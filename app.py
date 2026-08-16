@@ -3,7 +3,7 @@ import learner
 from translations import t
 from styles import CSS, countdown_ring_html, TOWER_SVG
 
-st.set_page_config(page_title="Word Wizard / Ordtrollmann", page_icon="🧙", layout="centered")
+st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 st.markdown(CSS, unsafe_allow_html=True)
 
 # --- Session state setup ---
