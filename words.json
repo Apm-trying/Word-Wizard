@@ -1,0 +1,442 @@
+[
+  {
+    "id": 1,
+    "word": "forutseelig",
+    "definition": "Noe som kan forutses eller er ventet; ikke overraskende.",
+    "topic": "politics",
+    "language": "no",
+    "examples": [
+      "Reaksjonen fra opposisjonen var helt forutseelig.",
+      "Været denne uken var lett forutseelig med klart solskinn hver dag."
+    ]
+  },
+  {
+    "id": 2,
+    "word": "polarisering",
+    "definition": "Når meninger eller grupper beveger seg mot hver sin ytterkant, med mindre rom for midten.",
+    "topic": "politics",
+    "language": "no",
+    "examples": [
+      "Debatten har ført til økt polarisering i samfunnet.",
+      "Sosiale medier bidrar ofte til ytterligere polarisering."
+    ]
+  },
+  {
+    "id": 3,
+    "word": "resesjon",
+    "definition": "En periode med nedgang i økonomisk aktivitet, ofte definert som to kvartaler på rad med negativ vekst.",
+    "topic": "economy",
+    "language": "no",
+    "examples": [
+      "Økonomer advarer om at landet kan gå inn i en resesjon neste år.",
+      "Mange bedrifter kutter kostnader i frykt for en kommende resesjon."
+    ]
+  },
+  {
+    "id": 4,
+    "word": "innovasjonstakt",
+    "definition": "Hastigheten som nye ideer, produkter eller løsninger utvikles og tas i bruk med.",
+    "topic": "economy",
+    "language": "no",
+    "examples": [
+      "Selskapet er kjent for sin høye innovasjonstakt.",
+      "Bransjen krever en stadig høyere innovasjonstakt for å holde tritt."
+    ]
+  },
+  {
+    "id": 5,
+    "word": "diagnostisere",
+    "definition": "Å fastslå hva slags sykdom eller tilstand noen har, basert på symptomer og undersøkelser.",
+    "topic": "health",
+    "language": "no",
+    "examples": [
+      "Legene brukte flere uker på å diagnostisere pasienten korrekt.",
+      "Det er viktig å diagnostisere problemet før man foreslår en løsning."
+    ]
+  },
+  {
+    "id": 6,
+    "word": "kronisk",
+    "definition": "Noe som varer over lang tid eller stadig kommer tilbake, ofte om sykdom.",
+    "topic": "health",
+    "language": "no",
+    "examples": [
+      "Han lever med en kronisk lidelse som krever daglig medisinering.",
+      "Kronisk stress kan påvirke både kropp og sinn over tid."
+    ]
+  },
+  {
+    "id": 7,
+    "word": "algoritme",
+    "definition": "En presis oppskrift eller fremgangsmåte for å løse et problem, ofte brukt i dataprogrammer.",
+    "topic": "technology",
+    "language": "no",
+    "examples": [
+      "Sosiale medier bruker algoritmer for å bestemme hva du ser i feeden din.",
+      "Ingeniørene forbedret algoritmen for å gjøre søket raskere."
+    ]
+  },
+  {
+    "id": 8,
+    "word": "skalerbar",
+    "definition": "Noe som kan vokse eller utvides uten å miste funksjonalitet eller effektivitet.",
+    "topic": "technology",
+    "language": "no",
+    "examples": [
+      "Selskapet trengte en mer skalerbar løsning for å håndtere veksten.",
+      "En skalerbar arkitektur gjør det enklere å håndtere fremtidig vekst."
+    ]
+  },
+  {
+    "id": 9,
+    "word": "predictable",
+    "definition": "Able to be foreseen or expected; not surprising.",
+    "topic": "politics",
+    "language": "en",
+    "examples": [
+      "The opposition's reaction was entirely predictable.",
+      "His reaction to bad news was always predictable."
+    ]
+  },
+  {
+    "id": 10,
+    "word": "polarization",
+    "definition": "When opinions or groups move toward opposite extremes, leaving less room for the middle ground.",
+    "topic": "politics",
+    "language": "en",
+    "examples": [
+      "The debate has led to increased polarization in society.",
+      "Political polarization has made compromise harder to reach."
+    ]
+  },
+  {
+    "id": 11,
+    "word": "recession",
+    "definition": "A period of decline in economic activity, often defined as two consecutive quarters of negative growth.",
+    "topic": "economy",
+    "language": "en",
+    "examples": [
+      "Economists warn the country may enter a recession next year.",
+      "Unemployment tends to rise sharply during a recession."
+    ]
+  },
+  {
+    "id": 12,
+    "word": "conglomerate",
+    "definition": "A large corporation formed by combining several smaller, often unrelated companies.",
+    "topic": "economy",
+    "language": "en",
+    "examples": [
+      "The media conglomerate acquired three streaming platforms this year.",
+      "The conglomerate now owns businesses across five industries."
+    ]
+  },
+  {
+    "id": 13,
+    "word": "diagnose",
+    "definition": "To identify the nature of an illness or condition through examination of symptoms.",
+    "topic": "health",
+    "language": "en",
+    "examples": [
+      "It took doctors several weeks to correctly diagnose the patient.",
+      "New tools help doctors diagnose rare diseases faster."
+    ]
+  },
+  {
+    "id": 14,
+    "word": "chronic",
+    "definition": "Persisting for a long time or constantly recurring, often used to describe illness.",
+    "topic": "health",
+    "language": "en",
+    "examples": [
+      "He lives with a chronic condition that requires daily medication.",
+      "Chronic pain can significantly affect someone's daily life."
+    ]
+  },
+  {
+    "id": 15,
+    "word": "algorithm",
+    "definition": "A precise set of steps or rules for solving a problem, often used in computer programs.",
+    "topic": "technology",
+    "language": "en",
+    "examples": [
+      "Social media platforms use algorithms to decide what appears in your feed.",
+      "The recommendation algorithm learns from your viewing habits."
+    ]
+  },
+  {
+    "id": 16,
+    "word": "scalable",
+    "definition": "Able to grow or expand without losing functionality or efficiency.",
+    "topic": "technology",
+    "language": "en",
+    "examples": [
+      "The company needed a more scalable solution to handle its growth.",
+      "Cloud computing makes it easier to build scalable systems."
+    ]
+  },
+  {
+    "word": "hegemoni",
+    "definition": "Et lands eller en gruppes dominans og overlegne makt over andre.",
+    "topic": "politics",
+    "language": "no",
+    "id": 17,
+    "examples": [
+      "USA har hatt et teknologisk hegemoni i flere tiår.",
+      "Historikere diskuterer hvordan imperiets hegemoni til slutt kollapset."
+    ]
+  },
+  {
+    "word": "populisme",
+    "definition": "En politisk stil som appellerer til folkets følelser og misnøye med eliten.",
+    "topic": "politics",
+    "language": "no",
+    "id": 18,
+    "examples": [
+      "Populisme har vokst frem i flere europeiske land.",
+      "Kritikere hevder at populisme forenkler komplekse politiske spørsmål."
+    ]
+  },
+  {
+    "word": "suverenitet",
+    "definition": "En stats rett til å styre seg selv uten innblanding fra andre.",
+    "topic": "politics",
+    "language": "no",
+    "id": 19,
+    "examples": [
+      "Landet kjempet for sin suverenitet under krigen.",
+      "Flere nasjoner har kjempet lange kriger for å bevare sin suverenitet."
+    ]
+  },
+  {
+    "word": "inflasjon",
+    "definition": "En generell prisstigning som reduserer pengers kjøpekraft.",
+    "topic": "economy",
+    "language": "no",
+    "id": 20,
+    "examples": [
+      "Høy inflasjon har gjort dagligvarer dyrere.",
+      "Sentralbanken hevet renten for å bekjempe stigende inflasjon."
+    ]
+  },
+  {
+    "word": "proteksjonisme",
+    "definition": "Økonomisk politikk som beskytter innenlandsk industri gjennom tollmurer.",
+    "topic": "economy",
+    "language": "no",
+    "id": 21,
+    "examples": [
+      "Landet innførte proteksjonisme for å beskytte lokale bønder.",
+      "Økt proteksjonisme kan føre til handelskonflikter mellom land."
+    ]
+  },
+  {
+    "word": "konjunktur",
+    "definition": "De generelle svingningene i økonomien over tid.",
+    "topic": "economy",
+    "language": "no",
+    "id": 22,
+    "examples": [
+      "Konjunkturen har vært nedadgående det siste året.",
+      "Analytikere følger nøye med på konjunkturen før de investerer."
+    ]
+  },
+  {
+    "word": "immunforsvar",
+    "definition": "Kroppens naturlige forsvar mot sykdom og infeksjon.",
+    "topic": "health",
+    "language": "no",
+    "id": 23,
+    "examples": [
+      "Et sterkt immunforsvar bidrar til raskere restitusjon.",
+      "God søvn og kosthold styrker immunforsvaret over tid."
+    ]
+  },
+  {
+    "word": "epidemi",
+    "definition": "Rask spredning av en sykdom i en befolkning.",
+    "topic": "health",
+    "language": "no",
+    "id": 24,
+    "examples": [
+      "Myndighetene fryktet en ny epidemi.",
+      "Rask respons kan forhindre at et utbrudd blir til en epidemi."
+    ]
+  },
+  {
+    "word": "forebygge",
+    "definition": "Å hindre noe fra å skje, særlig sykdom.",
+    "topic": "health",
+    "language": "no",
+    "id": 25,
+    "examples": [
+      "Vaksiner kan forebygge alvorlig sykdom.",
+      "Regelmessig trening kan forebygge flere livsstilssykdommer."
+    ]
+  },
+  {
+    "word": "kunstig intelligens",
+    "definition": "Datasystemer som kan utføre oppgaver som normalt krever menneskelig intelligens.",
+    "topic": "technology",
+    "language": "no",
+    "id": 26,
+    "examples": [
+      "Kunstig intelligens brukes nå i mange bransjer.",
+      "Kunstig intelligens endrer måten leger stiller diagnoser på."
+    ]
+  },
+  {
+    "word": "kryptering",
+    "definition": "En metode for å gjøre informasjon uleselig for uautoriserte.",
+    "topic": "technology",
+    "language": "no",
+    "id": 27,
+    "examples": [
+      "Meldingene sendes med kryptering for sikkerhet.",
+      "Banken bruker sterk kryptering for å beskytte kundedata."
+    ]
+  },
+  {
+    "word": "digitalisering",
+    "definition": "Prosessen der analoge prosesser gjøres om til digitale.",
+    "topic": "technology",
+    "language": "no",
+    "id": 28,
+    "examples": [
+      "Digitalisering har endret måten vi jobber på.",
+      "Digitalisering har gjort offentlige tjenester mer tilgjengelige."
+    ]
+  },
+  {
+    "word": "hegemony",
+    "definition": "The dominance and superior power of one group or state over others.",
+    "topic": "politics",
+    "language": "en",
+    "id": 29,
+    "examples": [
+      "The US has held technological hegemony for decades.",
+      "Scholars debate how the empire's hegemony eventually declined."
+    ]
+  },
+  {
+    "word": "populism",
+    "definition": "A political approach that appeals to ordinary people's feelings and grievances against the elite.",
+    "topic": "politics",
+    "language": "en",
+    "id": 30,
+    "examples": [
+      "Populism has surged across several European countries.",
+      "Critics argue that populism oversimplifies complex political issues."
+    ]
+  },
+  {
+    "word": "sovereignty",
+    "definition": "A state's right to govern itself without outside interference.",
+    "topic": "politics",
+    "language": "en",
+    "id": 31,
+    "examples": [
+      "The country fought for its sovereignty during the war.",
+      "Several nations fought long wars to preserve their sovereignty."
+    ]
+  },
+  {
+    "word": "inflation",
+    "definition": "A general rise in prices that reduces the purchasing power of money.",
+    "topic": "economy",
+    "language": "en",
+    "id": 32,
+    "examples": [
+      "High inflation has made groceries more expensive.",
+      "The central bank raised rates to fight rising inflation."
+    ]
+  },
+  {
+    "word": "protectionism",
+    "definition": "Economic policy that shields domestic industry through tariffs.",
+    "topic": "economy",
+    "language": "en",
+    "id": 33,
+    "examples": [
+      "The country adopted protectionism to protect local farmers.",
+      "Rising protectionism can spark trade conflicts between countries."
+    ]
+  },
+  {
+    "word": "business cycle",
+    "definition": "The general upward and downward swings of the economy over time.",
+    "topic": "economy",
+    "language": "en",
+    "id": 34,
+    "examples": [
+      "The business cycle has been in a downturn this past year.",
+      "Analysts watch the business cycle closely before investing."
+    ]
+  },
+  {
+    "word": "immune system",
+    "definition": "The body's natural defense against disease and infection.",
+    "topic": "health",
+    "language": "en",
+    "id": 35,
+    "examples": [
+      "A strong immune system supports faster recovery.",
+      "Good sleep and diet strengthen the immune system over time."
+    ]
+  },
+  {
+    "word": "epidemic",
+    "definition": "The rapid spread of a disease within a population.",
+    "topic": "health",
+    "language": "en",
+    "id": 36,
+    "examples": [
+      "Officials feared a new epidemic.",
+      "A fast response can stop an outbreak from becoming an epidemic."
+    ]
+  },
+  {
+    "word": "prevent",
+    "definition": "To stop something, especially illness, from happening.",
+    "topic": "health",
+    "language": "en",
+    "id": 37,
+    "examples": [
+      "Vaccines can prevent serious illness.",
+      "Regular exercise can help prevent several lifestyle diseases."
+    ]
+  },
+  {
+    "word": "artificial intelligence",
+    "definition": "Computer systems able to perform tasks that normally require human intelligence.",
+    "topic": "technology",
+    "language": "en",
+    "id": 38,
+    "examples": [
+      "Artificial intelligence is now used across many industries.",
+      "Artificial intelligence is changing how doctors make diagnoses."
+    ]
+  },
+  {
+    "word": "encryption",
+    "definition": "A method of making information unreadable to unauthorized parties.",
+    "topic": "technology",
+    "language": "en",
+    "id": 39,
+    "examples": [
+      "Messages are sent with encryption for security.",
+      "The bank uses strong encryption to protect customer data."
+    ]
+  },
+  {
+    "word": "digitization",
+    "definition": "The process of converting analog processes into digital ones.",
+    "topic": "technology",
+    "language": "en",
+    "id": 40,
+    "examples": [
+      "Digitization has changed the way we work.",
+      "Digitization has made public services more accessible."
+    ]
+  }
+]
