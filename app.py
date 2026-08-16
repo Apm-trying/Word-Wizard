@@ -11,6 +11,8 @@ if "setup_stage" not in st.session_state:
     st.session_state.setup_stage = "nickname"  # "nickname" -> "language" -> "topic" -> "done"
 if "revealed" not in st.session_state:
     st.session_state.revealed = False
+if "quiz_active" not in st.session_state:
+    st.session_state.quiz_active = False
 
 # ============================================================
 # STEP 0: NICKNAME — identifies this person so progress doesn't
@@ -112,7 +114,8 @@ if word is None:
 topic_label = strings["topics"][word["topic"]]
 word_status = learner.get_word_status(nickname, word["id"])
 
-if not st.session_state.revealed:
+if not st.session_state.revealed and not st.session_state.quiz_active:
+    # Step 1: show the word, ask if they know it
     st.markdown(
         f"""
         <div class="word-card">
@@ -127,8 +130,11 @@ if not st.session_state.revealed:
     col1, col2 = st.columns(2)
     with col1:
         if st.button(strings["yes_button"], use_container_width=True):
-            learner.mark_status(nickname, word["id"], "known")
-            st.session_state.revealed = True
+            choices, correct_index = learner.get_quiz_choices(word, language)
+            st.session_state.quiz_active = True
+            st.session_state.quiz_word_id = word["id"]
+            st.session_state.quiz_choices = choices
+            st.session_state.quiz_correct_index = correct_index
             st.rerun()
     with col2:
         if st.button(strings["no_button"], use_container_width=True):
@@ -136,7 +142,37 @@ if not st.session_state.revealed:
             st.session_state.revealed = True
             st.rerun()
 
+elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"]:
+    # Step 2: verify the claim with a 3-option quiz before trusting "known"
+    st.markdown(
+        f"""
+        <div class="word-card">
+            <span class="topic-tag">{topic_label}</span>
+            <div class="word-display">{word['word']}</div>
+            <div class="section-label">{strings['quiz_prompt']}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    for i, choice_text in enumerate(st.session_state.quiz_choices):
+        if st.button(choice_text, use_container_width=True, key=f"quiz_choice_{i}"):
+            st.session_state.quiz_active = False
+            if i == st.session_state.quiz_correct_index:
+                learner.mark_status(nickname, word["id"], "known")
+                learner.advance_word(nickname, language, topic)
+                st.session_state.revealed = False
+            else:
+                learner.mark_status(nickname, word["id"], "unknown")
+                st.session_state.revealed = True
+                st.session_state.quiz_was_wrong = True
+            st.rerun()
+
 else:
+    # Step 3: reveal — reached either via "No" or a wrong quiz answer
+    if st.session_state.pop("quiz_was_wrong", False):
+        st.warning(strings["quiz_wrong"])
+
     examples_html = "".join(f'<div class="example-line"><em>{ex}</em></div>' for ex in word["examples"])
     st.markdown(
         f"""
@@ -152,16 +188,9 @@ else:
         unsafe_allow_html=True,
     )
 
-    if word_status == "known":
-        st.success(strings["known_success"])
-        if st.button(strings["skip_button"], use_container_width=True):
-            learner.skip_word(nickname, language, topic)
-            st.session_state.revealed = False
-            st.rerun()
-    else:
-        st.info(strings["locked_message"])
-        remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname)
-        hours = int(remaining_seconds // 3600)
-        minutes = int((remaining_seconds % 3600) // 60)
-        countdown_label = strings["countdown_format"].format(h=hours, m=minutes)
-        st.markdown(countdown_ring_html(percent_elapsed, countdown_label), unsafe_allow_html=True)
+    st.info(strings["locked_message"])
+    remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname)
+    hours = int(remaining_seconds // 3600)
+    minutes = int((remaining_seconds % 3600) // 60)
+    countdown_label = strings["countdown_format"].format(h=hours, m=minutes)
+    st.markdown(countdown_ring_html(percent_elapsed, countdown_label), unsafe_allow_html=True)

@@ -87,11 +87,13 @@ def _pick_new_word(words, language, topic, word_status):
     return random.choice(candidates)
 
 
-def _assign_word(nickname, user_progress, word, language, topic):
+def _assign_word(nickname, user_progress, word, language, topic, reset_skips=True):
     user_progress["current_word_id"] = word["id"] if word else None
     user_progress["assigned_at"] = datetime.now().isoformat()
     user_progress["language"] = language
     user_progress["topic"] = topic
+    if reset_skips:
+        user_progress["skips_used"] = 0
     _save_user_progress(nickname, user_progress)
     return word
 
@@ -131,18 +133,30 @@ def get_word_status(nickname, word_id):
     return user_progress["word_status"].get(str(word_id))
 
 
-def skip_word(nickname, language, topic):
+def get_quiz_choices(word, language):
     """
-    Only allowed when the current word is already 'known' for this person.
-    Returns the new word, or None if skipping isn't allowed.
+    Builds a 3-option multiple choice quiz for verifying someone actually
+    knows this word: the real definition plus 2 distractors pulled from
+    other words in the same language. Returns (choices, correct_index).
+    """
+    words = load_words()
+    other_words = [w for w in words if w["language"] == language and w["id"] != word["id"]]
+    distractors = random.sample(other_words, min(2, len(other_words)))
+
+    choice_items = [(word["definition"], True)] + [(d["definition"], False) for d in distractors]
+    random.shuffle(choice_items)
+    choices = [c[0] for c in choice_items]
+    correct_index = next(i for i, c in enumerate(choice_items) if c[1])
+    return choices, correct_index
+
+
+def advance_word(nickname, language, topic):
+    """
+    Immediately assigns a new word — used after someone passes the
+    verification quiz, since a correct answer proves they already know it.
     """
     words = load_words()
     user_progress = _load_user_progress(nickname)
-    current_id = user_progress["current_word_id"]
-
-    if user_progress["word_status"].get(str(current_id)) != "known":
-        return None
-
     new_word = _pick_new_word(words, language, topic, user_progress["word_status"])
     return _assign_word(nickname, user_progress, new_word, language, topic)
 
