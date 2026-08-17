@@ -1,7 +1,7 @@
 import streamlit as st
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 st.markdown(CSS, unsafe_allow_html=True)
@@ -13,6 +13,8 @@ if "revealed" not in st.session_state:
     st.session_state.revealed = False
 if "quiz_active" not in st.session_state:
     st.session_state.quiz_active = False
+if "just_correct" not in st.session_state:
+    st.session_state.just_correct = False
 
 # ============================================================
 # STEP 0: NICKNAME — identifies this person so progress doesn't
@@ -68,53 +70,85 @@ if st.session_state.setup_stage == "language":
 
 # From here on, we have a language, so all further text comes from translations.py
 strings = t(st.session_state.language)
+TOPIC_KEYS = ["politics", "economy", "health", "technology"]
 
 # ============================================================
-# STEP 2: TOPIC PICKER — shown in the language just chosen
+# STEP 2: TOPIC PICKER — multi-select, shown in the chosen language
 # ============================================================
 if st.session_state.setup_stage == "topic":
     st.markdown(f'<div class="app-title">{strings["app_title"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="app-subtitle">{strings["app_subtitle"]}</div>', unsafe_allow_html=True)
 
     st.markdown(f'<div class="section-label" style="color:#9CA3AE;">{strings["topic_step_title"]}</div>', unsafe_allow_html=True)
-    topic_choice = st.radio(
-        "topic",
-        options=["all", "politics", "economy", "health", "technology"],
+    selected_topics = st.multiselect(
+        "topics",
+        options=TOPIC_KEYS,
+        default=TOPIC_KEYS,
         format_func=lambda x: strings["topics"][x],
         label_visibility="collapsed",
     )
 
     st.write("")
     if st.button(strings["start_button"], use_container_width=True, type="primary"):
-        st.session_state.topic = topic_choice
-        st.session_state.setup_stage = "done"
-        st.session_state.revealed = False
-        st.rerun()
+        if not selected_topics:
+            st.warning(strings["topic_required_warning"])
+        else:
+            st.session_state.topics = selected_topics
+            st.session_state.setup_stage = "done"
+            st.session_state.revealed = False
+            st.rerun()
 
     st.stop()
 
 # ============================================================
-# WORD SCREEN — shown once nickname + language + topic are set
+# WORD SCREEN — shown once nickname + language + topics are set
 # ============================================================
 language = st.session_state.language
-topic = st.session_state.topic
+topics = st.session_state.topics
+
+level_info = learner.get_level_info(nickname)
+level_title = strings["titles"][level_info["tier"]]
 
 top_col1, top_col2 = st.columns([3, 1])
+with top_col1:
+    st.markdown(
+        f'<span class="xp-badge">{strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
+        unsafe_allow_html=True,
+    )
 with top_col2:
     if st.button(strings["settings_button"], use_container_width=True):
         st.session_state.setup_stage = "language"
         st.rerun()
 
-word = learner.get_current_word(nickname, language, topic)
+word = learner.get_current_word(nickname, language, topics)
 
 if word is None:
     st.success(strings["all_learned"])
     st.stop()
 
 topic_label = strings["topics"][word["topic"]]
-word_status = learner.get_word_status(nickname, word["id"])
 
-if not st.session_state.revealed and not st.session_state.quiz_active:
+if st.session_state.just_correct:
+    # Celebration step: shown right after a correct quiz answer, before moving on
+    st.markdown(chime_audio_html(), unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        <div class="word-card">
+            <span class="topic-tag">{topic_label}</span>
+            <div class="word-display">{word['word']}</div>
+            <div class="section-label">{strings['correct_heading']}</div>
+            <div>{strings['xp_gained_template'].format(xp=learner.XP_PER_CORRECT)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.button(strings["continue_button"], use_container_width=True, type="primary"):
+        learner.advance_word(nickname, language, topics)
+        st.session_state.just_correct = False
+        st.session_state.revealed = False
+        st.rerun()
+
+elif not st.session_state.revealed and not st.session_state.quiz_active:
     # Step 1: show the word, ask if they know it
     st.markdown(
         f"""
@@ -160,8 +194,8 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
             st.session_state.quiz_active = False
             if i == st.session_state.quiz_correct_index:
                 learner.mark_status(nickname, word["id"], "known")
-                learner.advance_word(nickname, language, topic)
-                st.session_state.revealed = False
+                learner.award_xp(nickname)
+                st.session_state.just_correct = True
             else:
                 learner.mark_status(nickname, word["id"], "unknown")
                 st.session_state.revealed = True

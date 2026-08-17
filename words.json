@@ -438,5 +438,269 @@
       "Digitization has changed the way we work.",
       "Digitization has made public services more accessible."
     ]
+  },
+  {
+    "word": "korrupsjon",
+    "definition": "Misbruk av makt eller stilling for personlig vinning.",
+    "examples": [
+      "Korrupsjon svekker tilliten til myndighetene.",
+      "Journalisten avslørte omfattende korrupsjon i departementet."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 41
+  },
+  {
+    "word": "diplomati",
+    "definition": "Kunsten å forhandle og opprettholde relasjoner mellom stater.",
+    "examples": [
+      "Diplomati bidro til å løse konflikten uten krig.",
+      "Landene brukte diplomati for å unngå en handelskrig."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 42
+  },
+  {
+    "word": "autoritær",
+    "definition": "Som utøver streng kontroll og undertrykker motstand.",
+    "examples": [
+      "Regimet ble stadig mer autoritært over tid.",
+      "Kritikere advarte mot autoritære tendenser i regjeringen."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 43
+  },
+  {
+    "word": "monopol",
+    "definition": "Når ett selskap dominerer et marked uten reell konkurranse.",
+    "examples": [
+      "Selskapet hadde nærmest monopol på markedet.",
+      "Myndighetene grep inn for å hindre et monopol."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 44
+  },
+  {
+    "word": "subsidie",
+    "definition": "Økonomisk støtte fra staten til en bestemt næring eller aktivitet.",
+    "examples": [
+      "Bøndene mottok subsidier for å holde prisene lave.",
+      "Regjeringen kuttet subsidiene til fossil energi."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 45
+  },
+  {
+    "word": "likviditet",
+    "definition": "Hvor lett en eiendel kan omgjøres til kontanter.",
+    "examples": [
+      "Banken økte likviditeten for å møte etterspørselen.",
+      "Krisen skapte en likviditetsmangel i markedet."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 46
+  },
+  {
+    "word": "vaksinere",
+    "definition": "Å gi noen en vaksine for å beskytte mot sykdom.",
+    "examples": [
+      "Helsemyndighetene oppfordret alle til å vaksinere seg.",
+      "Barn blir vaksinert mot flere sykdommer det første leveåret."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 47
+  },
+  {
+    "word": "symptom",
+    "definition": "Et tegn på at noe er galt med kroppen.",
+    "examples": [
+      "Feber er et vanlig symptom på infeksjon.",
+      "Legene ba pasienten beskrive symptomene nøye."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 48
+  },
+  {
+    "word": "terapi",
+    "definition": "Behandling for å bedre en fysisk eller psykisk tilstand.",
+    "examples": [
+      "Fysioterapi hjalp henne å komme seg etter skaden.",
+      "Han gikk i terapi for å bearbeide traumet."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 49
+  },
+  {
+    "word": "skylagring",
+    "definition": "Lagring av data på eksterne servere tilgjengelig via internett.",
+    "examples": [
+      "Bedriften flyttet alle filene sine til skylagring.",
+      "Skylagring gjør det enkelt å dele dokumenter."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 50
+  },
+  {
+    "word": "brannmur",
+    "definition": "Et sikkerhetssystem som beskytter nettverk mot uautorisert tilgang.",
+    "examples": [
+      "IT-avdelingen oppdaterte brannmuren etter angrepet.",
+      "En sterk brannmur reduserer risikoen for datainnbrudd."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 51
+  },
+  {
+    "word": "biometri",
+    "definition": "Bruk av unike kroppslige kjennetegn for identifisering.",
+    "examples": [
+      "Flyplassen innførte biometri for raskere sikkerhetskontroll.",
+      "Telefonen bruker biometri som fingeravtrykk for å låses opp."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 52
+  },
+  {
+    "word": "corruption",
+    "definition": "The misuse of power or position for personal gain.",
+    "examples": [
+      "Corruption undermines public trust in government.",
+      "The journalist exposed widespread corruption in the ministry."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 53
+  },
+  {
+    "word": "diplomacy",
+    "definition": "The art of negotiating and maintaining relations between states.",
+    "examples": [
+      "Diplomacy helped resolve the conflict without war.",
+      "The countries used diplomacy to avoid a trade war."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 54
+  },
+  {
+    "word": "authoritarian",
+    "definition": "Exercising strict control and suppressing opposition.",
+    "examples": [
+      "The regime grew increasingly authoritarian over time.",
+      "Critics warned of authoritarian tendencies in the government."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 55
+  },
+  {
+    "word": "monopoly",
+    "definition": "When one company dominates a market without real competition.",
+    "examples": [
+      "The company held a near-monopoly on the market.",
+      "Regulators intervened to prevent a monopoly."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 56
+  },
+  {
+    "word": "subsidy",
+    "definition": "Financial support from the government to a specific industry or activity.",
+    "examples": [
+      "Farmers received subsidies to keep prices low.",
+      "The government cut subsidies for fossil fuels."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 57
+  },
+  {
+    "word": "liquidity",
+    "definition": "How easily an asset can be converted into cash.",
+    "examples": [
+      "The bank increased liquidity to meet demand.",
+      "The crisis created a liquidity shortage in the market."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 58
+  },
+  {
+    "word": "vaccinate",
+    "definition": "To give someone a vaccine to protect against disease.",
+    "examples": [
+      "Health authorities urged everyone to get vaccinated.",
+      "Children are vaccinated against several diseases in their first year."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 59
+  },
+  {
+    "word": "symptom",
+    "definition": "A sign that something is wrong with the body.",
+    "examples": [
+      "Fever is a common symptom of infection.",
+      "Doctors asked the patient to describe the symptoms carefully."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 60
+  },
+  {
+    "word": "therapy",
+    "definition": "Treatment aimed at improving a physical or mental condition.",
+    "examples": [
+      "Physical therapy helped her recover from the injury.",
+      "He went to therapy to process the trauma."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 61
+  },
+  {
+    "word": "cloud storage",
+    "definition": "Storing data on external servers accessible via the internet.",
+    "examples": [
+      "The company moved all its files to cloud storage.",
+      "Cloud storage makes it easy to share documents."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 62
+  },
+  {
+    "word": "firewall",
+    "definition": "A security system that protects networks from unauthorized access.",
+    "examples": [
+      "The IT department updated the firewall after the attack.",
+      "A strong firewall reduces the risk of data breaches."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 63
+  },
+  {
+    "word": "biometrics",
+    "definition": "The use of unique bodily characteristics for identification.",
+    "examples": [
+      "The airport introduced biometrics for faster security checks.",
+      "The phone uses biometrics like fingerprints to unlock."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 64
   }
 ]

@@ -6,6 +6,25 @@ from datetime import datetime, timedelta
 WORDS_FILE = "words.json"
 PROGRESS_FILE = "progress.json"
 LOCK_HOURS = 12
+XP_PER_CORRECT = 10
+
+
+def xp_required_for_level(level):
+    """
+    How much XP it takes to go from `level` to `level + 1`.
+    Grows with level, so early levels come fast and later ones take real effort.
+    """
+    return 50 + level * 15
+
+# Ordered highest-first so we can find the first tier the level qualifies for.
+LEVEL_TIERS = [
+    (50, "wizard_king"),
+    (40, "wizard"),
+    (30, "archmage"),
+    (20, "magician"),
+    (10, "novice"),
+    (0, "beginner"),
+]
 
 
 def sanitize_nickname(raw_nickname):
@@ -43,8 +62,9 @@ def _load_user_progress(nickname):
         "current_word_id": None,
         "assigned_at": None,
         "language": None,
-        "topic": None,
+        "topics": None,  # list of topic keys, e.g. ["politics", "economy"]
         "word_status": {},  # word_id (as string) -> "known" | "unknown"
+        "xp": 0,
     }
     defaults.update(all_progress.get(nickname, {}))
     return defaults
@@ -63,59 +83,56 @@ def get_topics_for_language(language):
     return sorted(topics)
 
 
-def _matches_filter(word, language, topic):
-    if word["language"] != language:
-        return False
-    if topic != "all" and word["topic"] != topic:
-        return False
-    return True
+def _matches_filter(word, language, topics):
+    return word["language"] == language and word["topic"] in topics
 
 
-def _pick_new_word(words, language, topic, word_status):
+def _pick_new_word(words, language, topics, word_status):
     candidates = [
         w for w in words
-        if _matches_filter(w, language, topic) and str(w["id"]) not in word_status
+        if _matches_filter(w, language, topics) and str(w["id"]) not in word_status
     ]
     if not candidates:
-        # Everything in this language/topic has been seen — recycle unknowns
+        # Everything in this language/topic set has been seen — recycle unknowns
         candidates = [
             w for w in words
-            if _matches_filter(w, language, topic) and word_status.get(str(w["id"])) == "unknown"
+            if _matches_filter(w, language, topics) and word_status.get(str(w["id"])) == "unknown"
         ]
     if not candidates:
         return None  # this person has learned every word in this language/topic combo!
     return random.choice(candidates)
 
 
-def _assign_word(nickname, user_progress, word, language, topic, reset_skips=True):
+def _assign_word(nickname, user_progress, word, language, topics):
     user_progress["current_word_id"] = word["id"] if word else None
     user_progress["assigned_at"] = datetime.now().isoformat()
     user_progress["language"] = language
-    user_progress["topic"] = topic
-    if reset_skips:
-        user_progress["skips_used"] = 0
+    user_progress["topics"] = sorted(topics)
     _save_user_progress(nickname, user_progress)
     return word
 
 
-def get_current_word(nickname, language, topic):
+def get_current_word(nickname, language, topics):
     """
-    Returns the word this person should see right now, for their language/topic filter.
+    Returns the word this person should see right now, for their language/topics filter.
     Assigns a new one if none is set, the 12h window expired, or the filter changed.
     """
     words = load_words()
     user_progress = _load_user_progress(nickname)
 
-    filter_changed = user_progress["language"] != language or user_progress["topic"] != topic
+    filter_changed = (
+        user_progress["language"] != language
+        or user_progress["topics"] != sorted(topics)
+    )
 
     if user_progress["current_word_id"] is None or filter_changed:
-        new_word = _pick_new_word(words, language, topic, user_progress["word_status"])
-        return _assign_word(nickname, user_progress, new_word, language, topic)
+        new_word = _pick_new_word(words, language, topics, user_progress["word_status"])
+        return _assign_word(nickname, user_progress, new_word, language, topics)
 
     assigned_at = datetime.fromisoformat(user_progress["assigned_at"])
     if datetime.now() - assigned_at >= timedelta(hours=LOCK_HOURS):
-        new_word = _pick_new_word(words, language, topic, user_progress["word_status"])
-        return _assign_word(nickname, user_progress, new_word, language, topic)
+        new_word = _pick_new_word(words, language, topics, user_progress["word_status"])
+        return _assign_word(nickname, user_progress, new_word, language, topics)
 
     current = next((w for w in words if w["id"] == user_progress["current_word_id"]), None)
     return current
@@ -150,15 +167,15 @@ def get_quiz_choices(word, language):
     return choices, correct_index
 
 
-def advance_word(nickname, language, topic):
+def advance_word(nickname, language, topics):
     """
     Immediately assigns a new word — used after someone passes the
     verification quiz, since a correct answer proves they already know it.
     """
     words = load_words()
     user_progress = _load_user_progress(nickname)
-    new_word = _pick_new_word(words, language, topic, user_progress["word_status"])
-    return _assign_word(nickname, user_progress, new_word, language, topic)
+    new_word = _pick_new_word(words, language, topics, user_progress["word_status"])
+    return _assign_word(nickname, user_progress, new_word, language, topics)
 
 
 def get_time_remaining(nickname):
@@ -175,3 +192,38 @@ def get_time_remaining(nickname):
     remaining = max(0, total - elapsed)
     percent = min(100.0, (elapsed / total) * 100)
     return remaining, percent
+
+
+def award_xp(nickname, amount=XP_PER_CORRECT):
+    """Adds XP for this person (called on a correct quiz answer). Returns new total."""
+    user_progress = _load_user_progress(nickname)
+    user_progress["xp"] = user_progress.get("xp", 0) + amount
+    _save_user_progress(nickname, user_progress)
+    return user_progress["xp"]
+
+
+def get_level_tier(level):
+    for threshold, tier in LEVEL_TIERS:
+        if level >= threshold:
+            return tier
+    return "beginner"
+
+
+def get_level_info(nickname):
+    """Returns a dict with xp, level, tier (a title key), and progress into the current level."""
+    user_progress = _load_user_progress(nickname)
+    xp = user_progress.get("xp", 0)
+
+    level = 0
+    remaining = xp
+    while remaining >= xp_required_for_level(level):
+        remaining -= xp_required_for_level(level)
+        level += 1
+
+    return {
+        "xp": xp,
+        "level": level,
+        "tier": get_level_tier(level),
+        "xp_into_level": remaining,
+        "xp_for_next": xp_required_for_level(level),
+    }
