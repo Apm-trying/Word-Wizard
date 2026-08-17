@@ -209,21 +209,45 @@ def get_level_tier(level):
     return "beginner"
 
 
-def get_level_info(nickname):
-    """Returns a dict with xp, level, tier (a title key), and progress into the current level."""
-    user_progress = _load_user_progress(nickname)
-    xp = user_progress.get("xp", 0)
-
+def _level_from_xp(xp):
+    """Walks the increasing XP curve to find (level, xp_into_current_level)."""
     level = 0
     remaining = xp
     while remaining >= xp_required_for_level(level):
         remaining -= xp_required_for_level(level)
         level += 1
+    return level, remaining
 
+
+def get_level_info(nickname):
+    """Returns a dict with xp, level, tier (a title key), and progress into the current level."""
+    user_progress = _load_user_progress(nickname)
+    xp = user_progress.get("xp", 0)
+    level, xp_into_level = _level_from_xp(xp)
     return {
         "xp": xp,
         "level": level,
         "tier": get_level_tier(level),
-        "xp_into_level": remaining,
+        "xp_into_level": xp_into_level,
         "xp_for_next": xp_required_for_level(level),
     }
+
+
+def get_leaderboard(limit=20):
+    """
+    Returns everyone's nickname/level/tier/xp, ranked highest XP first.
+    Reads straight from shared progress storage — no per-user call needed.
+    """
+    all_progress = _load_all_progress()
+    entries = []
+    for nickname, prog in all_progress.items():
+        xp = prog.get("xp", 0)
+        level, _ = _level_from_xp(xp)
+        entries.append({
+            "nickname": nickname,
+            "xp": xp,
+            "level": level,
+            "tier": get_level_tier(level),
+        })
+    entries.sort(key=lambda e: e["xp"], reverse=True)
+    return entries[:limit]

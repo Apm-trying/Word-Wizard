@@ -15,6 +15,8 @@ if "quiz_active" not in st.session_state:
     st.session_state.quiz_active = False
 if "just_correct" not in st.session_state:
     st.session_state.just_correct = False
+if "show_leaderboard" not in st.session_state:
+    st.session_state.show_leaderboard = False
 
 # ============================================================
 # STEP 0: NICKNAME — identifies this person so progress doesn't
@@ -109,16 +111,41 @@ topics = st.session_state.topics
 level_info = learner.get_level_info(nickname)
 level_title = strings["titles"][level_info["tier"]]
 
-top_col1, top_col2 = st.columns([3, 1])
+top_col1, top_col2, top_col3 = st.columns([2.4, 1, 1])
 with top_col1:
     st.markdown(
         f'<span class="xp-badge">{strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
         unsafe_allow_html=True,
     )
 with top_col2:
+    if st.button(strings["leaderboard_button"], use_container_width=True):
+        st.session_state.show_leaderboard = True
+        st.rerun()
+with top_col3:
     if st.button(strings["settings_button"], use_container_width=True):
         st.session_state.setup_stage = "language"
         st.rerun()
+
+if st.session_state.show_leaderboard:
+    st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["leaderboard_title"]}</div>', unsafe_allow_html=True)
+
+    rows_html = ""
+    for i, entry in enumerate(learner.get_leaderboard(), start=1):
+        title = strings["titles"][entry["tier"]]
+        name_display = entry["nickname"] + (strings["you_suffix"] if entry["nickname"] == nickname else "")
+        rows_html += (
+            f'<div style="display:flex; justify-content:space-between; padding:0.5rem 0; '
+            f'border-bottom:1px solid rgba(237,230,214,0.12);">'
+            f'<span>#{i} {name_display}</span>'
+            f'<span style="color:var(--muted);">{strings["level_prefix"]} {entry["level"]} · {title} · {entry["xp"]} XP</span>'
+            f'</div>'
+        )
+    st.markdown(f'<div class="word-card" style="text-align:left;">{rows_html}</div>', unsafe_allow_html=True)
+
+    if st.button(strings["back_button"], use_container_width=True):
+        st.session_state.show_leaderboard = False
+        st.rerun()
+    st.stop()
 
 word = learner.get_current_word(nickname, language, topics)
 
