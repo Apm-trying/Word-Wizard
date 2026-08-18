@@ -7,6 +7,7 @@ WORDS_FILE = "words.json"
 PROGRESS_FILE = "progress.json"
 LOCK_HOURS = 2
 XP_PER_CORRECT = 10
+XP_REVIEW_BONUS = 3  # smaller reward for correctly reviewing an already-known word
 
 
 def xp_required_for_level(level):
@@ -93,13 +94,20 @@ def _pick_new_word(words, language, topics, word_status):
         if _matches_filter(w, language, topics) and str(w["id"]) not in word_status
     ]
     if not candidates:
-        # Everything in this language/topic set has been seen — recycle unknowns
+        # Everything's been seen — recycle unknowns first, they need it most
         candidates = [
             w for w in words
             if _matches_filter(w, language, topics) and word_status.get(str(w["id"])) == "unknown"
         ]
     if not candidates:
-        return None  # this person has learned every word in this language/topic combo!
+        # Everything is known — bring back known words for spaced review
+        # instead of hitting a dead end
+        candidates = [
+            w for w in words
+            if _matches_filter(w, language, topics) and word_status.get(str(w["id"])) == "known"
+        ]
+    if not candidates:
+        return None  # this filter genuinely has zero matching words
     return random.choice(candidates)
 
 
@@ -203,6 +211,20 @@ def get_time_remaining(nickname):
     remaining = max(0, total - elapsed)
     percent = min(100.0, (elapsed / total) * 100)
     return remaining, percent
+
+
+def score_correct_answer(nickname, word_id):
+    """
+    Marks a word as known and awards XP for a correct quiz answer.
+    Full XP the first time; a smaller review bonus if this word was
+    already known (i.e. this is a spaced-repetition review, not new learning).
+    Returns the XP amount actually awarded, for display.
+    """
+    was_already_known = get_word_status(nickname, word_id) == "known"
+    mark_status(nickname, word_id, "known")
+    amount = XP_REVIEW_BONUS if was_already_known else XP_PER_CORRECT
+    award_xp(nickname, amount)
+    return amount
 
 
 def award_xp(nickname, amount=XP_PER_CORRECT):
