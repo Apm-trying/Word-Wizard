@@ -702,5 +702,1149 @@
     "topic": "technology",
     "language": "en",
     "id": 64
+  },
+  {
+    "word": "nøytralitet",
+    "definition": "Det å ikke ta parti i en konflikt eller strid.",
+    "examples": [
+      "Sveits er kjent for sin lange tradisjon med nøytralitet.",
+      "Landet erklærte nøytralitet under konflikten."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 65
+  },
+  {
+    "word": "reformere",
+    "definition": "Å endre noe, særlig et system eller en lov, for å forbedre det.",
+    "examples": [
+      "Regjeringen ønsket å reformere skattesystemet.",
+      "Utdanningssektoren ble reformert etter mange års kritikk."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 66
+  },
+  {
+    "word": "legitimitet",
+    "definition": "Anerkjennelse av at noe er rettmessig eller lovlig.",
+    "examples": [
+      "Valget styrket regjeringens legitimitet.",
+      "Opposisjonen stilte spørsmål ved legitimiteten til avgjørelsen."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 67
+  },
+  {
+    "word": "sanksjon",
+    "definition": "Et straffetiltak, ofte økonomisk, rettet mot et land eller en gruppe.",
+    "examples": [
+      "Landene innførte sanksjoner som svar på invasjonen.",
+      "Sanksjonene rammet økonomien hardt."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 68
+  },
+  {
+    "word": "koalisjon",
+    "definition": "En allianse mellom partier eller grupper for å oppnå et felles mål.",
+    "examples": [
+      "De to partiene dannet en koalisjon etter valget.",
+      "Koalisjonen sprakk etter uenighet om budsjettet."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 69
+  },
+  {
+    "word": "maktfordeling",
+    "definition": "Fordelingen av makt mellom ulike statlige institusjoner.",
+    "examples": [
+      "Grunnloven sikrer maktfordeling mellom de tre statsmaktene.",
+      "Svak maktfordeling kan true demokratiet."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 70
+  },
+  {
+    "word": "propaganda",
+    "definition": "Informasjon, ofte partisk eller villedende, brukt for å påvirke opinionen.",
+    "examples": [
+      "Regimet brukte propaganda for å kontrollere opinionen.",
+      "Journalisten avslørte kampanjen som ren propaganda."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 71
+  },
+  {
+    "word": "deflasjon",
+    "definition": "Et generelt fall i prisnivået over tid.",
+    "examples": [
+      "Deflasjon kan være like skadelig for økonomien som inflasjon.",
+      "Landet slet med deflasjon etter finanskrisen."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 72
+  },
+  {
+    "word": "utbytte",
+    "definition": "Del av overskuddet et selskap betaler ut til aksjonærene.",
+    "examples": [
+      "Aksjonærene mottok et solid utbytte i år.",
+      "Selskapet kuttet utbyttet på grunn av svake resultater."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 73
+  },
+  {
+    "word": "konkurs",
+    "definition": "Juridisk tilstand der en person eller et selskap ikke kan betale gjelden sin.",
+    "examples": [
+      "Butikken gikk konkurs etter flere år med underskudd.",
+      "Mange bedrifter fryktet konkurs under pandemien."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 74
+  },
+  {
+    "word": "handelsbalanse",
+    "definition": "Forholdet mellom verdien av et lands eksport og import.",
+    "examples": [
+      "Landet hadde en positiv handelsbalanse for første gang på ti år.",
+      "Handelsbalansen forverret seg da importen økte."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 75
+  },
+  {
+    "word": "spekulasjon",
+    "definition": "Kjøp og salg av eiendeler i håp om å tjene på prisendringer.",
+    "examples": [
+      "Spekulasjon i boligmarkedet drev prisene opp.",
+      "Investorer ble advart mot risikabel spekulasjon."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 76
+  },
+  {
+    "word": "regulering",
+    "definition": "Regler satt av myndighetene for å styre en næring eller aktivitet.",
+    "examples": [
+      "Ny regulering skulle beskytte forbrukerne bedre.",
+      "Bransjen protesterte mot den strengere reguleringen."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 77
+  },
+  {
+    "word": "bærekraftig",
+    "definition": "Noe som kan opprettholdes over tid uten å skade fremtidige ressurser.",
+    "examples": [
+      "Selskapet satset på en mer bærekraftig produksjon.",
+      "Bærekraftig vekst krever langsiktig planlegging."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 78
+  },
+  {
+    "word": "diagnose",
+    "definition": "En leges konklusjon om hva slags sykdom pasienten har.",
+    "examples": [
+      "Legen stilte en klar diagnose etter undersøkelsen.",
+      "Pasienten ventet lenge på riktig diagnose."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 79
+  },
+  {
+    "word": "smittsom",
+    "definition": "Som kan overføres fra en person til en annen.",
+    "examples": [
+      "Sykdommen er svært smittsom og spres raskt.",
+      "Skolen stengte etter et utbrudd av en smittsom infeksjon."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 80
+  },
+  {
+    "word": "rehabilitering",
+    "definition": "Prosessen med å gjenopprette funksjon etter sykdom eller skade.",
+    "examples": [
+      "Etter operasjonen fulgte flere måneder med rehabilitering.",
+      "Rehabiliteringen hjalp ham å gå igjen."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 81
+  },
+  {
+    "word": "antibiotika",
+    "definition": "Legemidler som brukes til å behandle bakterielle infeksjoner.",
+    "examples": [
+      "Legen skrev ut antibiotika mot infeksjonen.",
+      "Overforbruk av antibiotika kan føre til resistens."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 82
+  },
+  {
+    "word": "psykisk",
+    "definition": "Knyttet til sinnet eller den mentale tilstanden.",
+    "examples": [
+      "Psykisk helse er like viktig som fysisk helse.",
+      "Han slet med psykisk stress etter ulykken."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 83
+  },
+  {
+    "word": "betennelse",
+    "definition": "Kroppens reaksjon på skade eller infeksjon, ofte med hevelse og smerte.",
+    "examples": [
+      "Betennelsen i kneet gjorde det vanskelig å gå.",
+      "Kroppen reagerte med betennelse etter skaden."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 84
+  },
+  {
+    "word": "immunitet",
+    "definition": "Kroppens evne til å motstå en bestemt sykdom.",
+    "examples": [
+      "Vaksinen gir god immunitet mot sykdommen.",
+      "Immuniteten svekkes med alderen."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 85
+  },
+  {
+    "word": "programvare",
+    "definition": "Dataprogrammer og tilhørende data som styrer en datamaskin.",
+    "examples": [
+      "Bedriften oppdaterte programvaren for bedre sikkerhet.",
+      "Feil i programvaren forårsaket systemkrasj."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 86
+  },
+  {
+    "word": "maskinlæring",
+    "definition": "En gren av kunstig intelligens der systemer lærer av data.",
+    "examples": [
+      "Maskinlæring brukes til å forbedre søkeresultater.",
+      "Selskapet investerte tungt i maskinlæring."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 87
+  },
+  {
+    "word": "databehandling",
+    "definition": "Systematisk bearbeiding av data for å produsere nyttig informasjon.",
+    "examples": [
+      "Rask databehandling er avgjørende for finansmarkedene.",
+      "Selskapet automatiserte all databehandling."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 88
+  },
+  {
+    "word": "grensesnitt",
+    "definition": "Punktet der en bruker samhandler med et system eller en maskin.",
+    "examples": [
+      "Appen fikk et enklere og mer intuitivt grensesnitt.",
+      "Et dårlig grensesnitt gjør programmet vanskelig å bruke."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 89
+  },
+  {
+    "word": "automatisere",
+    "definition": "Å få en prosess til å foregå automatisk, uten menneskelig innblanding.",
+    "examples": [
+      "Fabrikken automatiserte store deler av produksjonen.",
+      "Målet var å automatisere rutineoppgaver."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 90
+  },
+  {
+    "word": "virtuell virkelighet",
+    "definition": "En datagenerert simulering av en tredimensjonal opplevelse.",
+    "examples": [
+      "Virtuell virkelighet brukes nå i medisinsk trening.",
+      "Spillet tilbyr en fullstendig opplevelse i virtuell virkelighet."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 91
+  },
+  {
+    "word": "cybersikkerhet",
+    "definition": "Beskyttelse av datasystemer mot digitale angrep.",
+    "examples": [
+      "Cybersikkerhet har blitt en prioritet for selskaper.",
+      "Angrepet avslørte svakheter i selskapets cybersikkerhet."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 92
+  },
+  {
+    "word": "neutrality",
+    "definition": "The state of not taking sides in a conflict or dispute.",
+    "examples": [
+      "Switzerland is known for its long tradition of neutrality.",
+      "The country declared neutrality during the conflict."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 93
+  },
+  {
+    "word": "reform",
+    "definition": "To change something, especially a system or law, in order to improve it.",
+    "examples": [
+      "The government wanted to reform the tax system.",
+      "The education sector was reformed after years of criticism."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 94
+  },
+  {
+    "word": "legitimacy",
+    "definition": "Recognition that something is rightful or lawful.",
+    "examples": [
+      "The election strengthened the government's legitimacy.",
+      "The opposition questioned the legitimacy of the decision."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 95
+  },
+  {
+    "word": "sanction",
+    "definition": "A punitive measure, often economic, aimed at a country or group.",
+    "examples": [
+      "The countries imposed sanctions in response to the invasion.",
+      "The sanctions hit the economy hard."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 96
+  },
+  {
+    "word": "coalition",
+    "definition": "An alliance between parties or groups to achieve a common goal.",
+    "examples": [
+      "The two parties formed a coalition after the election.",
+      "The coalition collapsed after disagreement over the budget."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 97
+  },
+  {
+    "word": "separation of powers",
+    "definition": "The division of power among different branches of government.",
+    "examples": [
+      "The constitution ensures separation of powers among the three branches.",
+      "Weak separation of powers can threaten democracy."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 98
+  },
+  {
+    "word": "propaganda",
+    "definition": "Information, often biased or misleading, used to influence public opinion.",
+    "examples": [
+      "The regime used propaganda to control public opinion.",
+      "The journalist exposed the campaign as pure propaganda."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 99
+  },
+  {
+    "word": "deflation",
+    "definition": "A general fall in price levels over time.",
+    "examples": [
+      "Deflation can be just as damaging to the economy as inflation.",
+      "The country struggled with deflation after the financial crisis."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 100
+  },
+  {
+    "word": "dividend",
+    "definition": "Part of a company's profit paid out to shareholders.",
+    "examples": [
+      "Shareholders received a solid dividend this year.",
+      "The company cut its dividend due to weak results."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 101
+  },
+  {
+    "word": "bankruptcy",
+    "definition": "A legal state in which a person or company cannot pay its debts.",
+    "examples": [
+      "The store went bankrupt after several years of losses.",
+      "Many businesses feared bankruptcy during the pandemic."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 102
+  },
+  {
+    "word": "trade balance",
+    "definition": "The relationship between the value of a country's exports and imports.",
+    "examples": [
+      "The country had a positive trade balance for the first time in a decade.",
+      "The trade balance worsened as imports increased."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 103
+  },
+  {
+    "word": "speculation",
+    "definition": "Buying and selling assets in hopes of profiting from price changes.",
+    "examples": [
+      "Speculation in the housing market drove prices up.",
+      "Investors were warned against risky speculation."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 104
+  },
+  {
+    "word": "regulation",
+    "definition": "Rules set by authorities to govern an industry or activity.",
+    "examples": [
+      "New regulation was meant to better protect consumers.",
+      "The industry protested against the stricter regulation."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 105
+  },
+  {
+    "word": "sustainable",
+    "definition": "Something that can be maintained over time without depleting future resources.",
+    "examples": [
+      "The company invested in more sustainable production.",
+      "Sustainable growth requires long-term planning."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 106
+  },
+  {
+    "word": "diagnosis",
+    "definition": "A doctor's conclusion about what illness a patient has.",
+    "examples": [
+      "The doctor made a clear diagnosis after the examination.",
+      "The patient waited a long time for the correct diagnosis."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 107
+  },
+  {
+    "word": "contagious",
+    "definition": "Able to be transmitted from one person to another.",
+    "examples": [
+      "The disease is highly contagious and spreads quickly.",
+      "The school closed after an outbreak of a contagious infection."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 108
+  },
+  {
+    "word": "rehabilitation",
+    "definition": "The process of restoring function after illness or injury.",
+    "examples": [
+      "Several months of rehabilitation followed the surgery.",
+      "The rehabilitation helped him walk again."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 109
+  },
+  {
+    "word": "antibiotics",
+    "definition": "Medicines used to treat bacterial infections.",
+    "examples": [
+      "The doctor prescribed antibiotics for the infection.",
+      "Overuse of antibiotics can lead to resistance."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 110
+  },
+  {
+    "word": "mental",
+    "definition": "Relating to the mind or mental state.",
+    "examples": [
+      "Mental health is just as important as physical health.",
+      "He struggled with mental stress after the accident."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 111
+  },
+  {
+    "word": "inflammation",
+    "definition": "The body's response to injury or infection, often with swelling and pain.",
+    "examples": [
+      "The inflammation in his knee made it hard to walk.",
+      "The body responded with inflammation after the injury."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 112
+  },
+  {
+    "word": "immunity",
+    "definition": "The body's ability to resist a particular disease.",
+    "examples": [
+      "The vaccine provides strong immunity against the disease.",
+      "Immunity weakens with age."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 113
+  },
+  {
+    "word": "software",
+    "definition": "Computer programs and related data that direct a computer's operation.",
+    "examples": [
+      "The company updated its software for better security.",
+      "A software bug caused the system to crash."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 114
+  },
+  {
+    "word": "machine learning",
+    "definition": "A branch of artificial intelligence where systems learn from data.",
+    "examples": [
+      "Machine learning is used to improve search results.",
+      "The company invested heavily in machine learning."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 115
+  },
+  {
+    "word": "data processing",
+    "definition": "The systematic handling of data to produce useful information.",
+    "examples": [
+      "Fast data processing is crucial for financial markets.",
+      "The company automated all of its data processing."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 116
+  },
+  {
+    "word": "interface",
+    "definition": "The point where a user interacts with a system or machine.",
+    "examples": [
+      "The app got a simpler, more intuitive interface.",
+      "A poor interface makes the program hard to use."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 117
+  },
+  {
+    "word": "automate",
+    "definition": "To make a process happen automatically, without human involvement.",
+    "examples": [
+      "The factory automated large parts of production.",
+      "The goal was to automate routine tasks."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 118
+  },
+  {
+    "word": "virtual reality",
+    "definition": "A computer-generated simulation of a three-dimensional experience.",
+    "examples": [
+      "Virtual reality is now used in medical training.",
+      "The game offers a full experience in virtual reality."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 119
+  },
+  {
+    "word": "cybersecurity",
+    "definition": "Protection of computer systems from digital attacks.",
+    "examples": [
+      "Cybersecurity has become a priority for companies.",
+      "The attack exposed weaknesses in the company's cybersecurity."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 120
+  },
+  {
+    "word": "utholdenhet",
+    "definition": "Evnen til å tåle fysisk eller mental belastning over lang tid.",
+    "examples": [
+      "Maratonløpere trenger enorm utholdenhet.",
+      "Trening bygger gradvis opp utholdenheten."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 121
+  },
+  {
+    "word": "disiplin",
+    "definition": "Evnen til å følge regler og opprettholde selvkontroll.",
+    "examples": [
+      "Disiplin er avgjørende for å nå toppnivå i idrett.",
+      "Treneren la vekt på disiplin under øktene."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 122
+  },
+  {
+    "word": "rivalisering",
+    "definition": "En sterk konkurranse mellom to eller flere parter.",
+    "examples": [
+      "Rivaliseringen mellom lagene går flere tiår tilbake.",
+      "Rivaliseringen skapte en elektrisk stemning på stadion."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 123
+  },
+  {
+    "word": "taktikk",
+    "definition": "En planlagt strategi for å oppnå et mål i en konkurranse.",
+    "examples": [
+      "Laget endret taktikk i andre omgang.",
+      "God taktikk kan avgjøre en jevn kamp."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 124
+  },
+  {
+    "word": "prestasjon",
+    "definition": "En bragd eller et resultat oppnådd gjennom innsats.",
+    "examples": [
+      "Utøverens prestasjon overrasket hele nasjonen.",
+      "Han leverte sin beste prestasjon i finalen."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 125
+  },
+  {
+    "word": "formkurve",
+    "definition": "Utviklingen av en utøvers prestasjonsnivå over tid.",
+    "examples": [
+      "Spillerens formkurve har pekt oppover den siste måneden.",
+      "En dårlig formkurve bekymret trenerapparatet."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 126
+  },
+  {
+    "word": "kvalifisere",
+    "definition": "Å oppfylle kravene for å delta i en konkurranse eller et mesterskap.",
+    "examples": [
+      "Laget klarte å kvalifisere seg til VM.",
+      "Hun måtte kvalifisere seg gjennom flere runder."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 127
+  },
+  {
+    "word": "diskvalifisere",
+    "definition": "Å utelukke noen fra en konkurranse på grunn av regelbrudd.",
+    "examples": [
+      "Løperen ble diskvalifisert etter et brudd på startreglene.",
+      "Dommerne vurderte å diskvalifisere laget for juks."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 128
+  },
+  {
+    "word": "tradisjon",
+    "definition": "En skikk eller praksis som overføres fra generasjon til generasjon.",
+    "examples": [
+      "Feiringen er en gammel tradisjon i landsbyen.",
+      "Familien holder fast ved mange tradisjoner."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 129
+  },
+  {
+    "word": "identitet",
+    "definition": "Følelsen av hvem man er, ofte knyttet til kultur eller bakgrunn.",
+    "examples": [
+      "Språket er en viktig del av folkets identitet.",
+      "Migrasjon kan påvirke opplevelsen av egen identitet."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 130
+  },
+  {
+    "word": "mangfold",
+    "definition": "Variasjon og forskjellighet, for eksempel i kultur eller bakgrunn.",
+    "examples": [
+      "Byen er kjent for sitt kulturelle mangfold.",
+      "Mangfold på arbeidsplassen fremmer nye perspektiver."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 131
+  },
+  {
+    "word": "fremmedgjøring",
+    "definition": "Følelsen av å være fremmed eller isolert fra samfunnet rundt seg.",
+    "examples": [
+      "Fremmedgjøring er et vanlig tema i moderne litteratur.",
+      "Han følte en sterk fremmedgjøring etter flyttingen."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 132
+  },
+  {
+    "word": "normer",
+    "definition": "Uskrevne regler for hvordan man forventes å oppføre seg i et samfunn.",
+    "examples": [
+      "Sosiale normer varierer sterkt mellom kulturer.",
+      "Å bryte normer kan føre til sosial fordømmelse."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 133
+  },
+  {
+    "word": "generasjonskløft",
+    "definition": "Forskjeller i verdier og holdninger mellom eldre og yngre generasjoner.",
+    "examples": [
+      "Generasjonskløften ble tydelig i debatten om teknologi.",
+      "Familien opplevde en generasjonskløft rundt oppdragelse."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 134
+  },
+  {
+    "word": "urbanisering",
+    "definition": "Prosessen der stadig flere mennesker flytter til og bor i byer.",
+    "examples": [
+      "Rask urbanisering har endret landskapet i landet.",
+      "Urbanisering fører ofte til press på boligmarkedet."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 135
+  },
+  {
+    "word": "kulturarv",
+    "definition": "Tradisjoner, kunst og verdier som overføres gjennom generasjoner.",
+    "examples": [
+      "Museet arbeider for å bevare landets kulturarv.",
+      "Bygningen regnes som en viktig del av kulturarven."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 136
+  },
+  {
+    "word": "hypotese",
+    "definition": "En antakelse som kan testes gjennom forskning eller eksperimenter.",
+    "examples": [
+      "Forskerne formulerte en hypotese før eksperimentet startet.",
+      "Resultatene bekreftet ikke den opprinnelige hypotesen."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 137
+  },
+  {
+    "word": "eksperiment",
+    "definition": "En vitenskapelig test utført for å undersøke en hypotese.",
+    "examples": [
+      "Eksperimentet ble gjentatt flere ganger for å sikre pålitelighet.",
+      "Et kontrollert eksperiment ga overraskende resultater."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 138
+  },
+  {
+    "word": "observere",
+    "definition": "Å nøye legge merke til og registrere noe.",
+    "examples": [
+      "Forskerne observerte dyrenes atferd over flere måneder.",
+      "Det er viktig å observere nøyaktig før man trekker konklusjoner."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 139
+  },
+  {
+    "word": "molekyl",
+    "definition": "Den minste enheten av et stoff som fortsatt har stoffets kjemiske egenskaper.",
+    "examples": [
+      "Vann består av molekyler med to hydrogenatomer og ett oksygenatom.",
+      "Forskerne studerte hvordan molekylet reagerte med varme."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 140
+  },
+  {
+    "word": "evolusjon",
+    "definition": "Den gradvise utviklingen av arter over lang tid.",
+    "examples": [
+      "Darwins teori om evolusjon endret vår forståelse av naturen.",
+      "Evolusjon skjer over tusenvis av generasjoner."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 141
+  },
+  {
+    "word": "organisme",
+    "definition": "Et levende individ, som et dyr, en plante eller en mikrobe.",
+    "examples": [
+      "Hver organisme tilpasser seg sitt eget miljø.",
+      "Forskerne studerte hvordan organismen reagerte på forurensning."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 142
+  },
+  {
+    "word": "teori",
+    "definition": "En velbegrunnet forklaring basert på store mengder bevis.",
+    "examples": [
+      "Teorien har blitt testet og bekreftet gjentatte ganger.",
+      "Ny forskning kan noen ganger utfordre en etablert teori."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 143
+  },
+  {
+    "word": "empirisk",
+    "definition": "Basert på observasjon og eksperiment, ikke bare teori.",
+    "examples": [
+      "Studien bygger på empirisk data fra tusenvis av deltakere.",
+      "Empirisk forskning er avgjørende for vitenskapelig fremgang."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 144
+  },
+  {
+    "word": "endurance",
+    "definition": "The ability to withstand physical or mental strain over a long time.",
+    "examples": [
+      "Marathon runners need enormous endurance.",
+      "Training gradually builds up endurance."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 145
+  },
+  {
+    "word": "discipline",
+    "definition": "The ability to follow rules and maintain self-control.",
+    "examples": [
+      "Discipline is essential for reaching the top level in sports.",
+      "The coach emphasized discipline during training sessions."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 146
+  },
+  {
+    "word": "rivalry",
+    "definition": "A strong competition between two or more parties.",
+    "examples": [
+      "The rivalry between the teams goes back decades.",
+      "The rivalry created an electric atmosphere in the stadium."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 147
+  },
+  {
+    "word": "tactics",
+    "definition": "A planned strategy for achieving a goal in a competition.",
+    "examples": [
+      "The team changed tactics in the second half.",
+      "Good tactics can decide a close match."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 148
+  },
+  {
+    "word": "performance",
+    "definition": "An achievement or result gained through effort.",
+    "examples": [
+      "The athlete's performance surprised the entire nation.",
+      "He delivered his best performance in the final."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 149
+  },
+  {
+    "word": "form",
+    "definition": "The development of an athlete's performance level over time.",
+    "examples": [
+      "The player's form has been trending upward this past month.",
+      "A poor run of form worried the coaching staff."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 150
+  },
+  {
+    "word": "qualify",
+    "definition": "To meet the requirements to take part in a competition or championship.",
+    "examples": [
+      "The team managed to qualify for the World Cup.",
+      "She had to qualify through several rounds."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 151
+  },
+  {
+    "word": "disqualify",
+    "definition": "To exclude someone from a competition due to a rule violation.",
+    "examples": [
+      "The runner was disqualified after a false start.",
+      "The judges considered disqualifying the team for cheating."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 152
+  },
+  {
+    "word": "tradition",
+    "definition": "A custom or practice passed down from generation to generation.",
+    "examples": [
+      "The celebration is an old tradition in the village.",
+      "The family holds on to many traditions."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 153
+  },
+  {
+    "word": "identity",
+    "definition": "The sense of who one is, often tied to culture or background.",
+    "examples": [
+      "Language is an important part of the people's identity.",
+      "Migration can affect one's sense of identity."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 154
+  },
+  {
+    "word": "diversity",
+    "definition": "Variation and difference, for example in culture or background.",
+    "examples": [
+      "The city is known for its cultural diversity.",
+      "Diversity in the workplace fosters new perspectives."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 155
+  },
+  {
+    "word": "alienation",
+    "definition": "The feeling of being estranged or isolated from the surrounding society.",
+    "examples": [
+      "Alienation is a common theme in modern literature.",
+      "He felt a strong sense of alienation after moving."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 156
+  },
+  {
+    "word": "norms",
+    "definition": "Unwritten rules for how one is expected to behave in a society.",
+    "examples": [
+      "Social norms vary greatly between cultures.",
+      "Breaking norms can lead to social disapproval."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 157
+  },
+  {
+    "word": "generation gap",
+    "definition": "Differences in values and attitudes between older and younger generations.",
+    "examples": [
+      "The generation gap became clear in the debate about technology.",
+      "The family experienced a generation gap around parenting."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 158
+  },
+  {
+    "word": "urbanization",
+    "definition": "The process of more people moving to and living in cities.",
+    "examples": [
+      "Rapid urbanization has changed the country's landscape.",
+      "Urbanization often puts pressure on the housing market."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 159
+  },
+  {
+    "word": "cultural heritage",
+    "definition": "Traditions, art, and values passed down through generations.",
+    "examples": [
+      "The museum works to preserve the country's cultural heritage.",
+      "The building is considered an important part of the cultural heritage."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 160
+  },
+  {
+    "word": "hypothesis",
+    "definition": "An assumption that can be tested through research or experiments.",
+    "examples": [
+      "The researchers formulated a hypothesis before the experiment began.",
+      "The results did not confirm the original hypothesis."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 161
+  },
+  {
+    "word": "experiment",
+    "definition": "A scientific test carried out to investigate a hypothesis.",
+    "examples": [
+      "The experiment was repeated several times to ensure reliability.",
+      "A controlled experiment produced surprising results."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 162
+  },
+  {
+    "word": "observe",
+    "definition": "To carefully notice and record something.",
+    "examples": [
+      "The researchers observed the animals' behavior for several months.",
+      "It's important to observe accurately before drawing conclusions."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 163
+  },
+  {
+    "word": "molecule",
+    "definition": "The smallest unit of a substance that still has the substance's chemical properties.",
+    "examples": [
+      "Water consists of molecules with two hydrogen atoms and one oxygen atom.",
+      "The researchers studied how the molecule reacted to heat."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 164
+  },
+  {
+    "word": "evolution",
+    "definition": "The gradual development of species over a long time.",
+    "examples": [
+      "Darwin's theory of evolution changed our understanding of nature.",
+      "Evolution occurs over thousands of generations."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 165
+  },
+  {
+    "word": "organism",
+    "definition": "A living individual, such as an animal, plant, or microbe.",
+    "examples": [
+      "Each organism adapts to its own environment.",
+      "The researchers studied how the organism reacted to pollution."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 166
+  },
+  {
+    "word": "theory",
+    "definition": "A well-supported explanation based on a large body of evidence.",
+    "examples": [
+      "The theory has been tested and confirmed repeatedly.",
+      "New research can sometimes challenge an established theory."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 167
+  },
+  {
+    "word": "empirical",
+    "definition": "Based on observation and experiment, not just theory.",
+    "examples": [
+      "The study is based on empirical data from thousands of participants.",
+      "Empirical research is essential for scientific progress."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 168
   }
 ]

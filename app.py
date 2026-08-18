@@ -74,7 +74,7 @@ if st.session_state.setup_stage == "language":
 
 # From here on, we have a language, so all further text comes from translations.py
 strings = t(st.session_state.language)
-TOPIC_KEYS = ["politics", "economy", "health", "technology"]
+TOPIC_KEYS = ["politics", "economy", "health", "technology", "sports", "culture", "science"]
 
 # ============================================================
 # STEP 2: TOPIC PICKER — multi-select, shown in the chosen language
@@ -193,6 +193,8 @@ if word is None:
     st.stop()
 
 topic_label = strings["topics"][word["topic"]]
+is_review = learner.get_word_status(nickname, word["id"]) == "known"
+review_tag_html = f'<span class="topic-tag" style="margin-left:0.4rem;">{strings["review_tag"]}</span>' if is_review else ""
 
 if st.session_state.just_correct:
     # Celebration step: shown right after a correct quiz answer, before moving on
@@ -203,7 +205,7 @@ if st.session_state.just_correct:
             <span class="topic-tag">{topic_label}</span>
             <div class="word-display">{word['word']}</div>
             <div class="section-label">{strings['correct_heading']}</div>
-            <div>{strings['xp_gained_template'].format(xp=learner.XP_PER_CORRECT)}</div>
+            <div>{strings['xp_gained_template'].format(xp=st.session_state.xp_awarded)}</div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -219,7 +221,7 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
     st.markdown(
         f"""
         <div class="word-card">
-            <span class="topic-tag">{topic_label}</span>
+            <span class="topic-tag">{topic_label}</span>{review_tag_html}
             <div class="word-display">{word['word']}</div>
         </div>
         """,
@@ -259,9 +261,9 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
         if st.button(choice_text, use_container_width=True, key=f"quiz_choice_{i}"):
             st.session_state.quiz_active = False
             if i == st.session_state.quiz_correct_index:
-                learner.mark_status(nickname, word["id"], "known")
-                learner.award_xp(nickname)
+                xp_awarded = learner.score_correct_answer(nickname, word["id"])
                 st.session_state.just_correct = True
+                st.session_state.xp_awarded = xp_awarded
             else:
                 learner.mark_status(nickname, word["id"], "unknown")
                 st.session_state.revealed = True
