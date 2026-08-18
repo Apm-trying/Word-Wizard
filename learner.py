@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 WORDS_FILE = "words.json"
 PROGRESS_FILE = "progress.json"
-LOCK_HOURS = 12
+LOCK_HOURS = 2
 XP_PER_CORRECT = 10
 
 
@@ -154,11 +154,22 @@ def get_quiz_choices(word, language):
     """
     Builds a 3-option multiple choice quiz for verifying someone actually
     knows this word: the real definition plus 2 distractors pulled from
-    other words in the same language. Returns (choices, correct_index).
+    OTHER WORDS IN THE SAME TOPIC (so the choices are genuinely similar,
+    not obviously different subjects). Falls back to any topic in the same
+    language if that topic doesn't have enough other words yet.
+    Returns (choices, correct_index).
     """
     words = load_words()
-    other_words = [w for w in words if w["language"] == language and w["id"] != word["id"]]
-    distractors = random.sample(other_words, min(2, len(other_words)))
+    same_topic = [
+        w for w in words
+        if w["language"] == language and w["topic"] == word["topic"] and w["id"] != word["id"]
+    ]
+    if len(same_topic) >= 2:
+        pool = same_topic
+    else:
+        pool = [w for w in words if w["language"] == language and w["id"] != word["id"]]
+
+    distractors = random.sample(pool, min(2, len(pool)))
 
     choice_items = [(word["definition"], True)] + [(d["definition"], False) for d in distractors]
     random.shuffle(choice_items)
@@ -231,6 +242,18 @@ def get_level_info(nickname):
         "xp_into_level": xp_into_level,
         "xp_for_next": xp_required_for_level(level),
     }
+
+
+def get_words_by_status(nickname, language, status):
+    """
+    Returns this person's words with the given status ('known' or 'unknown'),
+    filtered to the current language. Used for the trophy room / graveyard.
+    """
+    words = load_words()
+    user_progress = _load_user_progress(nickname)
+    word_status = user_progress["word_status"]
+    matching_ids = {int(wid) for wid, s in word_status.items() if s == status}
+    return [w for w in words if w["id"] in matching_ids and w["language"] == language]
 
 
 def get_leaderboard(limit=20):

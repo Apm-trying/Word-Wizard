@@ -17,6 +17,8 @@ if "just_correct" not in st.session_state:
     st.session_state.just_correct = False
 if "show_leaderboard" not in st.session_state:
     st.session_state.show_leaderboard = False
+if "show_my_words" not in st.session_state:
+    st.session_state.show_my_words = False
 
 # ============================================================
 # STEP 0: NICKNAME — identifies this person so progress doesn't
@@ -111,18 +113,22 @@ topics = st.session_state.topics
 level_info = learner.get_level_info(nickname)
 level_title = strings["titles"][level_info["tier"]]
 
-top_col1, top_col2, top_col3 = st.columns([2.4, 1, 1])
+top_col1, top_col2, top_col3, top_col4 = st.columns([2.4, 1, 1, 1])
 with top_col1:
     st.markdown(
         f'<span class="xp-badge">{strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
         unsafe_allow_html=True,
     )
 with top_col2:
-    if st.button(strings["leaderboard_button"], use_container_width=True):
+    if st.button(strings["leaderboard_button"], use_container_width=True, help="Leaderboard"):
         st.session_state.show_leaderboard = True
         st.rerun()
 with top_col3:
-    if st.button(strings["settings_button"], use_container_width=True):
+    if st.button(strings["my_words_button"], use_container_width=True, help=strings["my_words_tooltip"]):
+        st.session_state.show_my_words = True
+        st.rerun()
+with top_col4:
+    if st.button(strings["settings_button"], use_container_width=True, help=strings["settings_tooltip"]):
         st.session_state.setup_stage = "language"
         st.rerun()
 
@@ -144,6 +150,39 @@ if st.session_state.show_leaderboard:
 
     if st.button(strings["back_button"], use_container_width=True):
         st.session_state.show_leaderboard = False
+        st.rerun()
+    st.stop()
+
+if st.session_state.show_my_words:
+    known_words = learner.get_words_by_status(nickname, language, "known")
+    unknown_words = learner.get_words_by_status(nickname, language, "unknown")
+
+    st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["trophy_room_title"]}</div>', unsafe_allow_html=True)
+    if known_words:
+        rows_html = "".join(
+            f'<div style="padding:0.5rem 0; border-bottom:1px solid rgba(237,230,214,0.12);">'
+            f'<strong>{w["word"]}</strong><br>'
+            f'<span style="color:var(--muted); font-size:0.85rem;">{w["definition"]}</span></div>'
+            for w in known_words
+        )
+        st.markdown(f'<div class="word-card" style="text-align:left;">{rows_html}</div>', unsafe_allow_html=True)
+    else:
+        st.info(strings["empty_trophy"])
+
+    st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["graveyard_title"]}</div>', unsafe_allow_html=True)
+    if unknown_words:
+        rows_html = "".join(
+            f'<div style="padding:0.5rem 0; border-bottom:1px solid rgba(237,230,214,0.12);">'
+            f'<strong>{w["word"]}</strong><br>'
+            f'<span style="color:var(--muted); font-size:0.85rem;">{w["definition"]}</span></div>'
+            for w in unknown_words
+        )
+        st.markdown(f'<div class="word-card" style="text-align:left;">{rows_html}</div>', unsafe_allow_html=True)
+    else:
+        st.info(strings["empty_graveyard"])
+
+    if st.button(strings["back_button"], use_container_width=True):
+        st.session_state.show_my_words = False
         st.rerun()
     st.stop()
 
