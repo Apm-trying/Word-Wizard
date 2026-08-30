@@ -6,6 +6,10 @@ from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 st.markdown(CSS, unsafe_allow_html=True)
 
+# Typing this as your "name" on the nickname screen opens the hidden admin
+# panel instead of starting the app normally. Not shown anywhere in the UI.
+ADMIN_TRIGGER = "wizardmasterkey"
+
 # --- Session state setup ---
 if "setup_stage" not in st.session_state:
     st.session_state.setup_stage = "nickname"  # "nickname" -> "language" -> "topic" -> "done"
@@ -35,13 +39,65 @@ if st.session_state.setup_stage == "nickname":
     nickname_input = st.text_input("nickname", label_visibility="collapsed", placeholder="Your name / Ditt navn")
 
     if st.button("Continue / Fortsett →", use_container_width=True, type="primary"):
-        clean_nickname = learner.sanitize_nickname(nickname_input)
-        if clean_nickname:
-            st.session_state.nickname = clean_nickname
-            st.session_state.setup_stage = "language"
+        if nickname_input.strip().lower() == ADMIN_TRIGGER:
+            st.session_state.setup_stage = "admin_login"
             st.rerun()
         else:
-            st.error("Please enter a name / Vennligst skriv inn et navn")
+            clean_nickname = learner.sanitize_nickname(nickname_input)
+            if not clean_nickname:
+                st.error("Please enter a name / Vennligst skriv inn et navn")
+            elif not learner.is_nickname_allowed(nickname_input):
+                st.error("That name isn't allowed, please choose another. / Det navnet er ikke tillatt, velg et annet.")
+            else:
+                st.session_state.nickname = clean_nickname
+                st.session_state.setup_stage = "language"
+                st.rerun()
+
+    st.stop()
+
+# ============================================================
+# ADMIN — hidden behind a magic nickname + password, not shown
+# to regular users anywhere in the normal UI
+# ============================================================
+if st.session_state.setup_stage == "admin_login":
+    st.markdown('<div class="app-title">🛠️ Admin</div>', unsafe_allow_html=True)
+    password_input = st.text_input("password", type="password", label_visibility="collapsed", placeholder="Password")
+
+    if st.button("Enter", use_container_width=True, type="primary"):
+        try:
+            admin_password = st.secrets.get("ADMIN_PASSWORD", None)
+        except Exception:
+            admin_password = None
+        if admin_password and password_input == admin_password:
+            st.session_state.setup_stage = "admin_panel"
+            st.rerun()
+        else:
+            st.error("Incorrect password, or ADMIN_PASSWORD isn't set in Streamlit secrets yet.")
+
+    if st.button("← Back", use_container_width=True):
+        st.session_state.setup_stage = "nickname"
+        st.rerun()
+
+    st.stop()
+
+if st.session_state.setup_stage == "admin_panel":
+    st.markdown('<div class="app-title">🛠️ Admin Panel</div>', unsafe_allow_html=True)
+    all_users = learner.get_leaderboard(limit=1000)
+
+    if not all_users:
+        st.info("No users yet.")
+    for entry in all_users:
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.write(f'{entry["nickname"]} — Level {entry["level"]} ({entry["tier"]}), {entry["xp"]} XP')
+        with col2:
+            if st.button("Delete", key=f"del_{entry['nickname']}"):
+                learner.delete_user(entry["nickname"])
+                st.rerun()
+
+    if st.button("← Exit Admin", use_container_width=True):
+        st.session_state.setup_stage = "nickname"
+        st.rerun()
 
     st.stop()
 

@@ -31,12 +31,35 @@ LEVEL_TIERS = [
 def sanitize_nickname(raw_nickname):
     """
     Turns whatever someone typed into a safe key for storing their progress.
-    Lowercase, letters/numbers/dash/underscore only, max 30 chars.
-    Returns None if nothing usable was entered.
+    Lowercase, letters/numbers/dash/underscore only (including Norwegian
+    æøå), max 30 chars. Returns None if nothing usable was entered.
     """
-    cleaned = re.sub(r"[^a-z0-9_-]", "", raw_nickname.strip().lower().replace(" ", "_"))
+    cleaned = re.sub(r"[^a-z0-9æøå_-]", "", raw_nickname.strip().lower().replace(" ", "_"))
     cleaned = cleaned[:30]
     return cleaned if cleaned else None
+
+
+# Add any extra words you want blocked here (lowercase, no spaces needed —
+# substring matching catches them either way). Kept separate from the
+# better-profanity library's built-in list so you can extend it yourself,
+# e.g. for Norwegian-specific terms, without digging through library internals.
+CUSTOM_BLOCKED_TERMS = set()
+
+
+def is_nickname_allowed(raw_nickname):
+    """
+    Checks the ORIGINAL input (before spaces become underscores) for
+    profanity or slurs — word-boundary detection works better before that
+    conversion happens. Uses the better-profanity library for broad
+    coverage, plus CUSTOM_BLOCKED_TERMS above for anything you add yourself.
+    """
+    from better_profanity import profanity
+    if profanity.contains_profanity(raw_nickname):
+        return False
+    lowered = raw_nickname.lower()
+    if any(term in lowered for term in CUSTOM_BLOCKED_TERMS):
+        return False
+    return True
 
 
 def load_words():
@@ -276,6 +299,16 @@ def get_words_by_status(nickname, language, status):
     word_status = user_progress["word_status"]
     matching_ids = {int(wid) for wid, s in word_status.items() if s == status}
     return [w for w in words if w["id"] in matching_ids and w["language"] == language]
+
+
+def delete_user(nickname):
+    """Permanently removes a person's progress entirely (used by the admin panel)."""
+    all_progress = _load_all_progress()
+    if nickname in all_progress:
+        del all_progress[nickname]
+        _save_all_progress(all_progress)
+        return True
+    return False
 
 
 def get_leaderboard(limit=20):
