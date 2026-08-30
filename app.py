@@ -2,7 +2,7 @@ import streamlit as st
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, HAT_ICON_SVG, MONSTER_SVG, hp_bar_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 st.markdown(CSS, unsafe_allow_html=True)
@@ -57,8 +57,8 @@ if st.session_state.setup_stage == "landing":
         st.markdown(
             '<div style="display:flex; align-items:center; gap:8px; padding-top:0.4rem;">'
             '<svg viewBox="0 0 100 100" width="26" xmlns="http://www.w3.org/2000/svg">'
-            '<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#C79A3C" stroke="#8A6A28" stroke-width="2"/>'
-            '<ellipse cx="50" cy="68" rx="30" ry="8" fill="#A67D2C" stroke="#8A6A28" stroke-width="2"/>'
+            '<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#7B7F92" stroke="#4A4E5E" stroke-width="2"/>'
+            '<ellipse cx="50" cy="68" rx="30" ry="8" fill="#5B6578" stroke="#4A4E5E" stroke-width="2"/>'
             '</svg>'
             '<span style="font-family:\'Fraunces\',serif; font-weight:600; font-size:0.9rem; '
             'color:#F5F1E6; line-height:1.15; text-transform:uppercase; letter-spacing:0.02em;">Word<br>Wizard</span>'
@@ -77,7 +77,6 @@ if st.session_state.setup_stage == "landing":
                 st.rerun()
 
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
-    st.markdown(HAT_ICON_SVG, unsafe_allow_html=True)
     st.markdown('<div class="hero-title">Word</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-title hero-title-gold">Wizard</div>', unsafe_allow_html=True)
     st.markdown(

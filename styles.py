@@ -387,10 +387,17 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
 
 @keyframes lightningFlash {
     0%, 92%, 94%, 96%, 100% { opacity: 0; }
-    93% { opacity: 0.55; }
-    95% { opacity: 0.3; }
+    93% { opacity: 0.85; }
+    95% { opacity: 0.5; }
 }
 .lightning-flash { animation: lightningFlash 7s infinite; }
+
+@keyframes lightningGlow {
+    0%, 92%, 94%, 96%, 100% { opacity: 0; }
+    93% { opacity: 0.3; }
+    95% { opacity: 0.15; }
+}
+.lightning-glow { animation: lightningGlow 7s infinite; }
 
 
 @keyframes idleBounce {
@@ -453,8 +460,8 @@ def chime_audio_html():
 HAT_ICON_SVG = """
 <div style="display:flex; justify-content:center; margin-bottom: 0.3rem;">
 <svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
-<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#C79A3C" stroke="#8A6A28" stroke-width="2"/>
-<ellipse cx="50" cy="68" rx="30" ry="8" fill="#A67D2C" stroke="#8A6A28" stroke-width="2"/>
+<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#7B7F92" stroke="#4A4E5E" stroke-width="2"/>
+<ellipse cx="50" cy="68" rx="30" ry="8" fill="#5B6578" stroke="#4A4E5E" stroke-width="2"/>
 <circle cx="50" cy="44" r="4" fill="#EFE7D3"/>
 </svg>
 </div>
@@ -481,16 +488,16 @@ TOWER_SVG = """
 <ellipse cx="355" cy="12" rx="22" ry="9" fill="#3A3F4E"/>
 </g>
 <g class="rain-group" stroke="#7A8494" stroke-width="2" stroke-linecap="round" opacity="0.6">
-<line x1="40" y1="15" x2="28" y2="55"/>
-<line x1="65" y1="5" x2="53" y2="45"/>
-<line x1="90" y1="25" x2="78" y2="65"/>
-<line x1="115" y1="10" x2="103" y2="50"/>
-<line x1="140" y1="30" x2="128" y2="70"/>
-<line x1="260" y1="10" x2="248" y2="50"/>
-<line x1="285" y1="25" x2="273" y2="65"/>
-<line x1="310" y1="10" x2="298" y2="50"/>
-<line x1="335" y1="30" x2="323" y2="70"/>
-<line x1="360" y1="5" x2="348" y2="45"/>
+<line x1="40" y1="28" x2="28" y2="68"/>
+<line x1="65" y1="30" x2="53" y2="70"/>
+<line x1="90" y1="28" x2="78" y2="68"/>
+<line x1="115" y1="30" x2="103" y2="70"/>
+<line x1="140" y1="32" x2="128" y2="72"/>
+<line x1="260" y1="28" x2="248" y2="68"/>
+<line x1="285" y1="30" x2="273" y2="70"/>
+<line x1="310" y1="28" x2="298" y2="68"/>
+<line x1="335" y1="32" x2="323" y2="72"/>
+<line x1="360" y1="28" x2="348" y2="68"/>
 </g>
 <g fill="#2F4A3E">
 <polygon points="70,190 90,140 110,190"/>
@@ -540,7 +547,8 @@ TOWER_SVG = """
 <circle cx="215" cy="223" r="2" fill="#D8D4C4"/>
 <line x1="215" y1="212" x2="215" y2="260" stroke="#5A4A38" stroke-width="2" stroke-linecap="round"/>
 </g>
-<rect class="lightning-flash" x="0" y="0" width="400" height="280" fill="#E8E2D0" opacity="0"/>
+<ellipse class="lightning-glow" cx="258" cy="55" rx="45" ry="50" fill="#F5F0E0" opacity="0"/>
+<polygon class="lightning-flash" points="270,22 250,60 265,60 240,105 262,68 250,68 270,22" fill="#F5F0E0" opacity="0"/>
 </svg>
 </div>
 """
