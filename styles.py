@@ -399,6 +399,19 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
 }
 .lightning-glow { animation: lightningGlow 7s infinite; }
 
+@keyframes rainRipple {
+    0% { transform: scale(0.3); opacity: 0.5; }
+    100% { transform: scale(2.6); opacity: 0; }
+}
+.ripple-group circle {
+    animation: rainRipple 1.6s ease-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+.ripple-group circle:nth-child(2) { animation-delay: 0.4s; }
+.ripple-group circle:nth-child(3) { animation-delay: 0.9s; }
+.ripple-group circle:nth-child(4) { animation-delay: 0.2s; }
+
 
 @keyframes idleBounce {
     0%, 100% { transform: translateY(0); }
@@ -487,6 +500,11 @@ TOWER_SVG = """
 <ellipse cx="290" cy="20" rx="24" ry="9"/>
 <ellipse cx="355" cy="12" rx="22" ry="9" fill="#3A3F4E"/>
 </g>
+<g fill="#3A3F4E" opacity="0.55">
+<ellipse cx="200" cy="10" rx="24" ry="9"/>
+<ellipse cx="180" cy="14" rx="16" ry="7"/>
+<ellipse cx="222" cy="13" rx="14" ry="6"/>
+</g>
 <g class="rain-group" stroke="#7A8494" stroke-width="2" stroke-linecap="round" opacity="0.6">
 <line x1="40" y1="28" x2="28" y2="68"/>
 <line x1="65" y1="30" x2="53" y2="70"/>
@@ -505,6 +523,8 @@ TOWER_SVG = """
 <rect x="86" y="188" width="8" height="14"/>
 <polygon points="40,200 58,160 76,200"/>
 <rect x="54" y="198" width="8" height="12"/>
+<polygon points="128,205 143,175 158,205"/>
+<rect x="139" y="203" width="6" height="10"/>
 </g>
 <g fill="#2F4A3E">
 <polygon points="290,190 310,140 330,190"/>
@@ -512,6 +532,8 @@ TOWER_SVG = """
 <rect x="306" y="188" width="8" height="14"/>
 <polygon points="324,200 342,160 360,200"/>
 <rect x="338" y="198" width="8" height="12"/>
+<polygon points="242,205 257,175 272,205"/>
+<rect x="253" y="203" width="6" height="10"/>
 </g>
 <polygon points="130,280 270,280 228,224 172,224" fill="#8A8570" opacity="0.85"/>
 <g stroke="#5A5646" stroke-width="1.5" opacity="0.6">
@@ -537,6 +559,18 @@ TOWER_SVG = """
 <path d="M 188 100 Q 188 92 200 92 Q 212 92 212 100 L 212 130 L 188 130 Z" fill="#C79A3C" stroke="#8A6A28" stroke-width="1.5"/>
 <line x1="200" y1="96" x2="200" y2="130" stroke="#8A6A28" stroke-width="1"/>
 <line x1="189" y1="112" x2="211" y2="112" stroke="#8A6A28" stroke-width="1"/>
+<g fill="#5B5850">
+<ellipse cx="95" cy="255" rx="12" ry="7"/>
+<ellipse cx="120" cy="264" rx="8" ry="5" fill="#4A4740"/>
+<ellipse cx="305" cy="258" rx="11" ry="6"/>
+<ellipse cx="280" cy="266" rx="7" ry="4" fill="#4A4740"/>
+</g>
+<g class="ripple-group" fill="none" stroke="#8A94A8" stroke-width="1" opacity="0.5">
+<circle cx="110" cy="272" r="3"/>
+<circle cx="160" cy="277" r="3"/>
+<circle cx="240" cy="275" r="3"/>
+<circle cx="290" cy="270" r="3"/>
+</g>
 <g class="wizard-figure">
 <polygon points="194,258 206,258 210,232 190,232" fill="#8B8FA3" stroke="#4A4E5E" stroke-width="1"/>
 <circle cx="200" cy="225" r="6.5" fill="#D8D4C4"/>
