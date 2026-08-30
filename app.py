@@ -517,20 +517,3 @@ else:
     minutes = int((remaining_seconds % 3600) // 60)
     countdown_label = strings["countdown_format"].format(h=hours, m=minutes)
     st.markdown(countdown_ring_html(percent_elapsed, countdown_label), unsafe_allow_html=True)
-
-st.write("")
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("🇬🇧 EN", use_container_width=True, type=("primary" if language == "en" else "secondary")):
-        st.session_state.language = "en"
-        st.session_state.revealed = False
-        st.session_state.quiz_active = False
-        st.session_state.just_correct = False
-        st.rerun()
-with col2:
-    if st.button("🇳🇴 NO", use_container_width=True, type=("primary" if language == "no" else "secondary")):
-        st.session_state.language = "no"
-        st.session_state.revealed = False
-        st.session_state.quiz_active = False
-        st.session_state.just_correct = False
-        st.rerun()
