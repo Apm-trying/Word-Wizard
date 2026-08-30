@@ -256,6 +256,19 @@ def get_quiz_choices(word, language):
     return choices, correct_index
 
 
+def lock_guest_word(nickname, word, language, topics):
+    """
+    Explicitly locks a word as this person's current word for a language,
+    starting the wait timer now. Needed specifically for the guest flow:
+    a word picked before someone has a name was never assigned through
+    the normal per-user tracking, so without this, naming yourself after
+    answering wrong would accidentally skip the lock entirely and hand
+    you a free new word instead of making you wait.
+    """
+    user_progress = _load_user_progress(nickname)
+    return _assign_word(nickname, user_progress, word, language, topics)
+
+
 def advance_word(nickname, language, topics):
     """
     Immediately assigns a new word — used after someone passes the

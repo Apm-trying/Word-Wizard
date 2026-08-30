@@ -239,8 +239,10 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
                 else:
                     if st.session_state.guest_correct:
                         learner.score_correct_answer(clean_nickname, guest_word["id"])
+                        learner.advance_word(clean_nickname, language, st.session_state.topics)
                     else:
                         learner.mark_status(clean_nickname, guest_word["id"], "unknown")
+                        learner.lock_guest_word(clean_nickname, guest_word, language, st.session_state.topics)
                     with st.spinner("✨ Casting your spell..."):
                         time.sleep(1.2)
                     st.session_state.nickname = clean_nickname
