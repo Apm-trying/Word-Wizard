@@ -361,25 +361,6 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
 }
 
 /* Subtle micro-interactions on the tower scene and CTA */
-@keyframes fogDrift {
-    0% { transform: translateX(-15px); }
-    50% { transform: translateX(15px); }
-    100% { transform: translateX(-15px); }
-}
-.fog-layer-1 { animation: fogDrift 18s ease-in-out infinite; }
-.fog-layer-2 { animation: fogDrift 24s ease-in-out infinite reverse; }
-
-@keyframes starTwinkle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-.star-twinkle circle:nth-child(1) { animation: starTwinkle 3s ease-in-out infinite; }
-.star-twinkle circle:nth-child(2) { animation: starTwinkle 4s ease-in-out infinite 0.5s; }
-.star-twinkle circle:nth-child(3) { animation: starTwinkle 2.5s ease-in-out infinite 1s; }
-.star-twinkle circle:nth-child(4) { animation: starTwinkle 3.5s ease-in-out infinite 1.5s; }
-.star-twinkle circle:nth-child(5) { animation: starTwinkle 3s ease-in-out infinite 0.8s; }
-.star-twinkle circle:nth-child(6) { animation: starTwinkle 4s ease-in-out infinite 2s; }
-
 @keyframes windowFlicker {
     0%, 100% { opacity: 0.18; }
     45% { opacity: 0.24; }
@@ -390,15 +371,27 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
 
 @keyframes rainFall {
     0% { transform: translateY(-4px); opacity: 0.2; }
-    50% { opacity: 0.6; }
-    100% { transform: translateY(8px); opacity: 0.2; }
+    50% { opacity: 0.7; }
+    100% { transform: translateY(10px); opacity: 0.2; }
 }
-.rain-group line { animation: rainFall 1.4s linear infinite; }
-.rain-group line:nth-child(2) { animation-delay: 0.2s; }
-.rain-group line:nth-child(3) { animation-delay: 0.4s; }
-.rain-group line:nth-child(4) { animation-delay: 0.1s; }
-.rain-group line:nth-child(5) { animation-delay: 0.3s; }
-.rain-group line:nth-child(6) { animation-delay: 0.5s; }
+.rain-group line { animation: rainFall 1.1s linear infinite; }
+.rain-group line:nth-child(2) { animation-delay: 0.15s; }
+.rain-group line:nth-child(3) { animation-delay: 0.3s; }
+.rain-group line:nth-child(4) { animation-delay: 0.05s; }
+.rain-group line:nth-child(5) { animation-delay: 0.2s; }
+.rain-group line:nth-child(6) { animation-delay: 0.4s; }
+.rain-group line:nth-child(7) { animation-delay: 0.1s; }
+.rain-group line:nth-child(8) { animation-delay: 0.35s; }
+.rain-group line:nth-child(9) { animation-delay: 0.25s; }
+.rain-group line:nth-child(10) { animation-delay: 0.5s; }
+
+@keyframes lightningFlash {
+    0%, 92%, 94%, 96%, 100% { opacity: 0; }
+    93% { opacity: 0.55; }
+    95% { opacity: 0.3; }
+}
+.lightning-flash { animation: lightningFlash 7s infinite; }
+
 
 @keyframes idleBounce {
     0%, 100% { transform: translateY(0); }
@@ -476,27 +469,28 @@ CHIME_SOUND_B64 = "UklGRkI3AABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YR43AAAAA
 # was drawing too much attention.
 TOWER_SVG = """
 <div style="display:flex; justify-content:center; margin-bottom: 0.5rem;">
-<svg viewBox="0 0 400 280" width="260" style="max-width:80%; height:auto; opacity:0.92;" xmlns="http://www.w3.org/2000/svg">
-<circle cx="200" cy="95" r="70" fill="#E8E2D0" opacity="0.10"/>
-<circle cx="200" cy="95" r="45" fill="#F0EAD8" opacity="0.20"/>
-<circle cx="200" cy="95" r="28" fill="#F5F0E0" opacity="0.32"/>
-<g class="star-twinkle">
-<circle cx="55" cy="35" r="1.4" fill="#EDE6D6" opacity="0.6"/>
-<circle cx="340" cy="50" r="1.2" fill="#EDE6D6" opacity="0.5"/>
-<circle cx="105" cy="15" r="1" fill="#EDE6D6" opacity="0.45"/>
-<circle cx="290" cy="20" r="1.3" fill="#EDE6D6" opacity="0.55"/>
-<circle cx="370" cy="80" r="1" fill="#EDE6D6" opacity="0.4"/>
-<circle cx="20" cy="90" r="1.2" fill="#EDE6D6" opacity="0.5"/>
+<svg viewBox="0 0 400 280" width="300" style="max-width:85%; height:auto; opacity:0.97;" xmlns="http://www.w3.org/2000/svg">
+<g fill="#454B5C" opacity="0.7">
+<ellipse cx="70" cy="18" rx="35" ry="12"/>
+<ellipse cx="45" cy="22" rx="22" ry="9"/>
+<ellipse cx="100" cy="15" rx="25" ry="10" fill="#3A3F4E"/>
 </g>
-<ellipse class="fog-layer-1" cx="90" cy="230" rx="70" ry="14" fill="#5B6578" opacity="0.15"/>
-<ellipse class="fog-layer-2" cx="310" cy="240" rx="80" ry="16" fill="#5B6578" opacity="0.13"/>
-<g class="rain-group" stroke="#5B6578" stroke-width="2" stroke-linecap="round" opacity="0.5">
-<line x1="40" y1="20" x2="30" y2="55"/>
-<line x1="65" y1="10" x2="55" y2="45"/>
-<line x1="90" y1="30" x2="80" y2="65"/>
-<line x1="310" y1="15" x2="300" y2="50"/>
-<line x1="335" y1="35" x2="325" y2="70"/>
-<line x1="360" y1="10" x2="350" y2="45"/>
+<g fill="#454B5C" opacity="0.7">
+<ellipse cx="320" cy="15" rx="38" ry="13"/>
+<ellipse cx="290" cy="20" rx="24" ry="9"/>
+<ellipse cx="355" cy="12" rx="22" ry="9" fill="#3A3F4E"/>
+</g>
+<g class="rain-group" stroke="#7A8494" stroke-width="2" stroke-linecap="round" opacity="0.6">
+<line x1="40" y1="15" x2="28" y2="55"/>
+<line x1="65" y1="5" x2="53" y2="45"/>
+<line x1="90" y1="25" x2="78" y2="65"/>
+<line x1="115" y1="10" x2="103" y2="50"/>
+<line x1="140" y1="30" x2="128" y2="70"/>
+<line x1="260" y1="10" x2="248" y2="50"/>
+<line x1="285" y1="25" x2="273" y2="65"/>
+<line x1="310" y1="10" x2="298" y2="50"/>
+<line x1="335" y1="30" x2="323" y2="70"/>
+<line x1="360" y1="5" x2="348" y2="45"/>
 </g>
 <g fill="#2F4A3E">
 <polygon points="70,190 90,140 110,190"/>
@@ -512,7 +506,13 @@ TOWER_SVG = """
 <polygon points="324,200 342,160 360,200"/>
 <rect x="338" y="198" width="8" height="12"/>
 </g>
-<polygon points="130,280 270,280 228,224 172,224" fill="#3A3F4E" opacity="0.7"/>
+<polygon points="130,280 270,280 228,224 172,224" fill="#8A8570" opacity="0.85"/>
+<g stroke="#5A5646" stroke-width="1.5" opacity="0.6">
+<line x1="145" y1="270" x2="255" y2="270"/>
+<line x1="152" y1="256" x2="248" y2="256"/>
+<line x1="160" y1="242" x2="240" y2="242"/>
+<line x1="167" y1="228" x2="233" y2="228"/>
+</g>
 <rect x="172" y="216" width="56" height="8" fill="#5B6578" stroke="#333846" stroke-width="1"/>
 <rect x="178" y="208" width="44" height="8" fill="#5B6578" stroke="#333846" stroke-width="1"/>
 <rect x="184" y="200" width="32" height="8" fill="#5B6578" stroke="#333846" stroke-width="1"/>
@@ -540,6 +540,7 @@ TOWER_SVG = """
 <circle cx="215" cy="223" r="2" fill="#D8D4C4"/>
 <line x1="215" y1="212" x2="215" y2="260" stroke="#5A4A38" stroke-width="2" stroke-linecap="round"/>
 </g>
+<rect class="lightning-flash" x="0" y="0" width="400" height="280" fill="#E8E2D0" opacity="0"/>
 </svg>
 </div>
 """

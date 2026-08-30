@@ -52,7 +52,7 @@ if st.session_state.setup_stage == "landing":
     landing_strings = t(st.session_state.language)
     lang = st.session_state.language
 
-    col_brand, col_lang = st.columns([3, 1])
+    col_brand, col_lang = st.columns([2, 2])
     with col_brand:
         st.markdown(
             '<div style="display:flex; align-items:center; gap:8px; padding-top:0.4rem;">'
@@ -66,15 +66,15 @@ if st.session_state.setup_stage == "landing":
             unsafe_allow_html=True,
         )
     with col_lang:
-        lang_choice = st.selectbox(
-            "lang", options=["en", "no"],
-            format_func=lambda x: "🌐 EN" if x == "en" else "🌐 NO",
-            index=0 if lang == "en" else 1,
-            label_visibility="collapsed",
-        )
-        if lang_choice != lang:
-            st.session_state.language = lang_choice
-            st.rerun()
+        btn_col1, btn_col2 = st.columns(2)
+        with btn_col1:
+            if st.button("EN", key="lang_en_top", use_container_width=True, type=("primary" if lang == "en" else "secondary")):
+                st.session_state.language = "en"
+                st.rerun()
+        with btn_col2:
+            if st.button("NO", key="lang_no_top", use_container_width=True, type=("primary" if lang == "no" else "secondary")):
+                st.session_state.language = "no"
+                st.rerun()
 
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
     st.markdown(HAT_ICON_SVG, unsafe_allow_html=True)
