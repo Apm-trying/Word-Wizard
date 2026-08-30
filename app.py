@@ -52,7 +52,19 @@ if st.session_state.setup_stage == "landing":
     landing_strings = t(st.session_state.language)
     lang = st.session_state.language
 
-    col_spacer, col_lang = st.columns([3, 1])
+    col_brand, col_lang = st.columns([3, 1])
+    with col_brand:
+        st.markdown(
+            '<div style="display:flex; align-items:center; gap:8px; padding-top:0.4rem;">'
+            '<svg viewBox="0 0 100 100" width="26" xmlns="http://www.w3.org/2000/svg">'
+            '<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#C79A3C" stroke="#8A6A28" stroke-width="2"/>'
+            '<ellipse cx="50" cy="68" rx="30" ry="8" fill="#A67D2C" stroke="#8A6A28" stroke-width="2"/>'
+            '</svg>'
+            '<span style="font-family:\'Fraunces\',serif; font-weight:600; font-size:0.9rem; '
+            'color:#F5F1E6; line-height:1.15; text-transform:uppercase; letter-spacing:0.02em;">Word<br>Wizard</span>'
+            '</div>',
+            unsafe_allow_html=True,
+        )
     with col_lang:
         lang_choice = st.selectbox(
             "lang", options=["en", "no"],
@@ -66,7 +78,8 @@ if st.session_state.setup_stage == "landing":
 
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
     st.markdown(HAT_ICON_SVG, unsafe_allow_html=True)
-    st.markdown('<div class="hero-title">Word<br>Wizard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-title">Word</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-title hero-title-gold">Wizard</div>', unsafe_allow_html=True)
     st.markdown(
         f'<div style="text-align:center;"><span class="subtitle-banner">{landing_strings["landing_subtitle"]}</span></div>',
         unsafe_allow_html=True,
@@ -82,7 +95,7 @@ if st.session_state.setup_stage == "landing":
         )
     with fcol2:
         st.markdown(
-            f'<div class="feature-col"><div class="feature-icon">🪄</div>'
+            f'<div class="feature-col"><div class="feature-icon">✨</div>'
             f'<div class="feature-title">{landing_strings["feature_cast_title"]}</div>'
             f'<div class="feature-desc">{landing_strings["feature_cast_desc"]}</div></div>',
             unsafe_allow_html=True,
@@ -101,7 +114,7 @@ if st.session_state.setup_stage == "landing":
         f'<span class="xp-badge">🔥 0 · ⭐ {landing_strings["level_prefix"]} 1</span></div>',
         unsafe_allow_html=True,
     )
-    if st.button(f'🪄 {landing_strings["landing_start_button"]}', use_container_width=True, type="primary"):
+    if st.button(f'✨ {landing_strings["landing_start_button"]}', use_container_width=True, type="primary"):
         with st.spinner("✨ Casting your spell..."):
             time.sleep(1.2)
         st.session_state.setup_stage = "topic"

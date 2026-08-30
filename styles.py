@@ -124,6 +124,10 @@ html, body, [class*="css"] {
     margin-bottom: 0.4rem;
 }
 
+.hero-title-gold {
+    color: var(--accent) !important;
+}
+
 .value-prop-row {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.75rem;
@@ -149,6 +153,8 @@ html, body, [class*="css"] {
     border-radius: 999px;
     padding: 0.5rem 1.2rem;
     margin: 0 auto 1.2rem;
+    color: #E8DFC8 !important;
+    font-size: 0.95rem;
 }
 
 .feature-col {
@@ -196,13 +202,22 @@ html, body, [class*="css"] {
 }
 
 /* Theme Streamlit's selectbox dropdown to match the dark palette */
-div[data-baseweb="select"] > div {
-    background: rgba(237,230,214,0.06) !important;
-    border-color: rgba(237,230,214,0.25) !important;
+div[data-testid="stSelectbox"] > div > div {
+    background-color: #1C2029 !important;
+    border: 1px solid rgba(237,230,214,0.25) !important;
     border-radius: 999px !important;
+}
+div[data-testid="stSelectbox"] * {
     color: #EDE6D6 !important;
 }
-div[data-baseweb="select"] span {
+div[data-testid="stSelectbox"] svg {
+    fill: #EDE6D6 !important;
+}
+ul[data-testid="stSelectboxVirtualDropdown"] {
+    background-color: #1C2029 !important;
+}
+ul[data-testid="stSelectboxVirtualDropdown"] li {
+    background-color: #1C2029 !important;
     color: #EDE6D6 !important;
 }
 
@@ -354,6 +369,17 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
 .fog-layer-1 { animation: fogDrift 18s ease-in-out infinite; }
 .fog-layer-2 { animation: fogDrift 24s ease-in-out infinite reverse; }
 
+@keyframes starTwinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+.star-twinkle circle:nth-child(1) { animation: starTwinkle 3s ease-in-out infinite; }
+.star-twinkle circle:nth-child(2) { animation: starTwinkle 4s ease-in-out infinite 0.5s; }
+.star-twinkle circle:nth-child(3) { animation: starTwinkle 2.5s ease-in-out infinite 1s; }
+.star-twinkle circle:nth-child(4) { animation: starTwinkle 3.5s ease-in-out infinite 1.5s; }
+.star-twinkle circle:nth-child(5) { animation: starTwinkle 3s ease-in-out infinite 0.8s; }
+.star-twinkle circle:nth-child(6) { animation: starTwinkle 4s ease-in-out infinite 2s; }
+
 @keyframes windowFlicker {
     0%, 100% { opacity: 0.18; }
     45% { opacity: 0.24; }
@@ -451,6 +477,17 @@ CHIME_SOUND_B64 = "UklGRkI3AABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YR43AAAAA
 TOWER_SVG = """
 <div style="display:flex; justify-content:center; margin-bottom: 0.5rem;">
 <svg viewBox="0 0 400 280" width="260" style="max-width:80%; height:auto; opacity:0.92;" xmlns="http://www.w3.org/2000/svg">
+<circle cx="200" cy="95" r="70" fill="#E8E2D0" opacity="0.10"/>
+<circle cx="200" cy="95" r="45" fill="#F0EAD8" opacity="0.20"/>
+<circle cx="200" cy="95" r="28" fill="#F5F0E0" opacity="0.32"/>
+<g class="star-twinkle">
+<circle cx="55" cy="35" r="1.4" fill="#EDE6D6" opacity="0.6"/>
+<circle cx="340" cy="50" r="1.2" fill="#EDE6D6" opacity="0.5"/>
+<circle cx="105" cy="15" r="1" fill="#EDE6D6" opacity="0.45"/>
+<circle cx="290" cy="20" r="1.3" fill="#EDE6D6" opacity="0.55"/>
+<circle cx="370" cy="80" r="1" fill="#EDE6D6" opacity="0.4"/>
+<circle cx="20" cy="90" r="1.2" fill="#EDE6D6" opacity="0.5"/>
+</g>
 <ellipse class="fog-layer-1" cx="90" cy="230" rx="70" ry="14" fill="#5B6578" opacity="0.15"/>
 <ellipse class="fog-layer-2" cx="310" cy="240" rx="80" ry="16" fill="#5B6578" opacity="0.13"/>
 <g class="rain-group" stroke="#5B6578" stroke-width="2" stroke-linecap="round" opacity="0.5">
