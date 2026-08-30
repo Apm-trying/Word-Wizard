@@ -142,6 +142,70 @@ html, body, [class*="css"] {
     margin-top: 0.6rem;
 }
 
+.subtitle-banner {
+    display: inline-block;
+    background: rgba(199, 154, 60, 0.12);
+    border: 1px solid rgba(199, 154, 60, 0.3);
+    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    margin: 0 auto 1.2rem;
+}
+
+.feature-col {
+    text-align: center;
+    padding: 0 0.3rem;
+}
+.feature-col .feature-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.2rem;
+}
+.feature-col .feature-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+}
+.feature-col .feature-desc {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.3;
+}
+
+.trust-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+}
+.trust-badge .trust-icon {
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+.trust-badge .trust-title {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #EDE6D6;
+    margin: 0;
+}
+.trust-badge .trust-desc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* Theme Streamlit's selectbox dropdown to match the dark palette */
+div[data-baseweb="select"] > div {
+    background: rgba(237,230,214,0.06) !important;
+    border-color: rgba(237,230,214,0.25) !important;
+    border-radius: 999px !important;
+    color: #EDE6D6 !important;
+}
+div[data-baseweb="select"] span {
+    color: #EDE6D6 !important;
+}
+
 /* Make sure Streamlit's own widget text (radio labels, captions) stays
    bright and readable on our dark background, regardless of the user's
    system light/dark mode, which Streamlit would otherwise inherit from. */

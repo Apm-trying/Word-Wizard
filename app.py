@@ -52,11 +52,50 @@ if st.session_state.setup_stage == "landing":
     landing_strings = t(st.session_state.language)
     lang = st.session_state.language
 
+    col_spacer, col_lang = st.columns([3, 1])
+    with col_lang:
+        lang_choice = st.selectbox(
+            "lang", options=["en", "no"],
+            format_func=lambda x: "🌐 EN" if x == "en" else "🌐 NO",
+            index=0 if lang == "en" else 1,
+            label_visibility="collapsed",
+        )
+        if lang_choice != lang:
+            st.session_state.language = lang_choice
+            st.rerun()
+
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
     st.markdown(HAT_ICON_SVG, unsafe_allow_html=True)
     st.markdown('<div class="hero-title">Word<br>Wizard</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="app-subtitle">{landing_strings["landing_subtitle"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="value-prop-row">{landing_strings["value_prop_row"]}</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div style="text-align:center;"><span class="subtitle-banner">{landing_strings["landing_subtitle"]}</span></div>',
+        unsafe_allow_html=True,
+    )
+
+    fcol1, fcol2, fcol3 = st.columns(3)
+    with fcol1:
+        st.markdown(
+            f'<div class="feature-col"><div class="feature-icon">📖</div>'
+            f'<div class="feature-title">{landing_strings["feature_learn_title"]}</div>'
+            f'<div class="feature-desc">{landing_strings["feature_learn_desc"]}</div></div>',
+            unsafe_allow_html=True,
+        )
+    with fcol2:
+        st.markdown(
+            f'<div class="feature-col"><div class="feature-icon">🪄</div>'
+            f'<div class="feature-title">{landing_strings["feature_cast_title"]}</div>'
+            f'<div class="feature-desc">{landing_strings["feature_cast_desc"]}</div></div>',
+            unsafe_allow_html=True,
+        )
+    with fcol3:
+        st.markdown(
+            f'<div class="feature-col"><div class="feature-icon">⭐</div>'
+            f'<div class="feature-title">{landing_strings["feature_levelup_title"]}</div>'
+            f'<div class="feature-desc">{landing_strings["feature_levelup_desc"]}</div></div>',
+            unsafe_allow_html=True,
+        )
+
+    st.write("")
     st.markdown(
         f'<div style="text-align:center; margin-bottom:1.2rem;">'
         f'<span class="xp-badge">🔥 0 · ⭐ {landing_strings["level_prefix"]} 1</span></div>',
@@ -73,15 +112,21 @@ if st.session_state.setup_stage == "landing":
     )
 
     st.write("")
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🇬🇧 EN", use_container_width=True, type=("primary" if lang == "en" else "secondary")):
-            st.session_state.language = "en"
-            st.rerun()
-    with col2:
-        if st.button("🇳🇴 NO", use_container_width=True, type=("primary" if lang == "no" else "secondary")):
-            st.session_state.language = "no"
-            st.rerun()
+    tcol1, tcol2 = st.columns(2)
+    with tcol1:
+        st.markdown(
+            f'<div class="trust-badge"><span class="trust-icon">🔓</span>'
+            f'<div><p class="trust-title">{landing_strings["trust_no_signup_title"]}</p>'
+            f'<p class="trust-desc">{landing_strings["trust_no_signup_desc"]}</p></div></div>',
+            unsafe_allow_html=True,
+        )
+    with tcol2:
+        st.markdown(
+            f'<div class="trust-badge"><span class="trust-icon">📈</span>'
+            f'<div><p class="trust-title">{landing_strings["trust_track_title"]}</p>'
+            f'<p class="trust-desc">{landing_strings["trust_track_desc"]}</p></div></div>',
+            unsafe_allow_html=True,
+        )
 
     st.stop()
 
