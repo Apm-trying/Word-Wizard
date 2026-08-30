@@ -66,29 +66,10 @@ if st.session_state.setup_stage == "landing":
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
     st.markdown('<div class="hero-title">Word</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-title hero-title-gold">Wizard</div>', unsafe_allow_html=True)
-
-    fcol1, fcol2, fcol3 = st.columns(3)
-    with fcol1:
-        st.markdown(
-            f'<div class="feature-col"><div class="feature-icon">📖</div>'
-            f'<div class="feature-title">{landing_strings["feature_learn_title"]}</div>'
-            f'<div class="feature-desc">{landing_strings["feature_learn_desc"]}</div></div>',
-            unsafe_allow_html=True,
-        )
-    with fcol2:
-        st.markdown(
-            f'<div class="feature-col"><div class="feature-icon">✨</div>'
-            f'<div class="feature-title">{landing_strings["feature_cast_title"]}</div>'
-            f'<div class="feature-desc">{landing_strings["feature_cast_desc"]}</div></div>',
-            unsafe_allow_html=True,
-        )
-    with fcol3:
-        st.markdown(
-            f'<div class="feature-col"><div class="feature-icon">⭐</div>'
-            f'<div class="feature-title">{landing_strings["feature_levelup_title"]}</div>'
-            f'<div class="feature-desc">{landing_strings["feature_levelup_desc"]}</div></div>',
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        f'<div style="text-align:center;"><span class="subtitle-banner">{landing_strings["landing_subtitle"]}</span></div>',
+        unsafe_allow_html=True,
+    )
 
     st.write("")
     st.markdown(
