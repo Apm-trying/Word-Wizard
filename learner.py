@@ -83,17 +83,22 @@ def _save_all_progress(all_progress):
 def _load_user_progress(nickname):
     all_progress = _load_all_progress()
     defaults = {
-        "current_word_id": None,
-        "assigned_at": None,
-        "language": None,
-        "topics": None,  # list of topic keys, e.g. ["politics", "economy"]
-        "word_status": {},  # word_id (as string) -> "known" | "unknown"
+        "languages": {},  # lang code -> {"current_word_id":, "assigned_at":, "topics":}
+        "word_status": {},  # word_id (as string) -> "known" | "unknown" — shared across languages
         "xp": 0,
         "streak": 0,
         "last_active_date": None,  # ISO date string, e.g. "2026-08-30"
     }
     defaults.update(all_progress.get(nickname, {}))
+    if "languages" not in defaults or not isinstance(defaults["languages"], dict):
+        defaults["languages"] = {}
     return defaults
+
+
+def _get_lang_state(user_progress, language):
+    return user_progress["languages"].get(
+        language, {"current_word_id": None, "assigned_at": None, "topics": None}
+    )
 
 
 def _save_user_progress(nickname, user_progress):
@@ -146,10 +151,11 @@ def _pick_new_word(words, language, topics, word_status):
 
 
 def _assign_word(nickname, user_progress, word, language, topics):
-    user_progress["current_word_id"] = word["id"] if word else None
-    user_progress["assigned_at"] = datetime.now().isoformat()
-    user_progress["language"] = language
-    user_progress["topics"] = sorted(topics)
+    user_progress["languages"][language] = {
+        "current_word_id": word["id"] if word else None,
+        "assigned_at": datetime.now().isoformat(),
+        "topics": sorted(topics),
+    }
     _save_user_progress(nickname, user_progress)
     return word
 
@@ -157,26 +163,27 @@ def _assign_word(nickname, user_progress, word, language, topics):
 def get_current_word(nickname, language, topics):
     """
     Returns the word this person should see right now, for their language/topics filter.
-    Assigns a new one if none is set, the 12h window expired, or the filter changed.
+    Each language tracks its own current word and lock timer independently —
+    switching languages resumes wherever that language was, it doesn't reset anything.
+    Assigns a new word if none is set for this language, the lock window expired,
+    or the topic filter changed.
     """
     words = load_words()
     user_progress = _load_user_progress(nickname)
+    lang_state = _get_lang_state(user_progress, language)
 
-    filter_changed = (
-        user_progress["language"] != language
-        or user_progress["topics"] != sorted(topics)
-    )
+    filter_changed = lang_state["topics"] != sorted(topics)
 
-    if user_progress["current_word_id"] is None or filter_changed:
+    if lang_state["current_word_id"] is None or filter_changed:
         new_word = _pick_new_word(words, language, topics, user_progress["word_status"])
         return _assign_word(nickname, user_progress, new_word, language, topics)
 
-    assigned_at = datetime.fromisoformat(user_progress["assigned_at"])
+    assigned_at = datetime.fromisoformat(lang_state["assigned_at"])
     if datetime.now() - assigned_at >= timedelta(hours=LOCK_HOURS):
         new_word = _pick_new_word(words, language, topics, user_progress["word_status"])
         return _assign_word(nickname, user_progress, new_word, language, topics)
 
-    current = next((w for w in words if w["id"] == user_progress["current_word_id"]), None)
+    current = next((w for w in words if w["id"] == lang_state["current_word_id"]), None)
     return current
 
 
@@ -260,15 +267,17 @@ def advance_word(nickname, language, topics):
     return _assign_word(nickname, user_progress, new_word, language, topics)
 
 
-def get_time_remaining(nickname):
+def get_time_remaining(nickname, language):
     """
-    Returns (remaining_seconds, percent_elapsed) for this person's current 12h lock window.
+    Returns (remaining_seconds, percent_elapsed) for this person's lock window
+    in the given language specifically (each language has its own timer).
     """
     user_progress = _load_user_progress(nickname)
-    if not user_progress["assigned_at"]:
+    lang_state = _get_lang_state(user_progress, language)
+    if not lang_state["assigned_at"]:
         return 0, 0.0
 
-    assigned_at = datetime.fromisoformat(user_progress["assigned_at"])
+    assigned_at = datetime.fromisoformat(lang_state["assigned_at"])
     elapsed = (datetime.now() - assigned_at).total_seconds()
     total = LOCK_HOURS * 3600
     remaining = max(0, total - elapsed)

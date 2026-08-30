@@ -493,7 +493,7 @@ else:
     )
 
     st.info(strings["locked_message"])
-    remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname)
+    remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname, language)
     hours = int(remaining_seconds // 3600)
     minutes = int((remaining_seconds % 3600) // 60)
     countdown_label = strings["countdown_format"].format(h=hours, m=minutes)

@@ -386,7 +386,7 @@ CHIME_SOUND_B64 = "UklGRkI3AABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YR43AAAAA
 # was drawing too much attention.
 TOWER_SVG = """
 <div style="display:flex; justify-content:center; margin-bottom: 0.5rem;">
-<svg viewBox="0 0 400 280" width="210" style="max-width:70%; height:auto; opacity:0.9;" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 400 280" width="260" style="max-width:80%; height:auto; opacity:0.92;" xmlns="http://www.w3.org/2000/svg">
 <ellipse class="fog-layer-1" cx="90" cy="230" rx="70" ry="14" fill="#5B6578" opacity="0.15"/>
 <ellipse class="fog-layer-2" cx="310" cy="240" rx="80" ry="16" fill="#5B6578" opacity="0.13"/>
 <g class="rain-group" stroke="#5B6578" stroke-width="2" stroke-linecap="round" opacity="0.5">
