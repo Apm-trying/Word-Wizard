@@ -50,31 +50,18 @@ if "show_my_words" not in st.session_state:
 # ============================================================
 if st.session_state.setup_stage == "landing":
     landing_strings = t(st.session_state.language)
-    lang = st.session_state.language
 
-    col_brand, col_lang = st.columns([2, 2])
-    with col_brand:
-        st.markdown(
-            '<div style="display:flex; align-items:center; gap:8px; padding-top:0.4rem;">'
-            '<svg viewBox="0 0 100 100" width="26" xmlns="http://www.w3.org/2000/svg">'
-            '<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#7B7F92" stroke="#4A4E5E" stroke-width="2"/>'
-            '<ellipse cx="50" cy="68" rx="30" ry="8" fill="#5B6578" stroke="#4A4E5E" stroke-width="2"/>'
-            '</svg>'
-            '<span style="font-family:\'Fraunces\',serif; font-weight:600; font-size:0.9rem; '
-            'color:#F5F1E6; line-height:1.15; text-transform:uppercase; letter-spacing:0.02em;">Word<br>Wizard</span>'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-    with col_lang:
-        btn_col1, btn_col2 = st.columns(2)
-        with btn_col1:
-            if st.button("EN", key="lang_en_top", use_container_width=True, type=("primary" if lang == "en" else "secondary")):
-                st.session_state.language = "en"
-                st.rerun()
-        with btn_col2:
-            if st.button("NO", key="lang_no_top", use_container_width=True, type=("primary" if lang == "no" else "secondary")):
-                st.session_state.language = "no"
-                st.rerun()
+    st.markdown(
+        '<div style="display:flex; align-items:center; gap:8px; padding-top:0.4rem; margin-bottom:1rem;">'
+        '<svg viewBox="0 0 100 100" width="26" xmlns="http://www.w3.org/2000/svg">'
+        '<path d="M 50 10 L 72 68 Q 50 80 28 68 Z" fill="#7B7F92" stroke="#4A4E5E" stroke-width="2"/>'
+        '<ellipse cx="50" cy="68" rx="30" ry="8" fill="#5B6578" stroke="#4A4E5E" stroke-width="2"/>'
+        '</svg>'
+        '<span style="font-family:\'Fraunces\',serif; font-weight:600; font-size:0.9rem; '
+        'color:#F5F1E6; line-height:1.15; text-transform:uppercase; letter-spacing:0.02em;">Word<br>Wizard</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
 
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
     st.markdown('<div class="hero-title">Word</div>', unsafe_allow_html=True)
@@ -116,7 +103,7 @@ if st.session_state.setup_stage == "landing":
     if st.button(f'✨ {landing_strings["landing_start_button"]}', use_container_width=True, type="primary"):
         with st.spinner("✨ Casting your spell..."):
             time.sleep(1.2)
-        st.session_state.setup_stage = "topic"
+        st.session_state.setup_stage = "language"
         st.rerun()
     st.markdown(
         f'<div class="no-account-caption">{landing_strings["no_account_caption"]}</div>',
@@ -129,24 +116,16 @@ if st.session_state.setup_stage == "landing":
 # STEP 1: LANGUAGE PICKER — shown neutrally, no locale set yet
 # ============================================================
 if st.session_state.setup_stage == "language":
-    st.markdown(TOWER_SVG, unsafe_allow_html=True)
-    st.markdown('<div class="app-title">🧙 Word Wizard</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="app-subtitle">Choose your language to continue / Velg språk for å fortsette</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div class="app-title" style="font-size:1.6rem;">Choose your language</div>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("🇳🇴 Norsk", use_container_width=True):
-            st.session_state.language = "no"
-            st.session_state.setup_stage = "topic"
-            st.rerun()
-    with col2:
-        if st.button("🇬🇧 English", use_container_width=True):
-            st.session_state.language = "en"
-            st.session_state.setup_stage = "topic"
-            st.rerun()
+    if st.button("🇬🇧  English  ›", use_container_width=True, type="secondary"):
+        st.session_state.language = "en"
+        st.session_state.setup_stage = "topic"
+        st.rerun()
+    if st.button("🇳🇴  Norsk  ›", use_container_width=True, type="secondary"):
+        st.session_state.language = "no"
+        st.session_state.setup_stage = "topic"
+        st.rerun()
 
     st.stop()
 
