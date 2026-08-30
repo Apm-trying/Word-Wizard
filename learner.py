@@ -89,6 +89,8 @@ def _load_user_progress(nickname):
         "topics": None,  # list of topic keys, e.g. ["politics", "economy"]
         "word_status": {},  # word_id (as string) -> "known" | "unknown"
         "xp": 0,
+        "streak": 0,
+        "last_active_date": None,  # ISO date string, e.g. "2026-08-30"
     }
     defaults.update(all_progress.get(nickname, {}))
     return defaults
@@ -98,6 +100,15 @@ def _save_user_progress(nickname, user_progress):
     all_progress = _load_all_progress()
     all_progress[nickname] = user_progress
     _save_all_progress(all_progress)
+
+
+def pick_guest_word(language, topics):
+    """
+    Picks a random word for someone who hasn't named themselves yet —
+    no progress history to check against, since none exists.
+    """
+    words = load_words()
+    return _pick_new_word(words, language, topics, {})
 
 
 def get_topics_for_language(language):
@@ -169,11 +180,40 @@ def get_current_word(nickname, language, topics):
     return current
 
 
+def _update_streak(nickname):
+    """
+    Bumps a person's daily streak. One calendar day answered = streak day.
+    Answering again same day doesn't double-count; missing a day resets to 1.
+    """
+    user_progress = _load_user_progress(nickname)
+    today = datetime.now().date().isoformat()
+    last_date = user_progress.get("last_active_date")
+
+    if last_date == today:
+        return  # already counted today
+    if last_date is not None:
+        gap_days = (datetime.fromisoformat(today) - datetime.fromisoformat(last_date)).days
+        if gap_days == 1:
+            user_progress["streak"] = user_progress.get("streak", 0) + 1
+        else:
+            user_progress["streak"] = 1
+    else:
+        user_progress["streak"] = 1
+
+    user_progress["last_active_date"] = today
+    _save_user_progress(nickname, user_progress)
+
+
+def get_streak(nickname):
+    return _load_user_progress(nickname).get("streak", 0)
+
+
 def mark_status(nickname, word_id, status):
     """status should be 'known' or 'unknown'. Recorded for this person only."""
     user_progress = _load_user_progress(nickname)
     user_progress["word_status"][str(word_id)] = status
     _save_user_progress(nickname, user_progress)
+    _update_streak(nickname)
 
 
 def get_word_status(nickname, word_id):

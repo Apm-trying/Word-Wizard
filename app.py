@@ -1,18 +1,39 @@
 import streamlit as st
+import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, HAT_ICON_SVG, MONSTER_SVG, hp_bar_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 st.markdown(CSS, unsafe_allow_html=True)
 
-# Typing this as your "name" on the nickname screen opens the hidden admin
-# panel instead of starting the app normally. Not shown anywhere in the UI.
+# Typing this as your "name" at the name-entry screen opens the hidden admin
+# panel instead of saving progress normally. Not shown anywhere in the UI.
 ADMIN_TRIGGER = "wizardmasterkey"
 
 # --- Session state setup ---
 if "setup_stage" not in st.session_state:
-    st.session_state.setup_stage = "nickname"  # "nickname" -> "language" -> "topic" -> "done"
+    st.session_state.setup_stage = "landing"
+if "language" not in st.session_state:
+    query_lang = st.query_params.get("lang")
+    if query_lang in ("en", "no"):
+        st.session_state.language = query_lang
+    else:
+        st.session_state.language = "en"  # fallback while detection runs
+        st.markdown(
+            """
+            <script>
+            if (!window.location.search.includes('lang=')) {
+                const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+                const detected = (browserLang.startsWith('no') || browserLang.startsWith('nb') || browserLang.startsWith('nn')) ? 'no' : 'en';
+                const url = new URL(window.location);
+                url.searchParams.set('lang', detected);
+                window.location.replace(url);
+            }
+            </script>
+            """,
+            unsafe_allow_html=True,
+        )
 if "revealed" not in st.session_state:
     st.session_state.revealed = False
 if "quiz_active" not in st.session_state:
@@ -25,83 +46,44 @@ if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
 
 # ============================================================
-# STEP 0: NICKNAME — identifies this person so progress doesn't
-# collide with anyone else using the same deployed app
+# STEP 0: LANDING — no name required, just start playing
 # ============================================================
-if st.session_state.setup_stage == "nickname":
+if st.session_state.setup_stage == "landing":
+    landing_strings = t(st.session_state.language)
+    lang = st.session_state.language
+
     st.markdown(TOWER_SVG, unsafe_allow_html=True)
-    st.markdown('<div class="app-title">🧙 Word Wizard</div>', unsafe_allow_html=True)
+    st.markdown(HAT_ICON_SVG, unsafe_allow_html=True)
+    st.markdown('<div class="hero-title">Word<br>Wizard</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="app-subtitle">{landing_strings["landing_subtitle"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="value-prop-row">{landing_strings["value_prop_row"]}</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="app-subtitle">Enter your name to begin / Skriv inn navnet ditt for å starte</div>',
+        f'<div style="text-align:center; margin-bottom:1.2rem;">'
+        f'<span class="xp-badge">🔥 0 · ⭐ {landing_strings["level_prefix"]} 1</span></div>',
+        unsafe_allow_html=True,
+    )
+    if st.button(f'🪄 {landing_strings["landing_start_button"]}', use_container_width=True, type="primary"):
+        with st.spinner("✨ Casting your spell..."):
+            time.sleep(1.2)
+        st.session_state.setup_stage = "topic"
+        st.rerun()
+    st.markdown(
+        f'<div class="no-account-caption">{landing_strings["no_account_caption"]}</div>',
         unsafe_allow_html=True,
     )
 
-    nickname_input = st.text_input("nickname", label_visibility="collapsed", placeholder="Your name / Ditt navn")
-
-    if st.button("Continue / Fortsett →", use_container_width=True, type="primary"):
-        if nickname_input.strip().lower() == ADMIN_TRIGGER:
-            st.session_state.setup_stage = "admin_login"
+    st.write("")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🇬🇧 EN", use_container_width=True, type=("primary" if lang == "en" else "secondary")):
+            st.session_state.language = "en"
             st.rerun()
-        else:
-            clean_nickname = learner.sanitize_nickname(nickname_input)
-            if not clean_nickname:
-                st.error("Please enter a name / Vennligst skriv inn et navn")
-            elif not learner.is_nickname_allowed(nickname_input):
-                st.error("That name isn't allowed, please choose another. / Det navnet er ikke tillatt, velg et annet.")
-            else:
-                st.session_state.nickname = clean_nickname
-                st.session_state.setup_stage = "language"
-                st.rerun()
-
-    st.stop()
-
-# ============================================================
-# ADMIN — hidden behind a magic nickname + password, not shown
-# to regular users anywhere in the normal UI
-# ============================================================
-if st.session_state.setup_stage == "admin_login":
-    st.markdown('<div class="app-title">🛠️ Admin</div>', unsafe_allow_html=True)
-    password_input = st.text_input("password", type="password", label_visibility="collapsed", placeholder="Password")
-
-    if st.button("Enter", use_container_width=True, type="primary"):
-        try:
-            admin_password = st.secrets.get("ADMIN_PASSWORD", None)
-        except Exception:
-            admin_password = None
-        if admin_password and password_input == admin_password:
-            st.session_state.setup_stage = "admin_panel"
+    with col2:
+        if st.button("🇳🇴 NO", use_container_width=True, type=("primary" if lang == "no" else "secondary")):
+            st.session_state.language = "no"
             st.rerun()
-        else:
-            st.error("Incorrect password, or ADMIN_PASSWORD isn't set in Streamlit secrets yet.")
-
-    if st.button("← Back", use_container_width=True):
-        st.session_state.setup_stage = "nickname"
-        st.rerun()
 
     st.stop()
-
-if st.session_state.setup_stage == "admin_panel":
-    st.markdown('<div class="app-title">🛠️ Admin Panel</div>', unsafe_allow_html=True)
-    all_users = learner.get_leaderboard(limit=1000)
-
-    if not all_users:
-        st.info("No users yet.")
-    for entry in all_users:
-        col1, col2 = st.columns([3, 1])
-        with col1:
-            st.write(f'{entry["nickname"]} — Level {entry["level"]} ({entry["tier"]}), {entry["xp"]} XP')
-        with col2:
-            if st.button("Delete", key=f"del_{entry['nickname']}"):
-                learner.delete_user(entry["nickname"])
-                st.rerun()
-
-    if st.button("← Exit Admin", use_container_width=True):
-        st.session_state.setup_stage = "nickname"
-        st.rerun()
-
-    st.stop()
-
-nickname = st.session_state.nickname
 
 # ============================================================
 # STEP 1: LANGUAGE PICKER — shown neutrally, no locale set yet
@@ -154,25 +136,185 @@ if st.session_state.setup_stage == "topic":
             st.warning(strings["topic_required_warning"])
         else:
             st.session_state.topics = selected_topics
-            st.session_state.setup_stage = "done"
-            st.session_state.revealed = False
+            st.session_state.guest_word = learner.pick_guest_word(st.session_state.language, selected_topics)
+            st.session_state.setup_stage = "guest_word"
             st.rerun()
+
+    st.stop()
+
+language = st.session_state.language
+
+# ============================================================
+# GUEST FLOW — a real word, shown before any name is collected
+# ============================================================
+if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
+    guest_word = st.session_state.guest_word
+    topic_label = strings["topics"][guest_word["topic"]]
+
+    if st.session_state.setup_stage == "guest_word":
+        st.markdown(
+            f"""
+            <div class="word-card">
+                <span class="topic-tag">{topic_label}</span>
+                <div class="word-display">{guest_word['word']}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.write(strings["know_prompt"])
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button(strings["yes_button"], use_container_width=True):
+                choices, correct_index = learner.get_quiz_choices(guest_word, language)
+                st.session_state.guest_quiz_choices = choices
+                st.session_state.guest_quiz_correct_index = correct_index
+                st.session_state.setup_stage = "guest_quiz"
+                st.rerun()
+        with col2:
+            if st.button(strings["no_button"], use_container_width=True):
+                st.session_state.guest_correct = False
+                st.session_state.setup_stage = "name_entry"
+                st.rerun()
+        st.stop()
+
+    if st.session_state.setup_stage == "guest_quiz":
+        st.markdown(
+            f"""
+            <div class="word-card">
+                <span class="topic-tag">{topic_label}</span>
+                <div class="word-display">{guest_word['word']}</div>
+                <div class="section-label">{strings['quiz_prompt']}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        for i, choice_text in enumerate(st.session_state.guest_quiz_choices):
+            if st.button(choice_text, use_container_width=True, key=f"guest_quiz_choice_{i}"):
+                st.session_state.guest_correct = (i == st.session_state.guest_quiz_correct_index)
+                st.session_state.setup_stage = "name_entry"
+                st.rerun()
+        st.stop()
+
+    if st.session_state.setup_stage == "name_entry":
+        if st.session_state.guest_correct:
+            st.markdown(chime_audio_html(), unsafe_allow_html=True)
+            st.markdown(
+                f"""
+                <div class="word-card">
+                    <span class="topic-tag">{topic_label}</span>
+                    <div class="word-display">{guest_word['word']}</div>
+                    <div class="section-label">{strings['correct_heading']}</div>
+                    <div>{strings['xp_gained_template'].format(xp=learner.XP_PER_CORRECT)}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.write(strings["save_progress_correct"])
+        else:
+            examples_html = "".join(f'<div class="example-line"><em>{ex}</em></div>' for ex in guest_word["examples"])
+            st.markdown(
+                f"""
+                <div class="word-card">
+                    <span class="topic-tag">{topic_label}</span>
+                    <div class="word-display">{guest_word['word']}</div>
+                    <div class="section-label">{strings['definition_label']}</div>
+                    <div>{guest_word['definition']}</div>
+                    <div class="section-label">{strings['example_label']}</div>
+                    {examples_html}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.write(strings["save_progress_incorrect"])
+
+        nickname_input = st.text_input("nickname", label_visibility="collapsed", placeholder="Your name / Ditt navn")
+
+        if st.button(strings["continue_button"], use_container_width=True, type="primary"):
+            if nickname_input.strip().lower() == ADMIN_TRIGGER:
+                st.session_state.setup_stage = "admin_login"
+                st.rerun()
+            else:
+                clean_nickname = learner.sanitize_nickname(nickname_input)
+                if not clean_nickname:
+                    st.error("Please enter a name / Vennligst skriv inn et navn")
+                elif not learner.is_nickname_allowed(nickname_input):
+                    st.error("That name isn't allowed, please choose another. / Det navnet er ikke tillatt, velg et annet.")
+                else:
+                    if st.session_state.guest_correct:
+                        learner.score_correct_answer(clean_nickname, guest_word["id"])
+                    else:
+                        learner.mark_status(clean_nickname, guest_word["id"], "unknown")
+                    with st.spinner("✨ Casting your spell..."):
+                        time.sleep(1.2)
+                    st.session_state.nickname = clean_nickname
+                    st.session_state.setup_stage = "done"
+                    st.session_state.revealed = False
+                    st.session_state.quiz_active = False
+                    st.session_state.just_correct = False
+                    st.rerun()
+        st.stop()
+
+# ============================================================
+# ADMIN — hidden behind a magic name + password, not shown
+# to regular users anywhere in the normal UI
+# ============================================================
+if st.session_state.setup_stage == "admin_login":
+    st.markdown('<div class="app-title">🛠️ Admin</div>', unsafe_allow_html=True)
+    password_input = st.text_input("password", type="password", label_visibility="collapsed", placeholder="Password")
+
+    if st.button("Enter", use_container_width=True, type="primary"):
+        try:
+            admin_password = st.secrets.get("ADMIN_PASSWORD", None)
+        except Exception:
+            admin_password = None
+        if admin_password and password_input == admin_password:
+            st.session_state.setup_stage = "admin_panel"
+            st.rerun()
+        else:
+            st.error("Incorrect password, or ADMIN_PASSWORD isn't set in Streamlit secrets yet.")
+
+    if st.button("← Back", use_container_width=True):
+        st.session_state.setup_stage = "landing"
+        st.rerun()
+
+    st.stop()
+
+if st.session_state.setup_stage == "admin_panel":
+    st.markdown('<div class="app-title">🛠️ Admin Panel</div>', unsafe_allow_html=True)
+    all_users = learner.get_leaderboard(limit=1000)
+
+    if not all_users:
+        st.info("No users yet.")
+    for entry in all_users:
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.write(f'{entry["nickname"]} — Level {entry["level"]} ({entry["tier"]}), {entry["xp"]} XP')
+        with col2:
+            if st.button("Delete", key=f"del_{entry['nickname']}"):
+                learner.delete_user(entry["nickname"])
+                st.rerun()
+
+    if st.button("← Exit Admin", use_container_width=True):
+        st.session_state.setup_stage = "landing"
+        st.rerun()
 
     st.stop()
 
 # ============================================================
 # WORD SCREEN — shown once nickname + language + topics are set
 # ============================================================
-language = st.session_state.language
+nickname = st.session_state.nickname
 topics = st.session_state.topics
 
 level_info = learner.get_level_info(nickname)
 level_title = strings["titles"][level_info["tier"]]
+streak = learner.get_streak(nickname)
 
 top_col1, top_col2, top_col3, top_col4 = st.columns([2.4, 1, 1, 1])
 with top_col1:
     st.markdown(
-        f'<span class="xp-badge">{strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
+        f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
         unsafe_allow_html=True,
     )
 with top_col2:
@@ -253,8 +395,9 @@ is_review = learner.get_word_status(nickname, word["id"]) == "known"
 review_tag_html = f'<span class="topic-tag" style="margin-left:0.4rem;">{strings["review_tag"]}</span>' if is_review else ""
 
 if st.session_state.just_correct:
-    # Celebration step: shown right after a correct quiz answer, before moving on
     st.markdown(chime_audio_html(), unsafe_allow_html=True)
+    st.markdown(f'<div class="monster-defeated">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    st.markdown(hp_bar_html(0, draining=True), unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="word-card">
@@ -273,7 +416,8 @@ if st.session_state.just_correct:
         st.rerun()
 
 elif not st.session_state.revealed and not st.session_state.quiz_active:
-    # Step 1: show the word, ask if they know it
+    st.markdown(f'<div class="monster-idle">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    st.markdown(hp_bar_html(100), unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="word-card">
@@ -301,7 +445,8 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
             st.rerun()
 
 elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"]:
-    # Step 2: verify the claim with a 3-option quiz before trusting "known"
+    st.markdown(f'<div class="monster-idle">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    st.markdown(hp_bar_html(100), unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="word-card">
@@ -327,14 +472,15 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
             st.rerun()
 
 else:
-    # Step 3: reveal — reached either via "No" or a wrong quiz answer
     if st.session_state.pop("quiz_was_wrong", False):
         st.warning(strings["quiz_wrong"])
 
     examples_html = "".join(f'<div class="example-line"><em>{ex}</em></div>' for ex in word["examples"])
+    st.markdown(f'<div class="monster-attacking">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    st.markdown(hp_bar_html(100), unsafe_allow_html=True)
     st.markdown(
         f"""
-        <div class="word-card">
+        <div class="word-card hurt">
             <span class="topic-tag">{topic_label}</span>
             <div class="word-display">{word['word']}</div>
             <div class="section-label">{strings['definition_label']}</div>
@@ -352,3 +498,20 @@ else:
     minutes = int((remaining_seconds % 3600) // 60)
     countdown_label = strings["countdown_format"].format(h=hours, m=minutes)
     st.markdown(countdown_ring_html(percent_elapsed, countdown_label), unsafe_allow_html=True)
+
+st.write("")
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("🇬🇧 EN", use_container_width=True, type=("primary" if language == "en" else "secondary")):
+        st.session_state.language = "en"
+        st.session_state.revealed = False
+        st.session_state.quiz_active = False
+        st.session_state.just_correct = False
+        st.rerun()
+with col2:
+    if st.button("🇳🇴 NO", use_container_width=True, type=("primary" if language == "no" else "secondary")):
+        st.session_state.language = "no"
+        st.session_state.revealed = False
+        st.session_state.quiz_active = False
+        st.session_state.just_correct = False
+        st.rerun()
