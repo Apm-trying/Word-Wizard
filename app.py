@@ -123,23 +123,6 @@ if st.session_state.setup_stage == "landing":
         unsafe_allow_html=True,
     )
 
-    st.write("")
-    tcol1, tcol2 = st.columns(2)
-    with tcol1:
-        st.markdown(
-            f'<div class="trust-badge"><span class="trust-icon">🔓</span>'
-            f'<div><p class="trust-title">{landing_strings["trust_no_signup_title"]}</p>'
-            f'<p class="trust-desc">{landing_strings["trust_no_signup_desc"]}</p></div></div>',
-            unsafe_allow_html=True,
-        )
-    with tcol2:
-        st.markdown(
-            f'<div class="trust-badge"><span class="trust-icon">📈</span>'
-            f'<div><p class="trust-title">{landing_strings["trust_track_title"]}</p>'
-            f'<p class="trust-desc">{landing_strings["trust_track_desc"]}</p></div></div>',
-            unsafe_allow_html=True,
-        )
-
     st.stop()
 
 # ============================================================

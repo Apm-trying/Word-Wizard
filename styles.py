@@ -408,9 +408,15 @@ div[data-testid="stButton"] button[kind="primary"]:focus-visible {
     transform-box: fill-box;
     transform-origin: center;
 }
-.ripple-group circle:nth-child(2) { animation-delay: 0.4s; }
-.ripple-group circle:nth-child(3) { animation-delay: 0.9s; }
-.ripple-group circle:nth-child(4) { animation-delay: 0.2s; }
+.ripple-group circle:nth-child(2) { animation-delay: 0.35s; }
+.ripple-group circle:nth-child(3) { animation-delay: 0.7s; }
+.ripple-group circle:nth-child(4) { animation-delay: 1.05s; }
+.ripple-group circle:nth-child(5) { animation-delay: 1.4s; }
+.ripple-group circle:nth-child(6) { animation-delay: 0.15s; }
+.ripple-group circle:nth-child(7) { animation-delay: 0.5s; }
+.ripple-group circle:nth-child(8) { animation-delay: 0.85s; }
+.ripple-group circle:nth-child(9) { animation-delay: 1.2s; }
+.ripple-group circle:nth-child(10) { animation-delay: 0.6s; }
 
 
 @keyframes idleBounce {
@@ -560,16 +566,22 @@ TOWER_SVG = """
 <line x1="200" y1="96" x2="200" y2="130" stroke="#8A6A28" stroke-width="1"/>
 <line x1="189" y1="112" x2="211" y2="112" stroke="#8A6A28" stroke-width="1"/>
 <g fill="#5B5850">
-<ellipse cx="95" cy="255" rx="12" ry="7"/>
-<ellipse cx="120" cy="264" rx="8" ry="5" fill="#4A4740"/>
-<ellipse cx="305" cy="258" rx="11" ry="6"/>
-<ellipse cx="280" cy="266" rx="7" ry="4" fill="#4A4740"/>
+<polygon points="85,258 92,250 102,248 110,253 108,262 98,265 88,263"/>
+<polygon points="115,266 120,261 126,262 127,268 121,270" fill="#4A4740"/>
+<polygon points="298,261 306,253 316,252 322,258 319,266 308,268 300,266"/>
+<polygon points="274,268 279,263 285,264 286,270 280,272" fill="#4A4740"/>
 </g>
 <g class="ripple-group" fill="none" stroke="#8A94A8" stroke-width="1" opacity="0.5">
-<circle cx="110" cy="272" r="3"/>
-<circle cx="160" cy="277" r="3"/>
-<circle cx="240" cy="275" r="3"/>
-<circle cx="290" cy="270" r="3"/>
+<circle cx="180" cy="232" r="3"/>
+<circle cx="168" cy="245" r="3"/>
+<circle cx="155" cy="258" r="3"/>
+<circle cx="145" cy="268" r="3"/>
+<circle cx="135" cy="277" r="3"/>
+<circle cx="220" cy="232" r="3"/>
+<circle cx="232" cy="245" r="3"/>
+<circle cx="245" cy="258" r="3"/>
+<circle cx="255" cy="268" r="3"/>
+<circle cx="265" cy="277" r="3"/>
 </g>
 <g class="wizard-figure">
 <polygon points="194,258 206,258 210,232 190,232" fill="#8B8FA3" stroke="#4A4E5E" stroke-width="1"/>
