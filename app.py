@@ -50,26 +50,11 @@ ADMIN_TRIGGER = "wizardmasterkey"
 if "setup_stage" not in st.session_state:
     st.session_state.setup_stage = "landing"
 if "language" not in st.session_state:
+    # Default to English always. The only way to get Norwegian is an explicit
+    # choice on the language screen, or a "remember me" URL from a previous
+    # explicit choice — never automatic browser-language detection.
     query_lang = st.query_params.get("lang")
-    if query_lang in ("en", "no"):
-        st.session_state.language = query_lang
-    else:
-        st.session_state.language = "en"  # fallback while detection runs
-        components.html(
-            """
-            <script>
-            const win = window.parent;
-            if (!win.location.search.includes('lang=')) {
-                const browserLang = (win.navigator.language || win.navigator.userLanguage || '').toLowerCase();
-                const detected = (browserLang.startsWith('no') || browserLang.startsWith('nb') || browserLang.startsWith('nn')) ? 'no' : 'en';
-                const url = new URL(win.location);
-                url.searchParams.set('lang', detected);
-                win.location.replace(url);
-            }
-            </script>
-            """,
-            height=0,
-        )
+    st.session_state.language = query_lang if query_lang in ("en", "no") else "en"
 if "revealed" not in st.session_state:
     st.session_state.revealed = False
 if "quiz_active" not in st.session_state:
@@ -139,7 +124,7 @@ if st.session_state.setup_stage == "landing":
         unsafe_allow_html=True,
     )
     st.write("")
-    if st.button("Already have a wizard? Log back in", use_container_width=True, type="secondary"):
+    if st.button(landing_strings["log_back_in_button"], use_container_width=True, type="secondary"):
         st.session_state.setup_stage = "returning_login"
         st.rerun()
 
@@ -151,17 +136,22 @@ if st.session_state.setup_stage == "landing":
 # guest-word side effects on your real progress
 # ============================================================
 if st.session_state.setup_stage == "returning_login":
-    st.markdown('<div class="app-title" style="font-size:1.6rem;">Welcome back</div>', unsafe_allow_html=True)
+    returning_strings = t(st.session_state.language)
+    st.markdown(
+        f'<div class="app-title" style="font-size:1.6rem;">{returning_strings["welcome_back_title"]}</div>',
+        unsafe_allow_html=True,
+    )
     returning_nickname_input = st.text_input(
-        "returning_nickname", label_visibility="collapsed", placeholder="Your wizard's name"
+        "returning_nickname", label_visibility="collapsed",
+        placeholder=returning_strings["wizard_name_placeholder"],
     )
 
-    if st.button("Continue →", use_container_width=True, type="primary"):
+    if st.button(returning_strings["returning_continue_button"], use_container_width=True, type="primary"):
         clean_nickname = learner.sanitize_nickname(returning_nickname_input)
         if not clean_nickname:
-            st.error("Please enter a name")
+            st.error(returning_strings["empty_name_error"])
         elif not learner.user_exists(clean_nickname):
-            st.error("No wizard found with that name. Check the spelling, or start a new adventure below.")
+            st.error(returning_strings["no_wizard_found_error"])
         else:
             st.session_state.nickname = clean_nickname
             st.query_params["nickname"] = clean_nickname
