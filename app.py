@@ -5,6 +5,39 @@ from translations import t
 from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
+st.markdown(
+    """
+    <script>
+    if (!document.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
+        const capable = document.createElement('meta');
+        capable.name = 'apple-mobile-web-app-capable';
+        capable.content = 'yes';
+        document.head.appendChild(capable);
+
+        const statusBar = document.createElement('meta');
+        statusBar.name = 'apple-mobile-web-app-status-bar-style';
+        statusBar.content = 'black-translucent';
+        document.head.appendChild(statusBar);
+
+        const title = document.createElement('meta');
+        title.name = 'apple-mobile-web-app-title';
+        title.content = 'Word Wizard';
+        document.head.appendChild(title);
+
+        const touchIcon = document.createElement('link');
+        touchIcon.rel = 'apple-touch-icon';
+        touchIcon.href = 'app/static/apple-touch-icon.png';
+        document.head.appendChild(touchIcon);
+
+        const icon192 = document.createElement('link');
+        icon192.rel = 'icon';
+        icon192.href = 'app/static/icon-192.png';
+        document.head.appendChild(icon192);
+    }
+    </script>
+    """,
+    unsafe_allow_html=True,
+)
 st.markdown(CSS, unsafe_allow_html=True)
 
 # Typing this as your "name" at the name-entry screen opens the hidden admin
@@ -44,6 +77,22 @@ if "show_leaderboard" not in st.session_state:
     st.session_state.show_leaderboard = False
 if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
+
+# --- Remember me: if the URL already has a recognized nickname (saved there
+# after a previous login, e.g. via "Add to Home Screen"), skip straight past
+# landing/login. If topics are saved too, skip straight into the game. ---
+if "nickname" not in st.session_state and st.session_state.setup_stage == "landing":
+    url_nickname = st.query_params.get("nickname")
+    if url_nickname:
+        remembered_nickname = learner.sanitize_nickname(url_nickname)
+        if remembered_nickname and learner.user_exists(remembered_nickname):
+            st.session_state.nickname = remembered_nickname
+            url_topics = st.query_params.get("topics")
+            if url_topics:
+                st.session_state.topics = url_topics.split(",")
+                st.session_state.setup_stage = "done"
+            else:
+                st.session_state.setup_stage = "language"
 
 # ============================================================
 # STEP 0: LANDING — no name required, just start playing
@@ -86,6 +135,39 @@ if st.session_state.setup_stage == "landing":
         f'<div class="no-account-caption">{landing_strings["no_account_caption"]}</div>',
         unsafe_allow_html=True,
     )
+    st.write("")
+    if st.button("Already have a wizard? Log back in", use_container_width=True, type="secondary"):
+        st.session_state.setup_stage = "returning_login"
+        st.rerun()
+
+    st.stop()
+
+# ============================================================
+# RETURNING USER — logs back in with an existing nickname,
+# completely separate from the guest flow so there are no
+# guest-word side effects on your real progress
+# ============================================================
+if st.session_state.setup_stage == "returning_login":
+    st.markdown('<div class="app-title" style="font-size:1.6rem;">Welcome back</div>', unsafe_allow_html=True)
+    returning_nickname_input = st.text_input(
+        "returning_nickname", label_visibility="collapsed", placeholder="Your wizard's name"
+    )
+
+    if st.button("Continue →", use_container_width=True, type="primary"):
+        clean_nickname = learner.sanitize_nickname(returning_nickname_input)
+        if not clean_nickname:
+            st.error("Please enter a name")
+        elif not learner.user_exists(clean_nickname):
+            st.error("No wizard found with that name. Check the spelling, or start a new adventure below.")
+        else:
+            st.session_state.nickname = clean_nickname
+            st.query_params["nickname"] = clean_nickname
+            st.session_state.setup_stage = "language"
+            st.rerun()
+
+    if st.button("← Back", use_container_width=True):
+        st.session_state.setup_stage = "landing"
+        st.rerun()
 
     st.stop()
 
@@ -132,8 +214,18 @@ if st.session_state.setup_stage == "topic":
             st.warning(strings["topic_required_warning"])
         else:
             st.session_state.topics = selected_topics
-            st.session_state.guest_word = learner.pick_guest_word(st.session_state.language, selected_topics)
-            st.session_state.setup_stage = "guest_word"
+            if "nickname" in st.session_state:
+                # Returning user — already logged in, skip the guest flow entirely
+                st.query_params["nickname"] = st.session_state.nickname
+                st.query_params["lang"] = st.session_state.language
+                st.query_params["topics"] = ",".join(selected_topics)
+                st.session_state.setup_stage = "done"
+                st.session_state.revealed = False
+                st.session_state.quiz_active = False
+                st.session_state.just_correct = False
+            else:
+                st.session_state.guest_word = learner.pick_guest_word(st.session_state.language, selected_topics)
+                st.session_state.setup_stage = "guest_word"
             st.rerun()
 
     st.stop()
@@ -246,6 +338,9 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
                     with st.spinner("✨ Casting your spell..."):
                         time.sleep(1.2)
                     st.session_state.nickname = clean_nickname
+                    st.query_params["nickname"] = clean_nickname
+                    st.query_params["lang"] = language
+                    st.query_params["topics"] = ",".join(st.session_state.topics)
                     st.session_state.setup_stage = "done"
                     st.session_state.revealed = False
                     st.session_state.quiz_active = False
