@@ -1,10 +1,11 @@
 import json
 import re
 import random
+import streamlit as st
+from supabase import create_client
 from datetime import datetime, timedelta
 
 WORDS_FILE = "words.json"
-PROGRESS_FILE = "progress.json"
 LOCK_HOURS = 2
 XP_PER_CORRECT = 10
 XP_REVIEW_BONUS = 3  # smaller reward for correctly reviewing an already-known word
@@ -67,21 +68,18 @@ def load_words():
         return json.load(f)
 
 
-def _load_all_progress():
-    try:
-        with open(PROGRESS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {}
-
-
-def _save_all_progress(all_progress):
-    with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
-        json.dump(all_progress, f, ensure_ascii=False, indent=2)
+@st.cache_resource
+def _get_client():
+    """
+    One Supabase client shared across reruns (st.cache_resource keeps it
+    alive between script runs instead of reconnecting every time).
+    """
+    url = st.secrets["SUPABASE_URL"]
+    key = st.secrets["SUPABASE_KEY"]
+    return create_client(url, key)
 
 
 def _load_user_progress(nickname):
-    all_progress = _load_all_progress()
     defaults = {
         "languages": {},  # lang code -> {"current_word_id":, "assigned_at":, "topics":}
         "word_status": {},  # word_id (as string) -> "known" | "unknown" — shared across languages
@@ -89,7 +87,10 @@ def _load_user_progress(nickname):
         "streak": 0,
         "last_active_date": None,  # ISO date string, e.g. "2026-08-30"
     }
-    defaults.update(all_progress.get(nickname, {}))
+    client = _get_client()
+    result = client.table("progress").select("data").eq("nickname", nickname).execute()
+    if result.data:
+        defaults.update(result.data[0]["data"])
     if "languages" not in defaults or not isinstance(defaults["languages"], dict):
         defaults["languages"] = {}
     return defaults
@@ -102,9 +103,15 @@ def _get_lang_state(user_progress, language):
 
 
 def _save_user_progress(nickname, user_progress):
-    all_progress = _load_all_progress()
-    all_progress[nickname] = user_progress
-    _save_all_progress(all_progress)
+    client = _get_client()
+    client.table("progress").upsert({"nickname": nickname, "data": user_progress}).execute()
+
+
+def _get_all_progress():
+    """Returns {nickname: progress_dict} for everyone — used by the leaderboard and admin panel."""
+    client = _get_client()
+    result = client.table("progress").select("nickname, data").execute()
+    return {row["nickname"]: row["data"] for row in result.data}
 
 
 def pick_guest_word(language, topics):
@@ -365,12 +372,9 @@ def get_words_by_status(nickname, language, status):
 
 def delete_user(nickname):
     """Permanently removes a person's progress entirely (used by the admin panel)."""
-    all_progress = _load_all_progress()
-    if nickname in all_progress:
-        del all_progress[nickname]
-        _save_all_progress(all_progress)
-        return True
-    return False
+    client = _get_client()
+    client.table("progress").delete().eq("nickname", nickname).execute()
+    return True
 
 
 def get_leaderboard(limit=20):
@@ -378,7 +382,7 @@ def get_leaderboard(limit=20):
     Returns everyone's nickname/level/tier/xp, ranked highest XP first.
     Reads straight from shared progress storage — no per-user call needed.
     """
-    all_progress = _load_all_progress()
+    all_progress = _get_all_progress()
     entries = []
     for nickname, prog in all_progress.items():
         xp = prog.get("xp", 0)
