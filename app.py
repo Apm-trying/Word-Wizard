@@ -1,42 +1,44 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
 from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
-st.markdown(
+components.html(
     """
     <script>
-    if (!document.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
-        const capable = document.createElement('meta');
+    const doc = window.parent.document;
+    if (!doc.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
+        const capable = doc.createElement('meta');
         capable.name = 'apple-mobile-web-app-capable';
         capable.content = 'yes';
-        document.head.appendChild(capable);
+        doc.head.appendChild(capable);
 
-        const statusBar = document.createElement('meta');
+        const statusBar = doc.createElement('meta');
         statusBar.name = 'apple-mobile-web-app-status-bar-style';
         statusBar.content = 'black-translucent';
-        document.head.appendChild(statusBar);
+        doc.head.appendChild(statusBar);
 
-        const title = document.createElement('meta');
+        const title = doc.createElement('meta');
         title.name = 'apple-mobile-web-app-title';
         title.content = 'Word Wizard';
-        document.head.appendChild(title);
+        doc.head.appendChild(title);
 
-        const touchIcon = document.createElement('link');
+        const touchIcon = doc.createElement('link');
         touchIcon.rel = 'apple-touch-icon';
-        touchIcon.href = 'app/static/apple-touch-icon.png';
-        document.head.appendChild(touchIcon);
+        touchIcon.href = window.parent.location.origin + '/app/static/apple-touch-icon.png';
+        doc.head.appendChild(touchIcon);
 
-        const icon192 = document.createElement('link');
+        const icon192 = doc.createElement('link');
         icon192.rel = 'icon';
-        icon192.href = 'app/static/icon-192.png';
-        document.head.appendChild(icon192);
+        icon192.href = window.parent.location.origin + '/app/static/icon-192.png';
+        doc.head.appendChild(icon192);
     }
     </script>
     """,
-    unsafe_allow_html=True,
+    height=0,
 )
 st.markdown(CSS, unsafe_allow_html=True)
 
@@ -53,19 +55,20 @@ if "language" not in st.session_state:
         st.session_state.language = query_lang
     else:
         st.session_state.language = "en"  # fallback while detection runs
-        st.markdown(
+        components.html(
             """
             <script>
-            if (!window.location.search.includes('lang=')) {
-                const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+            const win = window.parent;
+            if (!win.location.search.includes('lang=')) {
+                const browserLang = (win.navigator.language || win.navigator.userLanguage || '').toLowerCase();
                 const detected = (browserLang.startsWith('no') || browserLang.startsWith('nb') || browserLang.startsWith('nn')) ? 'no' : 'en';
-                const url = new URL(window.location);
+                const url = new URL(win.location);
                 url.searchParams.set('lang', detected);
-                window.location.replace(url);
+                win.location.replace(url);
             }
             </script>
             """,
-            unsafe_allow_html=True,
+            height=0,
         )
 if "revealed" not in st.session_state:
     st.session_state.revealed = False
