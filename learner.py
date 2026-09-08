@@ -370,6 +370,13 @@ def get_words_by_status(nickname, language, status):
     return [w for w in words if w["id"] in matching_ids and w["language"] == language]
 
 
+def user_exists(nickname):
+    """Checks whether this nickname already has progress saved (a returning user)."""
+    client = _get_client()
+    result = client.table("progress").select("nickname").eq("nickname", nickname).execute()
+    return len(result.data) > 0
+
+
 def delete_user(nickname):
     """Permanently removes a person's progress entirely (used by the admin panel)."""
     client = _get_client()
