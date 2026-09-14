@@ -265,7 +265,6 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
             <div class="word-card">
                 <span class="topic-tag">{topic_label}</span>
                 <div class="word-display">{guest_word['word']}</div>
-                <div class="section-label">{strings['quiz_prompt']}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -538,7 +537,6 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>
             <div class="word-display">{word['word']}</div>
-            <div class="section-label">{strings['quiz_prompt']}</div>
         </div>
         """,
         unsafe_allow_html=True,

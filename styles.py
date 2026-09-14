@@ -495,7 +495,7 @@ CHIME_SOUND_B64 = "UklGRkI3AABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YR43AAAAA
 # was drawing too much attention.
 TOWER_SVG = """
 <div style="display:flex; justify-content:center; margin-bottom: 0.5rem;">
-<svg viewBox="0 0 400 280" width="300" style="max-width:85%; height:auto; opacity:0.97;" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 400 280" width="230" style="max-width:75%; height:auto; opacity:0.97;" xmlns="http://www.w3.org/2000/svg">
 <g fill="#454B5C" opacity="0.7">
 <ellipse cx="70" cy="18" rx="35" ry="12"/>
 <ellipse cx="45" cy="22" rx="22" ry="9"/>
@@ -602,7 +602,7 @@ TOWER_SVG = """
 
 MONSTER_SVG = """
 <div style="display:flex; justify-content:center;">
-<svg viewBox="0 0 100 100" width="70" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
 <polygon points="30,38 26,20 38,36" fill="#5C2E2E"/>
 <polygon points="70,38 74,20 62,36" fill="#5C2E2E"/>
 <ellipse cx="50" cy="60" rx="28" ry="24" fill="#7A3B3B" stroke="#4A2020" stroke-width="2"/>
