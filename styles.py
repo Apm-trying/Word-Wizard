@@ -206,8 +206,8 @@ html, body, [class*="css"] {
    instead of Streamlit's default red (which reads as danger/error/delete
    against our theme, not "selected and valuable"). */
 span[data-tag] {
-    background-color: rgba(199, 154, 60, 0.35) !important;
-    border: 1px solid rgba(199, 154, 60, 0.6) !important;
+    background-color: rgba(199, 154, 60, 0.75) !important;
+    border: 1px solid rgba(138, 106, 40, 0.9) !important;
     color: #2A1F0C !important;
 }
 span[data-tag] button svg {
