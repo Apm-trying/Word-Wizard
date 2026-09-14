@@ -6,7 +6,7 @@
 TRANSLATIONS = {
     "no": {
         "app_title": "🧙 Word Wizard",
-        "app_subtitle": "Lær avansert — én besvergelse hver 2. time.",
+        "app_subtitle": "Lær avansert ordforråd gjennom kort daglig øving.",
         "landing_subtitle": "Lær ord. Kast besvergelser. Nivå opp.",
         "value_prop_row": "Lær · Kast · Nivå opp",
         "feature_learn_title": "Lær",
@@ -58,7 +58,7 @@ TRANSLATIONS = {
         "empty_trophy": "Ingen ord mestret ennå!",
         "empty_graveyard": "Ingen bommede ord ennå!",
         "review_tag": "🔄 Repetisjon",
-        "start_button": "Start læring →",
+        "start_button": "✨ Kast din besvergelse →",
         "settings_button": "⚙️",
         "settings_tooltip": "Innstillinger",
         "know_prompt": "Kan du denne besvergelsen?",
@@ -79,7 +79,7 @@ TRANSLATIONS = {
     },
     "en": {
         "app_title": "🧙 Word Wizard",
-        "app_subtitle": "Learn advanced — one spell every 2 hours.",
+        "app_subtitle": "Learn advanced vocabulary through short daily practice.",
         "landing_subtitle": "Learn words. Cast spells. Level up.",
         "value_prop_row": "Learn · Cast · Level up",
         "feature_learn_title": "Learn",
@@ -131,7 +131,7 @@ TRANSLATIONS = {
         "empty_trophy": "No words mastered yet!",
         "empty_graveyard": "No missed words yet!",
         "review_tag": "🔄 Review",
-        "start_button": "Start learning →",
+        "start_button": "✨ Cast your spell →",
         "settings_button": "⚙️",
         "settings_tooltip": "Settings",
         "know_prompt": "Do you know this spell?",
