@@ -205,15 +205,13 @@ html, body, [class*="css"] {
 /* Theme the topic multiselect's selected-chip color: gold (unlocked/chosen)
    instead of Streamlit's default red (which reads as danger/error/delete
    against our theme, not "selected and valuable"). */
-span[data-baseweb="tag"] {
+span[data-tag] {
     background-color: rgba(199, 154, 60, 0.35) !important;
     border: 1px solid rgba(199, 154, 60, 0.6) !important;
+    color: #2A1F0C !important;
 }
-span[data-baseweb="tag"] span {
-    color: #F0E6D2 !important;
-}
-span[data-baseweb="tag"] svg {
-    fill: #F0E6D2 !important;
+span[data-tag] button svg {
+    stroke: #2A1F0C !important;
 }
 
 div[data-testid="stSelectbox"] > div > div {

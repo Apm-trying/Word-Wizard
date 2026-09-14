@@ -20,11 +20,11 @@ def xp_required_for_level(level):
 
 # Ordered highest-first so we can find the first tier the level qualifies for.
 LEVEL_TIERS = [
-    (50, "wizard_king"),
-    (40, "wizard"),
-    (30, "archmage"),
-    (20, "magician"),
-    (10, "novice"),
+    (50, "archmage"),
+    (40, "master_wizard"),
+    (30, "wizard"),
+    (20, "spellcaster"),
+    (10, "apprentice"),
     (0, "beginner"),
 ]
 

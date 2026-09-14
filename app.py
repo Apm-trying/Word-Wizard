@@ -104,16 +104,10 @@ if st.session_state.setup_stage == "landing":
     st.markdown('<div class="hero-title">Word</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-title hero-title-gold">Wizard</div>', unsafe_allow_html=True)
     st.markdown(
-        f'<div style="text-align:center;"><span class="subtitle-banner">{landing_strings["landing_subtitle"]}</span></div>',
+        f'<div style="text-align:center; margin-bottom:1rem;"><span class="subtitle-banner">{landing_strings["landing_subtitle"]}</span></div>',
         unsafe_allow_html=True,
     )
 
-    st.write("")
-    st.markdown(
-        f'<div style="text-align:center; margin-bottom:1.2rem;">'
-        f'<span class="xp-badge">🔥 0 · ⭐ {landing_strings["level_prefix"]} 1</span></div>',
-        unsafe_allow_html=True,
-    )
     if st.button(f'✨ {landing_strings["landing_start_button"]}', use_container_width=True, type="primary"):
         with st.spinner("✨ Casting your spell..."):
             time.sleep(1.2)
@@ -123,10 +117,11 @@ if st.session_state.setup_stage == "landing":
         f'<div class="no-account-caption">{landing_strings["no_account_caption"]}</div>',
         unsafe_allow_html=True,
     )
-    st.write("")
-    if st.button(landing_strings["log_back_in_button"], use_container_width=True, type="secondary"):
+    st.markdown('<div style="text-align:center; margin-top:0.8rem;">', unsafe_allow_html=True)
+    if st.button(landing_strings["log_back_in_button"], use_container_width=False, type="tertiary"):
         st.session_state.setup_stage = "returning_login"
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.stop()
 
