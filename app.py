@@ -196,7 +196,7 @@ if st.session_state.setup_stage == "topic":
     selected_topics = st.multiselect(
         "topics",
         options=TOPIC_KEYS,
-        default=TOPIC_KEYS,
+        default=TOPIC_KEYS[:3],
         format_func=lambda x: strings["topics"][x],
         label_visibility="collapsed",
     )
