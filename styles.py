@@ -213,6 +213,10 @@ span[data-tag] {
 span[data-tag] button svg {
     stroke: #2A1F0C !important;
 }
+div[data-testid="stMultiSelect"] div[data-rac][role="group"] {
+    background-color: #1C2029 !important;
+    border: 1px solid rgba(237,230,214,0.25) !important;
+}
 
 div[data-testid="stSelectbox"] > div > div {
     background-color: #1C2029 !important;
@@ -316,6 +320,14 @@ div[data-testid="stButton"] button[kind="primary"]:active {
 div[data-testid="stButton"] button[kind="primary"]:focus-visible {
     outline: 2px solid #F0C674;
     outline-offset: 2px;
+}
+
+/* Center the narrower "log back in" link-style button (it doesn't use
+   use_container_width, so it shrink-wraps to its own content — margin
+   auto centers a shrink-wrapped block within its stretched flex parent) */
+div[data-testid="stElementContainer"]:has(button[data-testid="stBaseButton-tertiary"]) {
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 /* Monster encounter — a light cosmetic reskin of the existing correct/wrong
