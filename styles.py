@@ -332,6 +332,14 @@ div[data-testid="stElementContainer"]:has(button[data-testid="stBaseButton-terti
 
 /* Monster encounter — a light cosmetic reskin of the existing correct/wrong
    mechanic. No new game rules, just visual stakes on top of what already exists. */
+.hp-bar-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-align: center;
+    color: var(--muted);
+    margin-top: 0.3rem;
+}
 .hp-bar-track {
     width: 120px;
     height: 8px;
@@ -644,6 +652,7 @@ MONSTER_SVG = """
 """
 
 
-def hp_bar_html(percent, draining=False):
+def hp_bar_html(percent, draining=False, label=None):
     fill_class = "hp-bar-fill draining" if draining else "hp-bar-fill"
-    return f'<div class="hp-bar-track"><div class="{fill_class}" style="width:{percent}%;"></div></div>'
+    label_html = f'<div class="hp-bar-label">{label}</div>' if label else ""
+    return f'{label_html}<div class="hp-bar-track"><div class="{fill_class}" style="width:{percent}%;"></div></div>'
