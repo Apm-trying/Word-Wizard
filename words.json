@@ -1846,5 +1846,1237 @@
     "topic": "science",
     "language": "en",
     "id": 168
+  },
+  {
+    "word": "assimilation",
+    "definition": "The process of adapting to and adopting the customs of a new culture.",
+    "examples": [
+      "Many immigrants face pressure toward assimilation.",
+      "The school promotes assimilation over isolation."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 169
+  },
+  {
+    "word": "subculture",
+    "definition": "A cultural group within a larger culture, with its own distinct values and practices.",
+    "examples": [
+      "Skateboarding developed its own subculture in the 1970s.",
+      "The band emerged from an underground subculture."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 170
+  },
+  {
+    "word": "folklore",
+    "definition": "Traditional beliefs, stories, and customs passed down orally through a community.",
+    "examples": [
+      "The village is rich in local folklore.",
+      "Dragons appear often in European folklore."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 171
+  },
+  {
+    "word": "symbolism",
+    "definition": "The use of symbols to represent ideas or qualities.",
+    "examples": [
+      "The film relies heavily on religious symbolism.",
+      "Color often carries symbolism in different cultures."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 172
+  },
+  {
+    "word": "multiculturalism",
+    "definition": "The coexistence of many distinct cultural groups within one society.",
+    "examples": [
+      "The city is known for its multiculturalism.",
+      "Multiculturalism is central to the country's identity."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 173
+  },
+  {
+    "word": "ritual",
+    "definition": "A set of fixed actions performed regularly, often for ceremonial or symbolic reasons.",
+    "examples": [
+      "The wedding ritual has stayed the same for centuries.",
+      "Morning coffee has become a personal ritual."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 174
+  },
+  {
+    "word": "taboo",
+    "definition": "Something forbidden or avoided for social or cultural reasons.",
+    "examples": [
+      "Discussing salary is often a taboo topic.",
+      "The subject remains taboo in polite conversation."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 175
+  },
+  {
+    "word": "nostalgia",
+    "definition": "A sentimental longing for the past.",
+    "examples": [
+      "The old photographs filled her with nostalgia.",
+      "The movie's soundtrack triggers nostalgia for the 90s."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 176
+  },
+  {
+    "word": "globalization",
+    "definition": "The increasing interconnection of the world's economies and cultures.",
+    "examples": [
+      "Globalization has changed how people consume media.",
+      "Critics argue globalization erodes local traditions."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 177
+  },
+  {
+    "word": "stereotype",
+    "definition": "An oversimplified and widely held belief about a group of people.",
+    "examples": [
+      "The show challenges common stereotypes.",
+      "She refused to be defined by a stereotype."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 178
+  },
+  {
+    "word": "ethnicity",
+    "definition": "A shared cultural or national identity based on ancestry.",
+    "examples": [
+      "The census asks about ethnicity and language.",
+      "The city's population represents many ethnicities."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 179
+  },
+  {
+    "word": "counterculture",
+    "definition": "A movement whose values and practices oppose mainstream society.",
+    "examples": [
+      "The 1960s counterculture rejected traditional norms.",
+      "Punk began as a counterculture movement."
+    ],
+    "topic": "culture",
+    "language": "en",
+    "id": 180
+  },
+  {
+    "word": "catalyst",
+    "definition": "A substance or event that speeds up a process or triggers change.",
+    "examples": [
+      "The discovery acted as a catalyst for new research.",
+      "Enzymes work as biological catalysts."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 181
+  },
+  {
+    "word": "equilibrium",
+    "definition": "A state of balance between opposing forces or influences.",
+    "examples": [
+      "The chemical reaction reached equilibrium.",
+      "The ecosystem depends on a delicate equilibrium."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 182
+  },
+  {
+    "word": "mutation",
+    "definition": "A change in the genetic structure of an organism.",
+    "examples": [
+      "The mutation gave the bacteria resistance.",
+      "Scientists study mutations to understand disease."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 183
+  },
+  {
+    "word": "synthesis",
+    "definition": "The combination of separate elements to form a new whole.",
+    "examples": [
+      "The lab specializes in protein synthesis.",
+      "Photosynthesis is the synthesis of sugar from light."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 184
+  },
+  {
+    "word": "variable",
+    "definition": "A factor that can change or be changed in an experiment.",
+    "examples": [
+      "Temperature was the key variable in the test.",
+      "Researchers controlled every variable but one."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 185
+  },
+  {
+    "word": "correlation",
+    "definition": "A relationship between two variables where one tends to change with the other.",
+    "examples": [
+      "The study found a correlation between sleep and mood.",
+      "Correlation does not always mean causation."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 186
+  },
+  {
+    "word": "phenomenon",
+    "definition": "An observable fact or event, especially one that is unusual or notable.",
+    "examples": [
+      "Lightning is a natural phenomenon.",
+      "The scientists couldn't explain the phenomenon."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 187
+  },
+  {
+    "word": "replicate",
+    "definition": "To repeat an experiment or study to verify its results.",
+    "examples": [
+      "Other labs failed to replicate the results.",
+      "The experiment must be replicated to be trusted."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 188
+  },
+  {
+    "word": "anomaly",
+    "definition": "Something that deviates from what is standard or expected.",
+    "examples": [
+      "The telescope detected an unusual anomaly.",
+      "The results contained a strange anomaly."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 189
+  },
+  {
+    "word": "ecosystem",
+    "definition": "A community of living organisms interacting with their environment.",
+    "examples": [
+      "The coral reef supports a fragile ecosystem.",
+      "Pollution can disrupt an entire ecosystem."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 190
+  },
+  {
+    "word": "genome",
+    "definition": "The complete set of genetic material in an organism.",
+    "examples": [
+      "Scientists mapped the human genome in 2003.",
+      "The genome contains instructions for every cell."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 191
+  },
+  {
+    "word": "quantify",
+    "definition": "To measure or express something as an exact amount.",
+    "examples": [
+      "It's hard to quantify the damage precisely.",
+      "Researchers tried to quantify the effect of stress."
+    ],
+    "topic": "science",
+    "language": "en",
+    "id": 192
+  },
+  {
+    "word": "resilience",
+    "definition": "The ability to recover quickly from setbacks or difficulty.",
+    "examples": [
+      "The team showed great resilience after losing the first game.",
+      "Resilience is what separates champions from the rest."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 193
+  },
+  {
+    "word": "stamina",
+    "definition": "The physical or mental strength to sustain effort over a long time.",
+    "examples": [
+      "Marathon runners need exceptional stamina.",
+      "Her stamina carried her through the final round."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 194
+  },
+  {
+    "word": "momentum",
+    "definition": "The strength or force gained by movement or progress in a game.",
+    "examples": [
+      "The team gained momentum after the second goal.",
+      "Losing momentum late in the match cost them the win."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 195
+  },
+  {
+    "word": "underdog",
+    "definition": "A competitor considered unlikely to win.",
+    "examples": [
+      "The underdog shocked everyone by winning the final.",
+      "Fans always love cheering for the underdog."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 196
+  },
+  {
+    "word": "sportsmanship",
+    "definition": "Fair, generous, and graceful behavior in competition.",
+    "examples": [
+      "He showed great sportsmanship after the loss.",
+      "The award recognizes outstanding sportsmanship."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 197
+  },
+  {
+    "word": "strategy",
+    "definition": "A plan of action designed to achieve a particular goal in competition.",
+    "examples": [
+      "The coach changed strategy at halftime.",
+      "Their defensive strategy frustrated the opponents."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 198
+  },
+  {
+    "word": "regimen",
+    "definition": "A structured plan of exercise, diet, or training.",
+    "examples": [
+      "He follows a strict training regimen.",
+      "Her recovery regimen includes daily stretching."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 199
+  },
+  {
+    "word": "comeback",
+    "definition": "A return to a strong position after being behind.",
+    "examples": [
+      "The team staged a remarkable comeback in the second half.",
+      "Injuries delayed her comeback to the sport."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 200
+  },
+  {
+    "word": "milestone",
+    "definition": "A significant point of achievement in progress.",
+    "examples": [
+      "Winning the championship was a career milestone.",
+      "The club celebrated a major milestone this season."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 201
+  },
+  {
+    "word": "elimination",
+    "definition": "The process of removing a competitor from a tournament.",
+    "examples": [
+      "A single loss meant elimination from the tournament.",
+      "The team avoided elimination with a late goal."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 202
+  },
+  {
+    "word": "veteran",
+    "definition": "A person with long experience in a particular field or sport.",
+    "examples": [
+      "The veteran player mentored the younger athletes.",
+      "Her veteran experience proved valuable under pressure."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 203
+  },
+  {
+    "word": "rookie",
+    "definition": "A player in their first season of professional competition.",
+    "examples": [
+      "The rookie impressed fans with his debut performance.",
+      "She was named rookie of the year."
+    ],
+    "topic": "sports",
+    "language": "en",
+    "id": 204
+  },
+  {
+    "word": "referendum",
+    "definition": "A direct vote by citizens on a specific political question.",
+    "examples": [
+      "The country held a referendum on independence.",
+      "Voters rejected the proposal in the referendum."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 205
+  },
+  {
+    "word": "lobbying",
+    "definition": "Attempting to influence politicians on behalf of a particular interest.",
+    "examples": [
+      "The company spent millions on lobbying.",
+      "Lobbying rules vary widely between countries."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 206
+  },
+  {
+    "word": "constituency",
+    "definition": "A body of voters in a specific area represented by an elected official.",
+    "examples": [
+      "The senator visited his constituency every month.",
+      "Her policies appealed to a young constituency."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 207
+  },
+  {
+    "word": "incumbent",
+    "definition": "The current holder of a political office.",
+    "examples": [
+      "The incumbent lost the election by a narrow margin.",
+      "Challengers rarely defeat a popular incumbent."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 208
+  },
+  {
+    "word": "bipartisan",
+    "definition": "Involving agreement or cooperation between two political parties.",
+    "examples": [
+      "The bill passed with bipartisan support.",
+      "Bipartisan negotiations are rare in this climate."
+    ],
+    "topic": "politics",
+    "language": "en",
+    "id": 209
+  },
+  {
+    "word": "austerity",
+    "definition": "Government policies that reduce public spending to cut a deficit.",
+    "examples": [
+      "The government introduced strict austerity measures.",
+      "Austerity policies often trigger public protest."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 210
+  },
+  {
+    "word": "tariff",
+    "definition": "A tax imposed on imported or exported goods.",
+    "examples": [
+      "The new tariff raised prices on imported steel.",
+      "Trade tensions led to higher tariffs."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 211
+  },
+  {
+    "word": "equity",
+    "definition": "The value of ownership in an asset after debts are subtracted.",
+    "examples": [
+      "She built equity in the company over ten years.",
+      "Homeowners often borrow against their equity."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 212
+  },
+  {
+    "word": "asset",
+    "definition": "A resource with economic value owned by a person or company.",
+    "examples": [
+      "Real estate is considered a valuable asset.",
+      "The firm sold several assets to raise cash."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 213
+  },
+  {
+    "word": "fiscal policy",
+    "definition": "Government decisions about spending and taxation to influence the economy.",
+    "examples": [
+      "The bank criticized the government's fiscal policy.",
+      "Fiscal policy shifted after the election."
+    ],
+    "topic": "economy",
+    "language": "en",
+    "id": 214
+  },
+  {
+    "word": "outbreak",
+    "definition": "A sudden occurrence of a disease in a particular area.",
+    "examples": [
+      "Health officials responded quickly to the outbreak.",
+      "The outbreak spread faster than expected."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 215
+  },
+  {
+    "word": "remission",
+    "definition": "A temporary or permanent decrease in the severity of a disease.",
+    "examples": [
+      "The cancer has been in remission for two years.",
+      "Doctors hope the treatment leads to remission."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 216
+  },
+  {
+    "word": "prognosis",
+    "definition": "A doctor's prediction of how a disease will develop.",
+    "examples": [
+      "The prognosis improved after early treatment.",
+      "Her prognosis was better than the family expected."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 217
+  },
+  {
+    "word": "pathogen",
+    "definition": "A microorganism that can cause disease.",
+    "examples": [
+      "The lab identified the pathogen within days.",
+      "Handwashing helps prevent the spread of pathogens."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 218
+  },
+  {
+    "word": "holistic",
+    "definition": "Treating the whole person, not just the symptoms of a disease.",
+    "examples": [
+      "She prefers a holistic approach to wellness.",
+      "The clinic offers holistic treatment programs."
+    ],
+    "topic": "health",
+    "language": "en",
+    "id": 219
+  },
+  {
+    "word": "bandwidth",
+    "definition": "The capacity of a network to transmit data.",
+    "examples": [
+      "Streaming video requires significant bandwidth.",
+      "The office upgraded its internet bandwidth."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 220
+  },
+  {
+    "word": "latency",
+    "definition": "The delay before a transfer of data begins following an instruction.",
+    "examples": [
+      "Gamers are sensitive to network latency.",
+      "The new server reduced latency significantly."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 221
+  },
+  {
+    "word": "blockchain",
+    "definition": "A digital ledger of transactions maintained across many computers.",
+    "examples": [
+      "Cryptocurrency relies on blockchain technology.",
+      "The company explored blockchain for supply chains."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 222
+  },
+  {
+    "word": "obsolete",
+    "definition": "No longer used or useful because something newer exists.",
+    "examples": [
+      "The old software became obsolete within years.",
+      "Many jobs risk becoming obsolete due to automation."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 223
+  },
+  {
+    "word": "interoperability",
+    "definition": "The ability of different systems to work together.",
+    "examples": [
+      "Interoperability between devices remains a challenge.",
+      "The update improved interoperability across platforms."
+    ],
+    "topic": "technology",
+    "language": "en",
+    "id": 224
+  },
+  {
+    "word": "assimilering",
+    "definition": "Prosessen med å tilpasse seg og ta opp skikkene i en ny kultur.",
+    "examples": [
+      "Mange innvandrere føler press mot assimilering.",
+      "Skolen fremmer assimilering i stedet for isolasjon."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 225
+  },
+  {
+    "word": "subkultur",
+    "definition": "En kulturell gruppe innenfor en større kultur, med egne verdier og skikker.",
+    "examples": [
+      "Skateboarding utviklet sin egen subkultur på 1970-tallet.",
+      "Bandet vokste ut av en undergrunns subkultur."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 226
+  },
+  {
+    "word": "folklore",
+    "definition": "Tradisjonelle fortellinger, skikker og tro som er overført muntlig i et samfunn.",
+    "examples": [
+      "Landsbyen er rik på lokal folklore.",
+      "Drager forekommer ofte i europeisk folklore."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 227
+  },
+  {
+    "word": "symbolikk",
+    "definition": "Bruken av symboler for å representere ideer eller egenskaper.",
+    "examples": [
+      "Filmen bruker mye religiøs symbolikk.",
+      "Farger bærer ofte symbolikk i forskjellige kulturer."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 228
+  },
+  {
+    "word": "multikulturalisme",
+    "definition": "Sameksistensen av mange forskjellige kulturelle grupper i ett samfunn.",
+    "examples": [
+      "Byen er kjent for sin multikulturalisme.",
+      "Multikulturalisme er sentralt for landets identitet."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 229
+  },
+  {
+    "word": "ritual",
+    "definition": "Et sett faste handlinger som utføres regelmessig, ofte av seremoniell betydning.",
+    "examples": [
+      "Bryllupsritualet har vært det samme i århundrer.",
+      "Morgenkaffen har blitt et personlig ritual."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 230
+  },
+  {
+    "word": "tabu",
+    "definition": "Noe som er forbudt eller unngås av sosiale eller kulturelle årsaker.",
+    "examples": [
+      "Å diskutere lønn er ofte et tabu-tema.",
+      "Temaet er fortsatt tabu i høflig samtale."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 231
+  },
+  {
+    "word": "nostalgi",
+    "definition": "En sentimental lengsel etter fortiden.",
+    "examples": [
+      "De gamle bildene fylte henne med nostalgi.",
+      "Filmens lydspor fremkaller nostalgi for 90-tallet."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 232
+  },
+  {
+    "word": "globalisering",
+    "definition": "Den økende sammenkoblingen av verdens økonomier og kulturer.",
+    "examples": [
+      "Globalisering har endret hvordan folk konsumerer media.",
+      "Kritikere hevder globalisering svekker lokale tradisjoner."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 233
+  },
+  {
+    "word": "stereotypi",
+    "definition": "En overforenklet og utbredt oppfatning om en gruppe mennesker.",
+    "examples": [
+      "Serien utfordrer vanlige stereotypier.",
+      "Hun ville ikke defineres av en stereotypi."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 234
+  },
+  {
+    "word": "etnisitet",
+    "definition": "En delt kulturell eller nasjonal identitet basert på avstamning.",
+    "examples": [
+      "Folketellingen spør om etnisitet og språk.",
+      "Byens befolkning representerer mange etnisiteter."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 235
+  },
+  {
+    "word": "motkultur",
+    "definition": "En bevegelse hvis verdier og praksis går mot samfunnets normer.",
+    "examples": [
+      "1960-tallets motkultur avviste tradisjonelle normer.",
+      "Punk startet som en motkulturbevegelse."
+    ],
+    "topic": "culture",
+    "language": "no",
+    "id": 236
+  },
+  {
+    "word": "katalysator",
+    "definition": "Et stoff eller en hendelse som fremskynder en prosess eller utløser endring.",
+    "examples": [
+      "Oppdagelsen fungerte som en katalysator for ny forskning.",
+      "Enzymer fungerer som biologiske katalysatorer."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 237
+  },
+  {
+    "word": "likevekt",
+    "definition": "En balansetilstand mellom motstridende krefter eller påvirkninger.",
+    "examples": [
+      "Den kjemiske reaksjonen nådde likevekt.",
+      "Økosystemet er avhengig av en skjør likevekt."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 238
+  },
+  {
+    "word": "mutasjon",
+    "definition": "En endring i et organismes genetiske struktur.",
+    "examples": [
+      "Mutasjonen ga bakteriene resistens.",
+      "Forskere studerer mutasjoner for å forstå sykdom."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 239
+  },
+  {
+    "word": "syntese",
+    "definition": "Kombinasjonen av separate elementer til en ny helhet.",
+    "examples": [
+      "Laboratoriet spesialiserer seg på proteinsyntese.",
+      "Fotosyntese er syntesen av sukker fra lys."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 240
+  },
+  {
+    "word": "variabel",
+    "definition": "En faktor som kan endres eller endre seg i et eksperiment.",
+    "examples": [
+      "Temperatur var nøkkelvariabelen i testen.",
+      "Forskerne kontrollerte alle variabler unntatt én."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 241
+  },
+  {
+    "word": "korrelasjon",
+    "definition": "Et forhold mellom to variabler der den ene har en tendens til å endre seg med den andre.",
+    "examples": [
+      "Studien fant en korrelasjon mellom søvn og humør.",
+      "Korrelasjon betyr ikke alltid årsakssammenheng."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 242
+  },
+  {
+    "word": "fenomen",
+    "definition": "Et observerbart faktum eller hendelse, spesielt en uvanlig eller merkbar.",
+    "examples": [
+      "Lyn er et naturlig fenomen.",
+      "Forskerne kunne ikke forklare fenomenet."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 243
+  },
+  {
+    "word": "replikere",
+    "definition": "Å gjenta et eksperiment eller studie for å bekrefte resultatene.",
+    "examples": [
+      "Andre laboratorier klarte ikke å replikere resultatene.",
+      "Eksperimentet må replikeres for å bli trodd."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 244
+  },
+  {
+    "word": "anomali",
+    "definition": "Noe som avviker fra det som er standard eller forventet.",
+    "examples": [
+      "Teleskopet oppdaget en uvanlig anomali.",
+      "Resultatene inneholdt en merkelig anomali."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 245
+  },
+  {
+    "word": "økosystem",
+    "definition": "Et samfunn av levende organismer som samhandler med miljøet sitt.",
+    "examples": [
+      "Korallrevet støtter et skjørt økosystem.",
+      "Forurensning kan forstyrre et helt økosystem."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 246
+  },
+  {
+    "word": "genom",
+    "definition": "Det komplette settet med genetisk materiale i en organisme.",
+    "examples": [
+      "Forskere kartla det menneskelige genomet i 2003.",
+      "Genomet inneholder instruksjoner for hver celle."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 247
+  },
+  {
+    "word": "kvantifisere",
+    "definition": "Å måle eller uttrykke noe som en nøyaktig mengde.",
+    "examples": [
+      "Det er vanskelig å kvantifisere skaden nøyaktig.",
+      "Forskere forsøkte å kvantifisere effekten av stress."
+    ],
+    "topic": "science",
+    "language": "no",
+    "id": 248
+  },
+  {
+    "word": "motstandskraft",
+    "definition": "Evnen til å komme seg raskt etter tilbakeslag eller vanskeligheter.",
+    "examples": [
+      "Laget viste stor motstandskraft etter å ha tapt den første kampen.",
+      "Motstandskraft er det som skiller mestere fra resten."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 249
+  },
+  {
+    "word": "stamina",
+    "definition": "Den fysiske eller mentale styrken til å holde ut innsats over lang tid.",
+    "examples": [
+      "Maratonløpere trenger eksepsjonell stamina.",
+      "Hennes stamina bar henne gjennom finalen."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 250
+  },
+  {
+    "word": "momentum",
+    "definition": "Styrken eller kraften som oppnås av bevegelse eller fremgang i en kamp.",
+    "examples": [
+      "Laget fikk momentum etter det andre målet.",
+      "Å miste momentum sent i kampen kostet dem seieren."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 251
+  },
+  {
+    "word": "underdog",
+    "definition": "En konkurrent som anses som lite sannsynlig å vinne.",
+    "examples": [
+      "Underdogen sjokkerte alle ved å vinne finalen.",
+      "Fansen elsker alltid å heie på underdogen."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 252
+  },
+  {
+    "word": "sportsånd",
+    "definition": "Rettferdig, generøs og verdig oppførsel i konkurranse.",
+    "examples": [
+      "Han viste stor sportsånd etter tapet.",
+      "Prisen anerkjenner utmerket sportsånd."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 253
+  },
+  {
+    "word": "strategi",
+    "definition": "En handlingsplan utformet for å nå et bestemt mål i konkurranse.",
+    "examples": [
+      "Treneren endret strategi i pausen.",
+      "Deres defensive strategi frustrerte motstanderne."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 254
+  },
+  {
+    "word": "treningsregime",
+    "definition": "En strukturert plan for trening, kosthold eller øvelse.",
+    "examples": [
+      "Han følger et strengt treningsregime.",
+      "Hennes rehabiliteringsregime inkluderer daglig tøying."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 255
+  },
+  {
+    "word": "comeback",
+    "definition": "En retur til en sterk posisjon etter å ha ligget bak.",
+    "examples": [
+      "Laget gjorde et bemerkelsesverdig comeback i andre omgang.",
+      "Skader forsinket hennes comeback til sporten."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 256
+  },
+  {
+    "word": "milepæl",
+    "definition": "Et betydningsfullt punkt i fremgang eller prestasjon.",
+    "examples": [
+      "Å vinne mesterskapet var en karrieremilepæl.",
+      "Klubben feiret en stor milepæl denne sesongen."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 257
+  },
+  {
+    "word": "eliminering",
+    "definition": "Prosessen med å fjerne en konkurrent fra en turnering.",
+    "examples": [
+      "Ett tap betydde eliminering fra turneringen.",
+      "Laget unngikk eliminering med et sent mål."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 258
+  },
+  {
+    "word": "veteran",
+    "definition": "En person med lang erfaring innen et bestemt felt eller sport.",
+    "examples": [
+      "Veteranspilleren var mentor for de yngre utøverne.",
+      "Hennes veteranerfaring var verdifull under press."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 259
+  },
+  {
+    "word": "nybegynner",
+    "definition": "En spiller i sin første sesong som utøver på toppnivå.",
+    "examples": [
+      "Nybegynneren imponerte fansen med sin debut.",
+      "Hun ble utnevnt til årets nybegynner."
+    ],
+    "topic": "sports",
+    "language": "no",
+    "id": 260
+  },
+  {
+    "word": "folkeavstemning",
+    "definition": "En direkte avstemning av borgere om et spesifikt politisk spørsmål.",
+    "examples": [
+      "Landet holdt en folkeavstemning om selvstendighet.",
+      "Velgerne avviste forslaget i folkeavstemningen."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 261
+  },
+  {
+    "word": "lobbyvirksomhet",
+    "definition": "Å forsøke å påvirke politikere på vegne av en bestemt interesse.",
+    "examples": [
+      "Selskapet brukte millioner på lobbyvirksomhet.",
+      "Reglene for lobbyvirksomhet varierer mye mellom land."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 262
+  },
+  {
+    "word": "valgkrets",
+    "definition": "En gruppe velgere i et bestemt område representert av en folkevalgt.",
+    "examples": [
+      "Senatoren besøkte sin valgkrets hver måned.",
+      "Hennes politikk appellerte til en ung valgkrets."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 263
+  },
+  {
+    "word": "sittende",
+    "definition": "Den nåværende innehaveren av et politisk embete.",
+    "examples": [
+      "Den sittende politikeren tapte valget med et lite margin.",
+      "Utfordrere vinner sjelden over en populær sittende politiker."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 264
+  },
+  {
+    "word": "tverrpolitisk",
+    "definition": "Som involverer samarbeid mellom to politiske partier.",
+    "examples": [
+      "Lovforslaget ble vedtatt med tverrpolitisk støtte.",
+      "Tverrpolitiske forhandlinger er sjeldne i dette klimaet."
+    ],
+    "topic": "politics",
+    "language": "no",
+    "id": 265
+  },
+  {
+    "word": "innstramming",
+    "definition": "Statlig politikk som reduserer offentlige utgifter for å kutte et underskudd.",
+    "examples": [
+      "Regjeringen innførte strenge innstramminger.",
+      "Innstrammingspolitikk fører ofte til offentlig protest."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 266
+  },
+  {
+    "word": "tariff",
+    "definition": "En skatt som legges på importerte eller eksporterte varer.",
+    "examples": [
+      "Den nye tariffen økte prisene på importert stål.",
+      "Handelsspenninger førte til høyere tariffer."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 267
+  },
+  {
+    "word": "egenkapital",
+    "definition": "Verdien av eierskap i en eiendel etter at gjeld er trukket fra.",
+    "examples": [
+      "Hun bygde egenkapital i selskapet over ti år.",
+      "Huseiere låner ofte mot egenkapitalen sin."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 268
+  },
+  {
+    "word": "eiendel",
+    "definition": "En ressurs med økonomisk verdi eid av en person eller et selskap.",
+    "examples": [
+      "Fast eiendom regnes som en verdifull eiendel.",
+      "Firmaet solgte flere eiendeler for å skaffe kapital."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 269
+  },
+  {
+    "word": "finanspolitikk",
+    "definition": "Statlige beslutninger om utgifter og skatt for å påvirke økonomien.",
+    "examples": [
+      "Banken kritiserte regjeringens finanspolitikk.",
+      "Finanspolitikken endret seg etter valget."
+    ],
+    "topic": "economy",
+    "language": "no",
+    "id": 270
+  },
+  {
+    "word": "utbrudd",
+    "definition": "En plutselig forekomst av en sykdom i et bestemt område.",
+    "examples": [
+      "Helsemyndighetene reagerte raskt på utbruddet.",
+      "Utbruddet spredte seg raskere enn forventet."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 271
+  },
+  {
+    "word": "remisjon",
+    "definition": "En midlertidig eller permanent reduksjon i alvorlighetsgraden av en sykdom.",
+    "examples": [
+      "Kreften har vært i remisjon i to år.",
+      "Legene har håp om at behandlingen fører til remisjon."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 272
+  },
+  {
+    "word": "prognose",
+    "definition": "En leges forutsigelse av hvordan en sykdom vil utvikle seg.",
+    "examples": [
+      "Prognosen ble bedre etter tidlig behandling.",
+      "Prognosen hennes var bedre enn familien forventet."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 273
+  },
+  {
+    "word": "patogen",
+    "definition": "En mikroorganisme som kan forårsake sykdom.",
+    "examples": [
+      "Laboratoriet identifiserte patogenet innen få dager.",
+      "Håndvask bidrar til å forhindre spredning av patogener."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 274
+  },
+  {
+    "word": "holistisk",
+    "definition": "Å behandle hele personen, ikke bare symptomene på en sykdom.",
+    "examples": [
+      "Hun foretrekker en holistisk tilnærming til velvære.",
+      "Klinikken tilbyr holistiske behandlingsprogrammer."
+    ],
+    "topic": "health",
+    "language": "no",
+    "id": 275
+  },
+  {
+    "word": "båndbredde",
+    "definition": "Kapasiteten til et nettverk til å overføre data.",
+    "examples": [
+      "Videostrømming krever betydelig båndbredde.",
+      "Kontoret oppgraderte internett-båndbredden."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 276
+  },
+  {
+    "word": "latens",
+    "definition": "Forsinkelsen før en dataoverføring starter etter en instruksjon.",
+    "examples": [
+      "Gamere er følsomme for nettverkslatens.",
+      "Den nye serveren reduserte latensen betydelig."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 277
+  },
+  {
+    "word": "blokkjede",
+    "definition": "En digital hovedbok over transaksjoner som opprettholdes over mange datamaskiner.",
+    "examples": [
+      "Kryptovaluta er avhengig av blokkjedeteknologi.",
+      "Selskapet utforsket blokkjede for forsyningskjeder."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 278
+  },
+  {
+    "word": "utdatert",
+    "definition": "Ikke lenger i bruk eller nyttig fordi noe nyere finnes.",
+    "examples": [
+      "Den gamle programvaren ble utdatert innen få år.",
+      "Mange jobber risikerer å bli utdaterte på grunn av automatisering."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 279
+  },
+  {
+    "word": "interoperabilitet",
+    "definition": "Evnen til at forskjellige systemer kan fungere sammen.",
+    "examples": [
+      "Interoperabilitet mellom enheter er fortsatt en utfordring.",
+      "Oppdateringen forbedret interoperabiliteten mellom plattformer."
+    ],
+    "topic": "technology",
+    "language": "no",
+    "id": 280
   }
 ]
