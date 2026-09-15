@@ -65,8 +65,6 @@ if "show_leaderboard" not in st.session_state:
     st.session_state.show_leaderboard = False
 if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
-if "reveal_reason" not in st.session_state:
-    st.session_state.reveal_reason = None
 
 # --- Remember me: if the URL already has a recognized nickname (saved there
 # after a previous login, e.g. via "Add to Home Screen"), skip straight past
@@ -511,7 +509,7 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
     )
     st.write(strings["know_prompt"])
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     with col1:
         if st.button(strings["yes_button"], use_container_width=True):
             choices, correct_index = learner.get_quiz_choices(word, language)
@@ -521,14 +519,8 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
             st.session_state.quiz_correct_index = correct_index
             st.rerun()
     with col2:
-        if st.button(strings["not_sure_button"], use_container_width=True):
-            st.session_state.reveal_reason = "unsure"
-            st.session_state.revealed = True
-            st.rerun()
-    with col3:
         if st.button(strings["no_button"], use_container_width=True):
             learner.mark_status(nickname, word["id"], "unknown")
-            st.session_state.reveal_reason = "unknown"
             st.session_state.revealed = True
             st.rerun()
 
@@ -554,7 +546,6 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
                 st.session_state.xp_awarded = xp_awarded
             else:
                 learner.mark_status(nickname, word["id"], "unknown")
-                st.session_state.reveal_reason = "unknown"
                 st.session_state.revealed = True
                 st.session_state.quiz_was_wrong = True
             st.rerun()
@@ -564,13 +555,11 @@ else:
         st.warning(strings["quiz_wrong"])
 
     examples_html = "".join(f'<div class="example-line"><em>{ex}</em></div>' for ex in word["examples"])
-    monster_state = "monster-idle" if st.session_state.reveal_reason == "unsure" else "monster-attacking"
-    card_class = "word-card" if st.session_state.reveal_reason == "unsure" else "word-card hurt"
-    st.markdown(f'<div class="{monster_state}">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="monster-attacking">{MONSTER_SVG}</div>', unsafe_allow_html=True)
     st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
         f"""
-        <div class="{card_class}">
+        <div class="word-card hurt">
             <span class="topic-tag">{topic_label}</span>
             <div class="word-display">{word['word']}</div>
             <div class="section-label">{strings['definition_label']}</div>
@@ -582,10 +571,7 @@ else:
         unsafe_allow_html=True,
     )
 
-    if st.session_state.reveal_reason == "unsure":
-        st.info(strings["not_sure_message"])
-    else:
-        st.info(strings["locked_message"])
+    st.info(strings["locked_message"])
     remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname, language)
     hours = int(remaining_seconds // 3600)
     minutes = int((remaining_seconds % 3600) // 60)
