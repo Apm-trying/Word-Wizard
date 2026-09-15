@@ -10,6 +10,12 @@ LOCK_HOURS = 2
 XP_PER_CORRECT = 10
 XP_REVIEW_BONUS = 3  # smaller reward for correctly reviewing an already-known word
 
+# Random boss encounters — a rare, higher-stakes detour from the normal loop
+BOSS_TRIGGER_CHANCE = 0.12  # ~12% chance on each new word, when no boss is already active
+BOSS_MAX_HP = 5
+BOSS_MAX_MISSES = 2  # a 3rd miss makes the boss flee
+BOSS_BONUS_XP = 50  # awarded only on full victory, on top of normal per-word XP
+
 
 def xp_required_for_level(level):
     """
@@ -98,7 +104,11 @@ def _load_user_progress(nickname):
 
 def _get_lang_state(user_progress, language):
     return user_progress["languages"].get(
-        language, {"current_word_id": None, "assigned_at": None, "topics": None}
+        language,
+        {
+            "current_word_id": None, "assigned_at": None, "topics": None,
+            "boss_active": False, "boss_hp": 0, "boss_misses": 0,
+        },
     )
 
 
@@ -158,12 +168,17 @@ def _pick_new_word(words, language, topics, word_status):
 
 
 def _assign_word(nickname, user_progress, word, language, topics):
+    existing = _get_lang_state(user_progress, language)
     user_progress["languages"][language] = {
         "current_word_id": word["id"] if word else None,
         "assigned_at": datetime.now().isoformat(),
         "topics": sorted(topics),
+        "boss_active": existing["boss_active"],
+        "boss_hp": existing["boss_hp"],
+        "boss_misses": existing["boss_misses"],
     }
     _save_user_progress(nickname, user_progress)
+    maybe_trigger_boss(nickname, language)
     return word
 
 
@@ -274,6 +289,67 @@ def lock_guest_word(nickname, word, language, topics):
     """
     user_progress = _load_user_progress(nickname)
     return _assign_word(nickname, user_progress, word, language, topics)
+
+
+def is_boss_active(nickname, language):
+    user_progress = _load_user_progress(nickname)
+    return _get_lang_state(user_progress, language)["boss_active"]
+
+
+def get_boss_hp(nickname, language):
+    user_progress = _load_user_progress(nickname)
+    return _get_lang_state(user_progress, language)["boss_hp"]
+
+
+def get_boss_misses(nickname, language):
+    user_progress = _load_user_progress(nickname)
+    return _get_lang_state(user_progress, language)["boss_misses"]
+
+
+def maybe_trigger_boss(nickname, language):
+    """
+    Rolls a random chance to start a boss encounter when a new word is
+    assigned, but only if one isn't already active. Returns True if a
+    boss encounter just started.
+    """
+    user_progress = _load_user_progress(nickname)
+    lang_state = _get_lang_state(user_progress, language)
+    if lang_state["boss_active"]:
+        return False
+    if random.random() < BOSS_TRIGGER_CHANCE:
+        lang_state["boss_active"] = True
+        lang_state["boss_hp"] = BOSS_MAX_HP
+        lang_state["boss_misses"] = 0
+        user_progress["languages"][language] = lang_state
+        _save_user_progress(nickname, user_progress)
+        return True
+    return False
+
+
+def boss_hit(nickname, language):
+    """Registers one correct answer against the active boss. Returns True if this defeated it."""
+    user_progress = _load_user_progress(nickname)
+    lang_state = _get_lang_state(user_progress, language)
+    lang_state["boss_hp"] = max(0, lang_state["boss_hp"] - 1)
+    defeated = lang_state["boss_hp"] <= 0
+    if defeated:
+        lang_state["boss_active"] = False
+    user_progress["languages"][language] = lang_state
+    _save_user_progress(nickname, user_progress)
+    return defeated
+
+
+def boss_miss(nickname, language):
+    """Registers one wrong answer against the active boss. Returns True if this made it flee."""
+    user_progress = _load_user_progress(nickname)
+    lang_state = _get_lang_state(user_progress, language)
+    lang_state["boss_misses"] += 1
+    fled = lang_state["boss_misses"] > BOSS_MAX_MISSES
+    if fled:
+        lang_state["boss_active"] = False
+    user_progress["languages"][language] = lang_state
+    _save_user_progress(nickname, user_progress)
+    return fled
 
 
 def advance_word(nickname, language, topics):
