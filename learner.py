@@ -103,13 +103,21 @@ def _load_user_progress(nickname):
 
 
 def _get_lang_state(user_progress, language):
-    return user_progress["languages"].get(
-        language,
-        {
-            "current_word_id": None, "assigned_at": None, "topics": None,
-            "boss_active": False, "boss_hp": 0, "boss_misses": 0,
-        },
-    )
+    """
+    Returns this language's state, filling in any missing fields with
+    defaults. Handles both a language never touched before AND an existing
+    record saved by older code that predates a field (e.g. accounts that
+    played before the boss system existed won't have boss_active/boss_hp/
+    boss_misses stored yet) — without this, existing users would crash.
+    """
+    defaults = {
+        "current_word_id": None, "assigned_at": None, "topics": None,
+        "boss_active": False, "boss_hp": 0, "boss_misses": 0,
+    }
+    stored = user_progress["languages"].get(language, {})
+    merged = dict(defaults)
+    merged.update(stored)
+    return merged
 
 
 def _save_user_progress(nickname, user_progress):
