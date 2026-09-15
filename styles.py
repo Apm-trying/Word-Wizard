@@ -360,6 +360,41 @@ div[data-testid="stElementContainer"]:has(button[data-testid="stBaseButton-terti
 }
 .monster-idle svg { animation: monsterIdleSway 3s ease-in-out infinite; transform-origin: bottom center; }
 
+@keyframes bossAura {
+    0%, 100% { box-shadow: 0 0 20px 4px rgba(140, 40, 140, 0.35); }
+    50% { box-shadow: 0 0 32px 10px rgba(140, 40, 140, 0.55); }
+}
+.boss-encounter {
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    animation: bossAura 2s ease-in-out infinite, monsterIdleSway 3.5s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+.boss-label {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #D68CD6;
+    margin-bottom: 0.3rem;
+}
+.boss-hp-track {
+    width: 160px;
+    height: 10px;
+    background: rgba(237,230,214,0.15);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0.4rem auto 0.8rem;
+    display: flex;
+}
+.boss-hp-pip {
+    flex: 1;
+    border-right: 2px solid rgba(20,24,31,0.6);
+}
+.boss-hp-pip.filled { background: linear-gradient(90deg, #8C288C, #D68CD6); }
+.boss-hp-pip:last-child { border-right: none; }
+
 @keyframes hpDrain {
     0% { width: 100%; }
     100% { width: 0%; }
@@ -456,6 +491,40 @@ div[data-testid="stElementContainer"]:has(button[data-testid="stBaseButton-terti
     50% { transform: translateY(-3px); }
 }
 .wizard-figure { animation: idleBounce 2.4s ease-in-out infinite; transform-origin: center bottom; }
+
+@keyframes auraPulse {
+    0%, 100% { opacity: 0.15; r: 10; }
+    50% { opacity: 0.35; r: 14; }
+}
+.wizard-aura { animation: auraPulse 2.2s ease-in-out infinite; transform-origin: center; }
+
+.encounter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 12%;
+    min-height: 60px;
+}
+.encounter-row .wizard-slot,
+.encounter-row .enemy-slot {
+    flex: 0 0 auto;
+}
+
+@keyframes spellTravel {
+    0% { left: 22%; opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    80% { opacity: 1; }
+    100% { left: 78%; opacity: 0; transform: translate(-50%, -50%) scale(1.1); }
+}
+.spell-projectile {
+    position: absolute;
+    top: 50%;
+    left: 22%;
+    transform: translate(-50%, -50%);
+    animation: spellTravel 0.7s ease-in forwards;
+    pointer-events: none;
+}
 
 @keyframes ctaPulse {
     0%, 100% {
@@ -651,8 +720,117 @@ MONSTER_SVG = """
 </div>
 """
 
+BOSS_MONSTER_SVG = """
+<div style="display:flex; justify-content:center;">
+<svg viewBox="0 0 100 100" width="88" xmlns="http://www.w3.org/2000/svg">
+<polygon points="30,34 24,10 40,32" fill="#3D1B3D"/>
+<polygon points="70,34 76,10 60,32" fill="#3D1B3D"/>
+<polygon points="20,26 26,4 32,24" fill="#2E1030"/>
+<polygon points="80,26 74,4 68,24" fill="#2E1030"/>
+<ellipse cx="50" cy="60" rx="32" ry="27" fill="#5C1F3D" stroke="#2E1030" stroke-width="2.5"/>
+<ellipse cx="22" cy="62" rx="8" ry="10" fill="#5C1F3D" stroke="#2E1030" stroke-width="2.5"/>
+<ellipse cx="78" cy="62" rx="8" ry="10" fill="#5C1F3D" stroke="#2E1030" stroke-width="2.5"/>
+<polygon points="14,70 9,78 19,75" fill="#2E1030"/>
+<polygon points="86,70 91,78 81,75" fill="#2E1030"/>
+<circle cx="38" cy="55" r="6.5" fill="#F0C674"/>
+<circle cx="62" cy="55" r="6.5" fill="#F0C674"/>
+<circle cx="38" cy="56" r="2.6" fill="#2A1510"/>
+<circle cx="62" cy="56" r="2.6" fill="#2A1510"/>
+<polyline points="34,74 39,79 44,73 50,79 56,73 61,79 66,74" fill="none" stroke="#2A1510" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</div>
+"""
+
 
 def hp_bar_html(percent, draining=False, label=None):
     fill_class = "hp-bar-fill draining" if draining else "hp-bar-fill"
     label_html = f'<div class="hp-bar-label">{label}</div>' if label else ""
     return f'{label_html}<div class="hp-bar-track"><div class="{fill_class}" style="width:{percent}%;"></div></div>'
+
+
+def boss_hp_html(hp, max_hp, label=None):
+    label_html = f'<div class="boss-label">{label}</div>' if label else ""
+    pips = "".join(
+        f'<div class="boss-hp-pip{" filled" if i < hp else ""}"></div>'
+        for i in range(max_hp)
+    )
+    return f'{label_html}<div class="boss-hp-track">{pips}</div>'
+
+
+WIZARD_AVATAR_TIER_1 = """
+<div style="display:flex; justify-content:center;">
+<svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
+<polygon points="35,92 65,92 60,50 40,50" fill="#6B7280" stroke="#4A4E5E" stroke-width="2"/>
+<circle cx="50" cy="42" r="10" fill="#EFD9B8"/>
+<polygon points="50,15 63,40 37,40" fill="#7B7F92" stroke="#4A4E5E" stroke-width="2"/>
+<ellipse cx="50" cy="40" rx="17" ry="4" fill="#5B6578" stroke="#4A4E5E" stroke-width="1.5"/>
+<line x1="74" y1="30" x2="74" y2="95" stroke="#5A4A38" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</div>
+"""
+
+WIZARD_AVATAR_TIER_2 = """
+<div style="display:flex; justify-content:center;">
+<svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
+<polygon points="35,92 65,92 60,50 40,50" fill="#4A3D6B" stroke="#2E2447" stroke-width="2"/>
+<line x1="40" y1="70" x2="60" y2="70" stroke="#C79A3C" stroke-width="1.5"/>
+<circle cx="50" cy="42" r="10" fill="#EFD9B8"/>
+<polygon points="50,15 63,40 37,40" fill="#4A3D6B" stroke="#2E2447" stroke-width="2"/>
+<ellipse cx="50" cy="40" rx="17" ry="4" fill="#3A2F54" stroke="#2E2447" stroke-width="1.5"/>
+<line x1="50" y1="20" x2="50" y2="38" stroke="#C79A3C" stroke-width="1"/>
+<line x1="74" y1="30" x2="74" y2="95" stroke="#5A4A38" stroke-width="3" stroke-linecap="round"/>
+<circle cx="74" cy="27" r="4" fill="#6B9BD1" stroke="#3A6EA5" stroke-width="1"/>
+</svg>
+</div>
+"""
+
+WIZARD_AVATAR_TIER_3 = """
+<div style="display:flex; justify-content:center;">
+<svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
+<circle class="wizard-aura" cx="74" cy="24" r="12" fill="#F0C674" opacity="0.25"/>
+<polygon points="35,92 65,92 58,50 42,50" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
+<line x1="38" y1="68" x2="62" y2="68" stroke="#C79A3C" stroke-width="1.5"/>
+<circle cx="44" cy="80" r="1.5" fill="#C79A3C"/>
+<circle cx="56" cy="84" r="1.5" fill="#C79A3C"/>
+<circle cx="50" cy="42" r="10" fill="#EFD9B8"/>
+<polygon points="50,13 64,40 36,40" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
+<ellipse cx="50" cy="40" rx="18" ry="4" fill="#2E2144" stroke="#C79A3C" stroke-width="1.5"/>
+<circle cx="50" cy="22" r="3" fill="#F0C674"/>
+<line x1="74" y1="26" x2="74" y2="95" stroke="#5A4A38" stroke-width="3" stroke-linecap="round"/>
+<circle cx="74" cy="24" r="5" fill="#F0C674" stroke="#C79A3C" stroke-width="1"/>
+</svg>
+</div>
+"""
+
+
+def wizard_avatar_html(visual_tier):
+    """visual_tier: 1 (Beginner/Apprentice), 2 (Spellcaster/Wizard), or 3 (Master Wizard/Archmage)."""
+    return {1: WIZARD_AVATAR_TIER_1, 2: WIZARD_AVATAR_TIER_2, 3: WIZARD_AVATAR_TIER_3}.get(visual_tier, WIZARD_AVATAR_TIER_1)
+
+
+SPELL_PROJECTILE_TIER_1 = """
+<svg viewBox="0 0 40 20" width="40" height="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20" cy="10" r="4" fill="#D8D4C4"/>
+</svg>
+"""
+
+SPELL_PROJECTILE_TIER_2 = """
+<svg viewBox="0 0 40 20" width="40" height="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20" cy="10" r="7" fill="#6B9BD1" opacity="0.3"/>
+<circle cx="20" cy="10" r="4" fill="#8CB8E8"/>
+<circle cx="20" cy="10" r="2" fill="#EFF5FC"/>
+</svg>
+"""
+
+SPELL_PROJECTILE_TIER_3 = """
+<svg viewBox="0 0 40 20" width="40" height="20" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20" cy="10" r="9" fill="#F0C674" opacity="0.3"/>
+<circle cx="20" cy="10" r="5" fill="#F5D68F"/>
+<circle cx="20" cy="10" r="2.5" fill="#FFFBEF"/>
+<path d="M 20 1 L 22 8 L 29 10 L 22 12 L 20 19 L 18 12 L 11 10 L 18 8 Z" fill="#F0C674" opacity="0.7"/>
+</svg>
+"""
+
+
+def spell_projectile_html(visual_tier):
+    return {1: SPELL_PROJECTILE_TIER_1, 2: SPELL_PROJECTILE_TIER_2, 3: SPELL_PROJECTILE_TIER_3}.get(visual_tier, SPELL_PROJECTILE_TIER_1)

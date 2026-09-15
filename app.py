@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -65,6 +65,8 @@ if "show_leaderboard" not in st.session_state:
     st.session_state.show_leaderboard = False
 if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
+if "boss_outcome" not in st.session_state:
+    st.session_state.boss_outcome = None
 
 # --- Remember me: if the URL already has a recognized nickname (saved there
 # after a previous login, e.g. via "Add to Home Screen"), skip straight past
@@ -391,6 +393,41 @@ level_info = learner.get_level_info(nickname)
 level_title = strings["titles"][level_info["tier"]]
 streak = learner.get_streak(nickname)
 
+# Maps the 6 rank tiers down to 3 visual bands for the wizard avatar —
+# your character's robe/hat/staff gets more elaborate as you rank up.
+WIZARD_VISUAL_TIER = {
+    "beginner": 1, "apprentice": 1,
+    "spellcaster": 2, "wizard": 2,
+    "master_wizard": 3, "archmage": 3,
+}
+wizard_visual_tier = WIZARD_VISUAL_TIER.get(level_info["tier"], 1)
+
+
+def render_encounter(enemy_svg, enemy_class, casting=False):
+    """
+    Shows your wizard (leveling up in appearance with your rank) beside the
+    enemy, in one flexbox row so positioning is fully in our control — needed
+    for the spell projectile below to travel accurately between the two.
+    casting=True (only on a correct answer) adds a one-shot projectile that
+    flies from the wizard to the enemy, in a style that matches your rank tier.
+    """
+    projectile_html = (
+        f'<div class="spell-projectile">{spell_projectile_html(wizard_visual_tier)}</div>' if casting else ""
+    )
+    # Built without leading whitespace per line — indented HTML inside a
+    # triple-quoted string gets misread by Streamlit's markdown parser as a
+    # code block (4+ spaces = code block in standard Markdown), which
+    # silently overrides unsafe_allow_html and shows raw text instead.
+    html = (
+        '<div class="encounter-row">'
+        f'<div class="wizard-slot">{wizard_avatar_html(wizard_visual_tier)}</div>'
+        f'{projectile_html}'
+        f'<div class="enemy-slot {enemy_class}">{enemy_svg}</div>'
+        '</div>'
+    )
+    st.markdown(html, unsafe_allow_html=True)
+
+
 top_col1, top_col2, top_col3, top_col4 = st.columns([2.4, 1, 1, 1])
 with top_col1:
     st.markdown(
@@ -474,9 +511,41 @@ topic_label = strings["topics"][word["topic"]]
 is_review = learner.get_word_status(nickname, word["id"]) == "known"
 review_tag_html = f'<span class="topic-tag" style="margin-left:0.4rem;">{strings["review_tag"]}</span>' if is_review else ""
 
-if st.session_state.just_correct:
+if st.session_state.boss_outcome is not None:
+    outcome = st.session_state.boss_outcome
+    if outcome == "defeated":
+        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "monster-defeated", casting=True)
+        st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
+        st.success(strings["boss_defeated_message"].format(xp=learner.BOSS_BONUS_XP))
+    elif outcome == "hit":
+        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "boss-encounter", casting=True)
+        current_hp = learner.get_boss_hp(nickname, language)
+        st.markdown(boss_hp_html(current_hp, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
+        st.info(strings["boss_hit_message"].format(hp=current_hp))
+    elif outcome == "fled":
+        render_encounter(MONSTER_SVG, "monster-idle")
+        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
+        st.warning(strings["boss_fled_message"])
+    else:  # "miss"
+        render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
+        current_hp = learner.get_boss_hp(nickname, language)
+        st.markdown(boss_hp_html(current_hp, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
+        current_misses = learner.get_boss_misses(nickname, language)
+        st.warning(strings["boss_miss_message"].format(misses=current_misses, max=learner.BOSS_MAX_MISSES))
+
+    if st.button(strings["continue_button"], use_container_width=True, type="primary"):
+        learner.advance_word(nickname, language, topics)
+        st.session_state.boss_outcome = None
+        st.session_state.revealed = False
+        st.session_state.quiz_active = False
+        st.session_state.just_correct = False
+        st.rerun()
+
+elif st.session_state.just_correct:
     st.markdown(chime_audio_html(), unsafe_allow_html=True)
-    st.markdown(f'<div class="monster-defeated">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    render_encounter(MONSTER_SVG, "monster-defeated", casting=True)
     st.markdown(hp_bar_html(0, draining=True, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
         f"""
@@ -496,8 +565,16 @@ if st.session_state.just_correct:
         st.rerun()
 
 elif not st.session_state.revealed and not st.session_state.quiz_active:
-    st.markdown(f'<div class="monster-idle">{MONSTER_SVG}</div>', unsafe_allow_html=True)
-    st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
+    boss_active = learner.is_boss_active(nickname, language)
+    if boss_active:
+        render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
+        st.markdown(
+            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_label"]),
+            unsafe_allow_html=True,
+        )
+    else:
+        render_encounter(MONSTER_SVG, "monster-idle")
+        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="word-card">
@@ -521,12 +598,24 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
     with col2:
         if st.button(strings["no_button"], use_container_width=True):
             learner.mark_status(nickname, word["id"], "unknown")
-            st.session_state.revealed = True
+            if boss_active:
+                fled = learner.boss_miss(nickname, language)
+                st.session_state.boss_outcome = "fled" if fled else "miss"
+            else:
+                st.session_state.revealed = True
             st.rerun()
 
 elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"]:
-    st.markdown(f'<div class="monster-idle">{MONSTER_SVG}</div>', unsafe_allow_html=True)
-    st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
+    boss_active = learner.is_boss_active(nickname, language)
+    if boss_active:
+        render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
+        st.markdown(
+            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_label"]),
+            unsafe_allow_html=True,
+        )
+    else:
+        render_encounter(MONSTER_SVG, "monster-idle")
+        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
         f"""
         <div class="word-card">
@@ -542,12 +631,20 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
             st.session_state.quiz_active = False
             if i == st.session_state.quiz_correct_index:
                 xp_awarded = learner.score_correct_answer(nickname, word["id"])
-                st.session_state.just_correct = True
-                st.session_state.xp_awarded = xp_awarded
+                if boss_active:
+                    defeated = learner.boss_hit(nickname, language)
+                    st.session_state.boss_outcome = "defeated" if defeated else "hit"
+                else:
+                    st.session_state.just_correct = True
+                    st.session_state.xp_awarded = xp_awarded
             else:
                 learner.mark_status(nickname, word["id"], "unknown")
-                st.session_state.revealed = True
-                st.session_state.quiz_was_wrong = True
+                if boss_active:
+                    fled = learner.boss_miss(nickname, language)
+                    st.session_state.boss_outcome = "fled" if fled else "miss"
+                else:
+                    st.session_state.revealed = True
+                    st.session_state.quiz_was_wrong = True
             st.rerun()
 
 else:
@@ -555,7 +652,7 @@ else:
         st.warning(strings["quiz_wrong"])
 
     examples_html = "".join(f'<div class="example-line"><em>{ex}</em></div>' for ex in word["examples"])
-    st.markdown(f'<div class="monster-attacking">{MONSTER_SVG}</div>', unsafe_allow_html=True)
+    render_encounter(MONSTER_SVG, "monster-attacking")
     st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
         f"""
