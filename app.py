@@ -513,27 +513,43 @@ review_tag_html = f'<span class="topic-tag" style="margin-left:0.4rem;">{strings
 
 if st.session_state.boss_outcome is not None:
     outcome = st.session_state.boss_outcome
-    if outcome == "defeated":
+    q_num = st.session_state.get("boss_question_number", 1)
+    correct_so_far = st.session_state.get("boss_correct_so_far", 0)
+    bonus_xp = st.session_state.get("boss_bonus_xp", 0)
+
+    if outcome == "perfect":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
         render_encounter(BOSS_MONSTER_SVG, "monster-defeated", casting=True)
         st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
-        st.success(strings["boss_defeated_message"].format(xp=learner.BOSS_BONUS_XP))
+        st.success(strings["boss_perfect_message"].format(xp=bonus_xp))
+    elif outcome == "defeated":
+        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "monster-defeated", casting=True)
+        st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
+        st.success(strings["boss_defeated_message"].format(correct=correct_so_far, xp=bonus_xp))
+    elif outcome == "escaped":
+        render_encounter(MONSTER_SVG, "monster-idle")
+        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
+        st.warning(strings["boss_escaped_message"].format(correct=correct_so_far))
     elif outcome == "hit":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter", casting=True)
         current_hp = learner.get_boss_hp(nickname, language)
-        st.markdown(boss_hp_html(current_hp, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
-        st.info(strings["boss_hit_message"].format(hp=current_hp))
-    elif outcome == "fled":
-        render_encounter(MONSTER_SVG, "monster-idle")
-        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
-        st.warning(strings["boss_fled_message"])
+        st.markdown(
+            boss_hp_html(current_hp, learner.BOSS_MAX_HP,
+                         label=strings["boss_question_label"].format(n=q_num, max=learner.BOSS_MAX_QUESTIONS)),
+            unsafe_allow_html=True,
+        )
+        st.info(strings["boss_hit_message"].format(correct=correct_so_far))
     else:  # "miss"
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
         current_hp = learner.get_boss_hp(nickname, language)
-        st.markdown(boss_hp_html(current_hp, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
-        current_misses = learner.get_boss_misses(nickname, language)
-        st.warning(strings["boss_miss_message"].format(misses=current_misses, max=learner.BOSS_MAX_MISSES))
+        st.markdown(
+            boss_hp_html(current_hp, learner.BOSS_MAX_HP,
+                         label=strings["boss_question_label"].format(n=q_num, max=learner.BOSS_MAX_QUESTIONS)),
+            unsafe_allow_html=True,
+        )
+        st.warning(strings["boss_miss_message"].format(correct=correct_so_far))
 
     if st.button(strings["continue_button"], use_container_width=True, type="primary"):
         learner.advance_word(nickname, language, topics)
@@ -569,7 +585,8 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
     if boss_active:
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
         st.markdown(
-            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_label"]),
+            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP,
+                         label=strings["boss_question_label"].format(n=learner.get_boss_question_number(nickname, language), max=learner.BOSS_MAX_QUESTIONS)),
             unsafe_allow_html=True,
         )
     else:
@@ -599,8 +616,11 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
         if st.button(strings["no_button"], use_container_width=True):
             learner.mark_status(nickname, word["id"], "unknown")
             if boss_active:
-                fled = learner.boss_miss(nickname, language)
-                st.session_state.boss_outcome = "fled" if fled else "miss"
+                result_info = learner.boss_miss(nickname, language)
+                st.session_state.boss_outcome = result_info["result"] if result_info["finished"] else "miss"
+                st.session_state.boss_question_number = result_info["question_number"]
+                st.session_state.boss_correct_so_far = result_info["correct_so_far"]
+                st.session_state.boss_bonus_xp = result_info["bonus_xp"]
             else:
                 st.session_state.revealed = True
             st.rerun()
@@ -610,7 +630,8 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
     if boss_active:
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
         st.markdown(
-            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_label"]),
+            boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP,
+                         label=strings["boss_question_label"].format(n=learner.get_boss_question_number(nickname, language), max=learner.BOSS_MAX_QUESTIONS)),
             unsafe_allow_html=True,
         )
     else:
@@ -632,16 +653,22 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
             if i == st.session_state.quiz_correct_index:
                 xp_awarded = learner.score_correct_answer(nickname, word["id"])
                 if boss_active:
-                    defeated = learner.boss_hit(nickname, language)
-                    st.session_state.boss_outcome = "defeated" if defeated else "hit"
+                    result_info = learner.boss_hit(nickname, language)
+                    st.session_state.boss_outcome = result_info["result"] if result_info["finished"] else "hit"
+                    st.session_state.boss_question_number = result_info["question_number"]
+                    st.session_state.boss_correct_so_far = result_info["correct_so_far"]
+                    st.session_state.boss_bonus_xp = result_info["bonus_xp"]
                 else:
                     st.session_state.just_correct = True
                     st.session_state.xp_awarded = xp_awarded
             else:
                 learner.mark_status(nickname, word["id"], "unknown")
                 if boss_active:
-                    fled = learner.boss_miss(nickname, language)
-                    st.session_state.boss_outcome = "fled" if fled else "miss"
+                    result_info = learner.boss_miss(nickname, language)
+                    st.session_state.boss_outcome = result_info["result"] if result_info["finished"] else "miss"
+                    st.session_state.boss_question_number = result_info["question_number"]
+                    st.session_state.boss_correct_so_far = result_info["correct_so_far"]
+                    st.session_state.boss_bonus_xp = result_info["bonus_xp"]
                 else:
                     st.session_state.revealed = True
                     st.session_state.quiz_was_wrong = True

@@ -13,8 +13,19 @@ XP_REVIEW_BONUS = 3  # smaller reward for correctly reviewing an already-known w
 # Random boss encounters — a rare, higher-stakes detour from the normal loop
 BOSS_TRIGGER_CHANCE = 0.12  # ~12% chance on each new word, when no boss is already active
 BOSS_MAX_HP = 5
-BOSS_MAX_MISSES = 2  # a 3rd miss makes the boss flee
-BOSS_BONUS_XP = 50  # awarded only on full victory, on top of normal per-word XP
+BOSS_MAX_QUESTIONS = 5  # always exactly 5 questions — outcome decided only after the 5th
+BOSS_WIN_THRESHOLD = 3  # 3 or more correct out of 5 = defeated
+
+
+def boss_bonus_xp(correct_count):
+    """Tiered bonus XP by final result: 0-2 correct = escaped (no bonus),
+    3-4 = defeated, 5 = Perfect Victory."""
+    if correct_count >= BOSS_MAX_QUESTIONS:
+        return 75
+    elif correct_count >= BOSS_WIN_THRESHOLD:
+        return 50
+    else:
+        return 0
 
 
 def xp_required_for_level(level):
@@ -112,7 +123,8 @@ def _get_lang_state(user_progress, language):
     """
     defaults = {
         "current_word_id": None, "assigned_at": None, "topics": None,
-        "boss_active": False, "boss_hp": 0, "boss_misses": 0,
+        "boss_active": False, "boss_hp": 0,
+        "boss_correct_count": 0, "boss_questions_answered": 0,
     }
     stored = user_progress["languages"].get(language, {})
     merged = dict(defaults)
@@ -183,7 +195,8 @@ def _assign_word(nickname, user_progress, word, language, topics):
         "topics": sorted(topics),
         "boss_active": existing["boss_active"],
         "boss_hp": existing["boss_hp"],
-        "boss_misses": existing["boss_misses"],
+        "boss_correct_count": existing["boss_correct_count"],
+        "boss_questions_answered": existing["boss_questions_answered"],
     }
     _save_user_progress(nickname, user_progress)
     maybe_trigger_boss(nickname, language)
@@ -311,7 +324,8 @@ def get_boss_hp(nickname, language):
 
 def get_boss_misses(nickname, language):
     user_progress = _load_user_progress(nickname)
-    return _get_lang_state(user_progress, language)["boss_misses"]
+    lang_state = _get_lang_state(user_progress, language)
+    return lang_state["boss_questions_answered"] - lang_state["boss_correct_count"]
 
 
 def maybe_trigger_boss(nickname, language):
@@ -327,37 +341,78 @@ def maybe_trigger_boss(nickname, language):
     if random.random() < BOSS_TRIGGER_CHANCE:
         lang_state["boss_active"] = True
         lang_state["boss_hp"] = BOSS_MAX_HP
-        lang_state["boss_misses"] = 0
+        lang_state["boss_correct_count"] = 0
+        lang_state["boss_questions_answered"] = 0
         user_progress["languages"][language] = lang_state
         _save_user_progress(nickname, user_progress)
         return True
     return False
 
 
-def boss_hit(nickname, language):
-    """Registers one correct answer against the active boss. Returns True if this defeated it."""
+def get_boss_question_number(nickname, language):
+    """Which question number (1-based, up to BOSS_MAX_QUESTIONS) is currently being asked."""
     user_progress = _load_user_progress(nickname)
     lang_state = _get_lang_state(user_progress, language)
-    lang_state["boss_hp"] = max(0, lang_state["boss_hp"] - 1)
-    defeated = lang_state["boss_hp"] <= 0
-    if defeated:
+    return lang_state["boss_questions_answered"] + 1
+
+
+def _register_boss_answer(nickname, language, correct):
+    """
+    Records one answer during the 5-question boss encounter. Always exactly
+    5 questions are asked — a wrong answer never ends the encounter early or
+    costs XP already earned; it just doesn't count toward defeating the boss.
+    The outcome (defeated / perfect / escaped) is only decided after the 5th.
+
+    Returns a dict: {"finished", "question_number", "correct_so_far",
+    "result" (None until finished, then "defeated"/"perfect"/"escaped"),
+    "bonus_xp"}.
+    """
+    user_progress = _load_user_progress(nickname)
+    lang_state = _get_lang_state(user_progress, language)
+
+    lang_state["boss_questions_answered"] += 1
+    if correct:
+        lang_state["boss_correct_count"] += 1
+        lang_state["boss_hp"] = max(0, BOSS_MAX_HP - lang_state["boss_correct_count"])
+
+    question_number = lang_state["boss_questions_answered"]
+    finished = question_number >= BOSS_MAX_QUESTIONS
+    result = None
+    bonus_xp = 0
+
+    if finished:
+        correct_count = lang_state["boss_correct_count"]
+        bonus_xp = boss_bonus_xp(correct_count)
+        if correct_count >= BOSS_MAX_QUESTIONS:
+            result = "perfect"
+        elif correct_count >= BOSS_WIN_THRESHOLD:
+            result = "defeated"
+        else:
+            result = "escaped"
         lang_state["boss_active"] = False
+        if bonus_xp:
+            user_progress["xp"] = user_progress.get("xp", 0) + bonus_xp
+
     user_progress["languages"][language] = lang_state
     _save_user_progress(nickname, user_progress)
-    return defeated
+
+    return {
+        "finished": finished,
+        "question_number": question_number,
+        "correct_so_far": lang_state["boss_correct_count"],
+        "result": result,
+        "bonus_xp": bonus_xp,
+    }
+
+
+def boss_hit(nickname, language):
+    """Registers one correct answer during a boss encounter. See _register_boss_answer."""
+    return _register_boss_answer(nickname, language, correct=True)
 
 
 def boss_miss(nickname, language):
-    """Registers one wrong answer against the active boss. Returns True if this made it flee."""
-    user_progress = _load_user_progress(nickname)
-    lang_state = _get_lang_state(user_progress, language)
-    lang_state["boss_misses"] += 1
-    fled = lang_state["boss_misses"] > BOSS_MAX_MISSES
-    if fled:
-        lang_state["boss_active"] = False
-    user_progress["languages"][language] = lang_state
-    _save_user_progress(nickname, user_progress)
-    return fled
+    """Registers one wrong answer during a boss encounter. See _register_boss_answer."""
+    return _register_boss_answer(nickname, language, correct=False)
 
 
 def advance_word(nickname, language, topics):
