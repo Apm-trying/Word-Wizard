@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -72,6 +72,16 @@ if "boss_entrance_shown" not in st.session_state:
     # the currently-active boss encounter, so it fires exactly once per
     # encounter and never replays on ordinary Streamlit reruns.
     st.session_state.boss_entrance_shown = False
+if "rank_up_info" not in st.session_state:
+    # Set right after a correct answer pushes the player into a new rank
+    # tier (e.g. Level 9 -> 10: Apprentice). Shown as a full celebratory
+    # screen that takes priority over whatever would normally show next.
+    st.session_state.rank_up_info = None
+if "level_up_info" not in st.session_state:
+    # Set right after a correct answer pushes the player up a level
+    # *without* crossing into a new rank tier. Shown as a small one-shot
+    # badge on the very next screen, no extra click or screen required.
+    st.session_state.level_up_info = None
 
 # --- Remember me: if the URL already has a recognized nickname (saved there
 # after a previous login, e.g. via "Add to Home Screen"), skip straight past
@@ -516,11 +526,38 @@ topic_label = strings["topics"][word["topic"]]
 is_review = learner.get_word_status(nickname, word["id"]) == "known"
 review_tag_html = f'<span class="topic-tag" style="margin-left:0.4rem;">{strings["review_tag"]}</span>' if is_review else ""
 
-if st.session_state.boss_outcome is not None:
+if st.session_state.rank_up_info is not None:
+    # The big, "amazing" moment -- takes priority over whatever would
+    # otherwise show next (a boss outcome, a plain correct-answer screen),
+    # which still shows normally on the next rerun once this is dismissed.
+    rank_up = st.session_state.rank_up_info
+    st.markdown(chime_audio_html(), unsafe_allow_html=True)
+    st.markdown(
+        rank_up_html(
+            rank_up_title=strings["rank_up_title"],
+            rank_name=strings["titles"][rank_up["new_tier"]],
+            level_label=f'{strings["level_prefix"]} {rank_up["new_level"]}',
+            flavor=strings["rank_up_flavor"],
+            wizard_tier_html=wizard_avatar_html(WIZARD_VISUAL_TIER.get(rank_up["new_tier"], 1)),
+        ),
+        unsafe_allow_html=True,
+    )
+    if st.button(strings["continue_button"], use_container_width=True, type="primary"):
+        st.session_state.rank_up_info = None
+        st.rerun()
+
+elif st.session_state.boss_outcome is not None:
     outcome = st.session_state.boss_outcome
     q_num = st.session_state.get("boss_question_number", 1)
     correct_so_far = st.session_state.get("boss_correct_so_far", 0)
     bonus_xp = st.session_state.get("boss_bonus_xp", 0)
+
+    level_up = st.session_state.pop("level_up_info", None)
+    if level_up:
+        st.markdown(
+            level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
+            unsafe_allow_html=True,
+        )
 
     if outcome == "perfect":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
@@ -579,6 +616,12 @@ if st.session_state.boss_outcome is not None:
         st.rerun()
 
 elif st.session_state.just_correct:
+    level_up = st.session_state.pop("level_up_info", None)
+    if level_up:
+        st.markdown(
+            level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
+            unsafe_allow_html=True,
+        )
     st.markdown(chime_audio_html(), unsafe_allow_html=True)
     render_encounter(MONSTER_SVG, "monster-defeated", casting=True)
     st.markdown(hp_bar_html(0, draining=True, label=strings["monster_hp_label"]), unsafe_allow_html=True)
@@ -679,6 +722,13 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
     for i, choice_text in enumerate(st.session_state.quiz_choices):
         if st.button(choice_text, use_container_width=True, key=f"quiz_choice_{i}"):
             st.session_state.quiz_active = False
+            # Snapshot level/rank from before this answer's XP (whether
+            # per-word XP, boss bonus XP on a finishing hit, or boss bonus
+            # XP on a finishing miss) is awarded below, so we can tell
+            # afterwards whether it pushed the player up a level and/or
+            # into a new rank tier.
+            old_level = level_info["level"]
+            old_tier = level_info["tier"]
             if i == st.session_state.quiz_correct_index:
                 xp_awarded = learner.score_correct_answer(nickname, word["id"])
                 if boss_active:
@@ -701,6 +751,14 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
                 else:
                     st.session_state.revealed = True
                     st.session_state.quiz_was_wrong = True
+            new_level_info = learner.get_level_info(nickname)
+            if new_level_info["tier"] != old_tier:
+                st.session_state.rank_up_info = {
+                    "new_tier": new_level_info["tier"],
+                    "new_level": new_level_info["level"],
+                }
+            elif new_level_info["level"] != old_level:
+                st.session_state.level_up_info = {"new_level": new_level_info["level"]}
             st.rerun()
 
 else:

@@ -658,6 +658,92 @@ div[data-testid="stButton"] button[kind="primary"] {
     color: #C9A8DE;
     margin-top: 0.1rem;
 }
+
+/* --- Level-up / rank-up celebrations. Ordinary level-ups get a small
+   one-shot badge on the screen that's already showing (no extra click);
+   crossing into a new rank tier gets a dedicated full celebratory screen,
+   reusing the existing wizard-avatar tier system. --- */
+@keyframes levelUpBadgePop {
+    0% { transform: scale(0.7); opacity: 0; }
+    45% { transform: scale(1.08); opacity: 1; }
+    65% { transform: scale(1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.level-up-badge {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+    color: #2A1510;
+    background: linear-gradient(90deg, #F0C674, #E8A93C);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    margin: 0 0 0.8rem;
+    box-shadow: 0 0 16px rgba(240,198,116,0.5);
+    animation: levelUpBadgePop 0.45s ease-out;
+}
+
+@keyframes rankUpAura {
+    0%, 100% { box-shadow: 0 0 26px 6px rgba(240,198,116,0.4); }
+    50% { box-shadow: 0 0 42px 14px rgba(240,198,116,0.65); }
+}
+@keyframes rankUpEnter {
+    0% { opacity: 0; transform: scale(0.85) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.rankup-screen {
+    text-align: center;
+    animation: rankUpEnter 0.5s ease-out;
+}
+.rankup-portrait {
+    display: flex;
+    justify-content: center;
+    margin: 0.4rem auto 0.6rem;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    align-items: center;
+    background: radial-gradient(circle, rgba(199,154,60,0.22) 0%, rgba(20,10,28,0.05) 75%);
+    animation: rankUpAura 2s ease-in-out infinite;
+}
+.rankup-portrait svg {
+    width: 92px;
+    height: auto;
+}
+.rankup-title {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.2em;
+    font-size: 0.9rem;
+    color: #F0C674;
+    text-shadow: 0 0 14px rgba(240,198,116,0.8);
+    margin-bottom: 0.3rem;
+}
+.rankup-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    background: linear-gradient(90deg, #F0C674, #EDE6D6 50%, #F0C674);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 24px rgba(240,198,116,0.5);
+    margin-bottom: 0.3rem;
+}
+.rankup-level {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: #D6B8E8;
+    margin-bottom: 0.6rem;
+}
+.rankup-flavor {
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #C9A8DE;
+    margin-bottom: 1rem;
+}
 </style>
 """
 
@@ -904,6 +990,28 @@ def boss_outcome_heading_html(boss_name, boss_subtitle):
         '<div class="boss-outcome-heading">'
         f'<div class="boss-outcome-name">{boss_name}</div>'
         f'<div class="boss-outcome-subtitle">{boss_subtitle}</div>'
+        '</div>'
+    )
+
+
+def level_up_badge_html(text):
+    """Small one-shot gold badge for an ordinary level-up (no rank/tier
+    change). Rendered on top of whatever screen is already showing --
+    no extra click, no new screen."""
+    return f'<div class="level-up-badge">{text}</div>'
+
+
+def rank_up_html(rank_up_title, rank_name, level_label, flavor, wizard_tier_html):
+    """Full celebratory screen shown when a correct answer pushes the
+    player across a rank-tier boundary (e.g. Level 9 -> 10: Apprentice).
+    Reuses the existing wizard-avatar tier art via wizard_tier_html."""
+    return (
+        '<div class="rankup-screen">'
+        f'<div class="rankup-portrait">{wizard_tier_html}</div>'
+        f'<div class="rankup-title">{rank_up_title}</div>'
+        f'<div class="rankup-name">{rank_name}</div>'
+        f'<div class="rankup-level">{level_label}</div>'
+        f'<div class="rankup-flavor">{flavor}</div>'
         '</div>'
     )
 
