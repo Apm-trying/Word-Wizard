@@ -550,14 +550,23 @@ div[data-testid="stButton"] button[kind="primary"] {
    and an enlarged "portrait" treatment for the boss on the final outcome
    screen. All reuse the existing boss SVG, aura and HP-pip system. --- */
 @keyframes bossEntrancePlay {
+    /* Quick pop-in, then a long hold at full visibility -- the previous
+       version faded back out starting at 72% of a 1.2s animation, leaving
+       well under a second of genuinely readable time. This version holds
+       at full opacity from ~0.16s to ~1.44s (~1.28s of solid read time)
+       before fading, out of a slower 1.8s total. */
     0% { opacity: 0; transform: scale(0.88); }
-    14% { opacity: 1; transform: scale(1.04); }
-    22% { transform: scale(1); }
-    72% { opacity: 1; }
+    9% { opacity: 1; transform: scale(1.04); }
+    15% { transform: scale(1); }
+    80% { opacity: 1; }
     100% { opacity: 0; transform: scale(1); }
 }
 @keyframes bossEntranceCollapse {
-    0%, 82% { max-height: 140px; margin-bottom: 0.7rem; }
+    /* Only starts shrinking once the text has already faded out (90% =
+       1.62s of 1.8s), so the collapse never visibly clips readable
+       content -- previously it began at 82% of a 1.2s animation, while
+       opacity was still well above 0, which read as an abrupt cut. */
+    0%, 90% { max-height: 140px; margin-bottom: 0.7rem; }
     100% { max-height: 0; margin-bottom: 0; }
 }
 .boss-entrance {
@@ -566,7 +575,7 @@ div[data-testid="stButton"] button[kind="primary"] {
     border-radius: 14px;
     background: radial-gradient(circle, rgba(92,31,61,0.45) 0%, rgba(20,10,28,0.1) 78%);
     overflow: hidden;
-    animation: bossEntrancePlay 1.2s ease-out forwards, bossEntranceCollapse 1.2s ease-out forwards;
+    animation: bossEntrancePlay 1.8s ease-out forwards, bossEntranceCollapse 1.8s ease-out forwards;
 }
 .boss-entrance-arrives {
     font-family: 'IBM Plex Mono', monospace;
