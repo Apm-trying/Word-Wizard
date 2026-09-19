@@ -545,6 +545,110 @@ div[data-testid="stElementContainer"]:has(button[data-testid="stBaseButton-terti
 div[data-testid="stButton"] button[kind="primary"] {
     animation: ctaPulse 2.5s ease-in-out 2.5s infinite;
 }
+
+/* --- Boss two-stage reveal: entrance banner, punchier hit/miss feedback,
+   and an enlarged "portrait" treatment for the boss on the final outcome
+   screen. All reuse the existing boss SVG, aura and HP-pip system. --- */
+@keyframes bossEntrancePlay {
+    0% { opacity: 0; transform: scale(0.88); }
+    14% { opacity: 1; transform: scale(1.04); }
+    22% { transform: scale(1); }
+    72% { opacity: 1; }
+    100% { opacity: 0; transform: scale(1); }
+}
+@keyframes bossEntranceCollapse {
+    0%, 82% { max-height: 140px; margin-bottom: 0.7rem; }
+    100% { max-height: 0; margin-bottom: 0; }
+}
+.boss-entrance {
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    border-radius: 14px;
+    background: radial-gradient(circle, rgba(92,31,61,0.45) 0%, rgba(20,10,28,0.1) 78%);
+    overflow: hidden;
+    animation: bossEntrancePlay 1.2s ease-out forwards, bossEntranceCollapse 1.2s ease-out forwards;
+}
+.boss-entrance-arrives {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.22em;
+    font-size: 0.8rem;
+    color: #F0C674;
+    text-shadow: 0 0 12px rgba(240,198,116,0.7);
+}
+.boss-entrance-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #EDE6D6;
+    margin-top: 0.25rem;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 18px rgba(140,40,140,0.85);
+}
+.boss-entrance-subtitle {
+    font-size: 0.78rem;
+    font-style: italic;
+    color: #D6B8E8;
+    margin-top: 0.15rem;
+}
+
+@keyframes feedbackPop {
+    0% { transform: scale(0.7); opacity: 0; }
+    45% { transform: scale(1.08); opacity: 1; }
+    65% { transform: scale(1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.boss-feedback {
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    margin: 0.5rem 0 0.8rem;
+    animation: feedbackPop 0.45s ease-out;
+}
+.boss-feedback-hit {
+    font-size: 1.25rem;
+    color: #2A1510;
+    background: linear-gradient(90deg, #F0C674, #E8A93C);
+    box-shadow: 0 0 22px rgba(240,198,116,0.55);
+}
+.boss-feedback-miss {
+    font-size: 1.05rem;
+    color: #F5E4E4;
+    background: rgba(120,30,30,0.55);
+    border: 1px solid rgba(226,75,74,0.6);
+}
+.boss-feedback-sub {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+    margin-top: 0.2rem;
+}
+
+/* Elevated final-outcome treatment: same BOSS_MONSTER_SVG, scaled up via
+   CSS (overrides the SVG's own width attribute, no new artwork needed). */
+.boss-portrait svg {
+    width: 168px;
+    height: auto;
+}
+.boss-outcome-heading {
+    text-align: center;
+    margin: 0.6rem 0 0.2rem;
+}
+.boss-outcome-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #EDE6D6;
+}
+.boss-outcome-subtitle {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #C9A8DE;
+    margin-top: 0.1rem;
+}
 </style>
 """
 
@@ -755,6 +859,44 @@ def boss_hp_html(hp, max_hp, label=None):
         for i in range(max_hp)
     )
     return f'{label_html}<div class="boss-hp-track">{pips}</div>'
+
+
+def boss_entrance_html(arrives_label, boss_name, boss_subtitle):
+    """
+    One-shot ~1.2s CSS-only entrance banner shown above the boss the first
+    time a boss encounter becomes active. Purely decorative (no JS, no
+    blocking) — it plays and then collapses itself via the
+    bossEntranceCollapse keyframe, so it never requires an extra click and
+    never leaves a gap in the layout once it's done.
+    """
+    return (
+        '<div class="boss-entrance">'
+        f'<div class="boss-entrance-arrives">{arrives_label}</div>'
+        f'<div class="boss-entrance-name">{boss_name}</div>'
+        f'<div class="boss-entrance-subtitle">{boss_subtitle}</div>'
+        '</div>'
+    )
+
+
+def boss_feedback_html(headline, sub_text, kind):
+    """Punchy DIRECT HIT! / MISSED! banner shown on the boss in-progress
+    result screen, in place of the quieter st.info/st.warning box."""
+    css_class = "boss-feedback-hit" if kind == "hit" else "boss-feedback-miss"
+    return (
+        f'<div class="boss-feedback {css_class}">{headline}'
+        f'<span class="boss-feedback-sub">{sub_text}</span></div>'
+    )
+
+
+def boss_outcome_heading_html(boss_name, boss_subtitle):
+    """Boss name/subtitle shown above the enlarged boss-portrait on the
+    final outcome screen (perfect / defeated / escaped)."""
+    return (
+        '<div class="boss-outcome-heading">'
+        f'<div class="boss-outcome-name">{boss_name}</div>'
+        f'<div class="boss-outcome-subtitle">{boss_subtitle}</div>'
+        '</div>'
+    )
 
 
 WIZARD_AVATAR_TIER_1 = """

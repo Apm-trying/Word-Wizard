@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -67,6 +67,11 @@ if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
 if "boss_outcome" not in st.session_state:
     st.session_state.boss_outcome = None
+if "boss_entrance_shown" not in st.session_state:
+    # Tracks whether the "⚔ BOSS APPROACHES" entrance has already played for
+    # the currently-active boss encounter, so it fires exactly once per
+    # encounter and never replays on ordinary Streamlit reruns.
+    st.session_state.boss_entrance_shown = False
 
 # --- Remember me: if the URL already has a recognized nickname (saved there
 # after a previous login, e.g. via "Add to Home Screen"), skip straight past
@@ -519,17 +524,20 @@ if st.session_state.boss_outcome is not None:
 
     if outcome == "perfect":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
-        render_encounter(BOSS_MONSTER_SVG, "monster-defeated", casting=True)
+        st.markdown(boss_outcome_heading_html(strings["boss_name"], strings["boss_subtitle"]), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "monster-defeated boss-portrait", casting=True)
         st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
         st.success(strings["boss_perfect_message"].format(xp=bonus_xp))
     elif outcome == "defeated":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
-        render_encounter(BOSS_MONSTER_SVG, "monster-defeated", casting=True)
+        st.markdown(boss_outcome_heading_html(strings["boss_name"], strings["boss_subtitle"]), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "monster-defeated boss-portrait", casting=True)
         st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
         st.success(strings["boss_defeated_message"].format(correct=correct_so_far, xp=bonus_xp))
     elif outcome == "escaped":
-        render_encounter(MONSTER_SVG, "monster-idle")
-        st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
+        st.markdown(boss_outcome_heading_html(strings["boss_name"], strings["boss_subtitle"]), unsafe_allow_html=True)
+        render_encounter(BOSS_MONSTER_SVG, "boss-encounter boss-portrait", casting=False)
+        st.markdown(boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
         st.warning(strings["boss_escaped_message"].format(correct=correct_so_far))
     elif outcome == "hit":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
@@ -540,7 +548,10 @@ if st.session_state.boss_outcome is not None:
                          label=strings["boss_question_label"].format(n=q_num, max=learner.BOSS_MAX_QUESTIONS)),
             unsafe_allow_html=True,
         )
-        st.info(strings["boss_hit_message"].format(correct=correct_so_far))
+        st.markdown(
+            boss_feedback_html(strings["boss_hit_headline"], strings["boss_hit_message"].format(correct=correct_so_far), "hit"),
+            unsafe_allow_html=True,
+        )
     else:  # "miss"
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
         current_hp = learner.get_boss_hp(nickname, language)
@@ -549,9 +560,17 @@ if st.session_state.boss_outcome is not None:
                          label=strings["boss_question_label"].format(n=q_num, max=learner.BOSS_MAX_QUESTIONS)),
             unsafe_allow_html=True,
         )
-        st.warning(strings["boss_miss_message"].format(correct=correct_so_far))
+        st.markdown(
+            boss_feedback_html(strings["boss_miss_headline"], strings["boss_miss_message"].format(correct=correct_so_far), "miss"),
+            unsafe_allow_html=True,
+        )
 
     if st.button(strings["continue_button"], use_container_width=True, type="primary"):
+        if outcome in ("perfect", "defeated", "escaped"):
+            # This boss encounter is fully over — clear the entrance flag so
+            # a freshly-triggered new boss (advance_word can roll one for
+            # the very next word) gets its own "⚔ BOSS APPROACHES" moment.
+            st.session_state.boss_entrance_shown = False
         learner.advance_word(nickname, language, topics)
         st.session_state.boss_outcome = None
         st.session_state.revealed = False
@@ -583,6 +602,15 @@ elif st.session_state.just_correct:
 elif not st.session_state.revealed and not st.session_state.quiz_active:
     boss_active = learner.is_boss_active(nickname, language)
     if boss_active:
+        if not st.session_state.boss_entrance_shown:
+            # Plays once, the first time this specific boss encounter is
+            # seen on the idle ask-screen; resets below once the encounter
+            # ends, ready for the next boss to trigger its own entrance.
+            st.session_state.boss_entrance_shown = True
+            st.markdown(
+                boss_entrance_html(strings["boss_arrives_label"], strings["boss_name"], strings["boss_subtitle"]),
+                unsafe_allow_html=True,
+            )
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter")
         st.markdown(
             boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP,
@@ -590,6 +618,7 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
             unsafe_allow_html=True,
         )
     else:
+        st.session_state.boss_entrance_shown = False
         render_encounter(MONSTER_SVG, "monster-idle")
         st.markdown(hp_bar_html(100, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
