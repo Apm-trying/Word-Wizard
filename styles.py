@@ -826,6 +826,61 @@ div[data-testid="stButton"] button[kind="primary"] {
     color: #6B665A;
     font-size: 0.72rem;
 }
+
+/* Mobile-only tightening for the progression screen so it fits closer to
+   one viewport on a typical phone. Scoped to .progression-hero (an extra
+   class alongside .rankup-screen, added only on this screen's hero) and
+   .progression-ladder-card (an extra class alongside .word-card, added
+   only on this screen's ladder), so the shared rank-up celebration screen
+   and the leaderboard/My Words cards are completely unaffected. Desktop
+   (>480px) is untouched -- these rules only apply below that width. */
+@media (max-width: 480px) {
+    .progression-hero .rankup-portrait {
+        width: 96px;
+        height: 96px;
+        margin: 0.15rem auto 0.3rem;
+    }
+    .progression-hero .rankup-portrait svg {
+        width: 64px;
+    }
+    .progression-hero .rankup-name {
+        font-size: 1.7rem;
+        margin-bottom: 0.15rem;
+    }
+    .progression-hero .rankup-level {
+        font-size: 0.78rem;
+        margin-bottom: 0.25rem;
+    }
+    .progression-xp-label {
+        margin-top: 0.2rem;
+        font-size: 0.6rem;
+    }
+    .progression-xp-track {
+        margin: 0.25rem auto 0.15rem;
+    }
+    .progression-xp-remaining {
+        font-size: 0.68rem;
+        margin-bottom: 0.25rem;
+    }
+    .progression-next-rank {
+        font-size: 0.78rem;
+        margin-bottom: 0.6rem;
+    }
+    .progression-ladder-card.word-card {
+        padding: 1.1rem 1rem;
+        margin-bottom: 0.6rem;
+    }
+    .progression-ladder-card .rank-ladder-row {
+        padding: 0.42rem 0.15rem;
+        font-size: 0.72rem;
+    }
+    .progression-ladder-card .rank-ladder-row.current {
+        padding: 0.5rem 0.55rem;
+    }
+    .progression-ladder-card .rank-ladder-name {
+        font-size: 0.88rem;
+    }
+}
 </style>
 """
 
@@ -1101,9 +1156,12 @@ def rank_up_html(rank_up_title, rank_name, level_label, flavor, wizard_tier_html
 def progression_hero_html(wizard_tier_html, rank_name, level_label):
     """Current-rank focal point for the progression screen -- reuses the
     exact same .rankup-portrait/.rankup-name/.rankup-level treatment as
-    the rank-up celebration, so it reads as the same visual language."""
+    the rank-up celebration, so it reads as the same visual language.
+    The extra "progression-hero" class doesn't change desktop styling at
+    all -- it only gives the mobile media query something to scope its
+    tightened spacing to, without touching the shared rank-up screen."""
     return (
-        '<div class="rankup-screen">'
+        '<div class="rankup-screen progression-hero">'
         f'<div class="rankup-portrait">{wizard_tier_html}</div>'
         f'<div class="rankup-name">{rank_name}</div>'
         f'<div class="rankup-level">{level_label}</div>'

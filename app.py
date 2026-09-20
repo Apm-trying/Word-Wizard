@@ -529,7 +529,7 @@ if st.session_state.show_progression:
             "state": state,
         })
     st.markdown(
-        f'<div class="word-card" style="text-align:left;">{rank_ladder_html(ladder_rows)}</div>',
+        f'<div class="word-card progression-ladder-card" style="text-align:left;">{rank_ladder_html(ladder_rows)}</div>',
         unsafe_allow_html=True,
     )
 
