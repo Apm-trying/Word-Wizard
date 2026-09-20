@@ -913,6 +913,7 @@ div[data-testid="stButton"] button[kind="primary"] {
     .xp-badge {
         font-size: 0.62rem;
         padding: 0.22rem 0.5rem;
+        text-align: center;
     }
 
     /* 2) Reserve less dead space above the first element, and tighten
