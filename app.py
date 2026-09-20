@@ -445,28 +445,34 @@ def render_encounter(enemy_svg, enemy_class, casting=False):
     st.markdown(html, unsafe_allow_html=True)
 
 
-top_col1, top_col2, top_col3, top_col4, top_col5 = st.columns([2.0, 1, 1, 1, 1])
-with top_col1:
-    st.markdown(
-        f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
-        unsafe_allow_html=True,
-    )
-with top_col2:
-    if st.button(strings["progression_button"], use_container_width=True, help=strings["progression_tooltip"]):
-        st.session_state.show_progression = True
-        st.rerun()
-with top_col3:
-    if st.button(strings["leaderboard_button"], use_container_width=True, help="Leaderboard"):
-        st.session_state.show_leaderboard = True
-        st.rerun()
-with top_col4:
-    if st.button(strings["my_words_button"], use_container_width=True, help=strings["my_words_tooltip"]):
-        st.session_state.show_my_words = True
-        st.rerun()
-with top_col5:
-    if st.button(strings["settings_button"], use_container_width=True, help=strings["settings_tooltip"]):
-        st.session_state.setup_stage = "language"
-        st.rerun()
+# Wrapped in a keyed container purely so mobile CSS can target this
+# specific row (see the "top-nav" media-query rules in styles.py) without
+# touching st.columns() elsewhere in the app -- Streamlit's own responsive
+# behavior stacks columns vertically below a width threshold, which is
+# what was pushing the primary answer button below the fold on phones.
+with st.container(key="top-nav"):
+    top_col1, top_col2, top_col3, top_col4, top_col5 = st.columns([2.0, 1, 1, 1, 1])
+    with top_col1:
+        st.markdown(
+            f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
+            unsafe_allow_html=True,
+        )
+    with top_col2:
+        if st.button(strings["progression_button"], use_container_width=True, help=strings["progression_tooltip"]):
+            st.session_state.show_progression = True
+            st.rerun()
+    with top_col3:
+        if st.button(strings["leaderboard_button"], use_container_width=True, help="Leaderboard"):
+            st.session_state.show_leaderboard = True
+            st.rerun()
+    with top_col4:
+        if st.button(strings["my_words_button"], use_container_width=True, help=strings["my_words_tooltip"]):
+            st.session_state.show_my_words = True
+            st.rerun()
+    with top_col5:
+        if st.button(strings["settings_button"], use_container_width=True, help=strings["settings_tooltip"]):
+            st.session_state.setup_stage = "language"
+            st.rerun()
 
 if st.session_state.show_progression:
     st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["progression_title"]}</div>', unsafe_allow_html=True)

@@ -881,6 +881,68 @@ div[data-testid="stButton"] button[kind="primary"] {
         font-size: 0.88rem;
     }
 }
+
+/* --- Main word-screen mobile tightening. Goal: the word card, its
+   question, and the primary "Yes, I know this" button all fit in one
+   phone screen without scrolling. Three things were eating the space:
+   1) Streamlit's own responsive behavior stacks st.columns() vertically
+      below a width threshold -- the 4 top-nav icon buttons were each
+      getting their own full-width row instead of sitting in one row.
+      Fixed by forcing nowrap on that specific row only (scoped to the
+      "top-nav" keyed container from app.py's st.container(key="top-nav"),
+      so no other st.columns() elsewhere in the app is affected).
+   2) Streamlit's default page padding-top (96px) and the ~16px gap
+      between every top-level element add up fast on a short screen.
+      Trimmed both, scoped to the outermost content flow only (the
+      direct-child selector below reaches just the page's top-level
+      block, not the layout inside columns/cards elsewhere).
+   3) The encounter row and word-card had comfortable-but-not-essential
+      padding/margins that a phone doesn't have room for. Desktop is
+      untouched -- none of this applies above 480px. --- */
+@media (max-width: 480px) {
+    /* 1) Keep the top-nav row horizontal instead of letting Streamlit
+       stack it into 4 separate full-width rows. */
+    .st-key-top-nav div[data-testid="stHorizontalBlock"] {
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+    }
+    .st-key-top-nav div[data-testid="stColumn"] {
+        min-width: 0 !important;
+        width: auto !important;
+    }
+    .xp-badge {
+        font-size: 0.62rem;
+        padding: 0.22rem 0.5rem;
+    }
+
+    /* 2) Reserve less dead space above the first element, and tighten
+       the gap Streamlit inserts between each top-level block. Streamlit's
+       own header toolbar is a fixed/absolute 60px bar that overlaps the
+       page rather than pushing it down, so padding-top can't go below
+       that without content hiding under the toolbar -- 68px keeps a
+       small buffer below it while still saving ~28px over the default. */
+    div[data-testid="stMainBlockContainer"] {
+        padding-top: 68px !important;
+    }
+    div[data-testid="stMainBlockContainer"] > div[data-testid="stVerticalBlock"] {
+        gap: 8px !important;
+    }
+
+    /* 3) Trim the encounter row and word card just enough to help the
+       primary button fit, without shrinking the word itself or making
+       the layout feel cramped. */
+    .encounter-row {
+        min-height: 46px;
+        padding: 0 14%;
+    }
+    .hp-bar-track, .boss-hp-track {
+        margin: 0.25rem auto 0.5rem;
+    }
+    .word-card {
+        padding: 1.5rem 1.5rem;
+        margin-bottom: 0.8rem;
+    }
+}
 </style>
 """
 
