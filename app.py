@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html, progression_hero_html, xp_progress_bar_html, progression_next_rank_html, rank_ladder_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -65,6 +65,8 @@ if "show_leaderboard" not in st.session_state:
     st.session_state.show_leaderboard = False
 if "show_my_words" not in st.session_state:
     st.session_state.show_my_words = False
+if "show_progression" not in st.session_state:
+    st.session_state.show_progression = False
 if "boss_outcome" not in st.session_state:
     st.session_state.boss_outcome = None
 if "boss_entrance_shown" not in st.session_state:
@@ -443,24 +445,98 @@ def render_encounter(enemy_svg, enemy_class, casting=False):
     st.markdown(html, unsafe_allow_html=True)
 
 
-top_col1, top_col2, top_col3, top_col4 = st.columns([2.4, 1, 1, 1])
+top_col1, top_col2, top_col3, top_col4, top_col5 = st.columns([2.0, 1, 1, 1, 1])
 with top_col1:
     st.markdown(
         f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
         unsafe_allow_html=True,
     )
 with top_col2:
+    if st.button(strings["progression_button"], use_container_width=True, help=strings["progression_tooltip"]):
+        st.session_state.show_progression = True
+        st.rerun()
+with top_col3:
     if st.button(strings["leaderboard_button"], use_container_width=True, help="Leaderboard"):
         st.session_state.show_leaderboard = True
         st.rerun()
-with top_col3:
+with top_col4:
     if st.button(strings["my_words_button"], use_container_width=True, help=strings["my_words_tooltip"]):
         st.session_state.show_my_words = True
         st.rerun()
-with top_col4:
+with top_col5:
     if st.button(strings["settings_button"], use_container_width=True, help=strings["settings_tooltip"]):
         st.session_state.setup_stage = "language"
         st.rerun()
+
+if st.session_state.show_progression:
+    st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["progression_title"]}</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        progression_hero_html(
+            wizard_tier_html=wizard_avatar_html(wizard_visual_tier),
+            rank_name=level_title,
+            level_label=f'{strings["level_prefix"]} {level_info["level"]}',
+        ),
+        unsafe_allow_html=True,
+    )
+
+    xp_percent = (level_info["xp_into_level"] / level_info["xp_for_next"]) * 100 if level_info["xp_for_next"] else 100
+    xp_remaining = level_info["xp_for_next"] - level_info["xp_into_level"]
+    st.markdown(
+        xp_progress_bar_html(
+            percent=xp_percent,
+            xp_label=strings["progression_xp_label"],
+            remaining_label=strings["progression_xp_remaining_template"].format(
+                xp=xp_remaining, level=level_info["level"] + 1
+            ),
+        ),
+        unsafe_allow_html=True,
+    )
+
+    next_tier = learner.get_next_tier(level_info["tier"])
+    if next_tier:
+        next_level_required, next_tier_name = next_tier
+        st.markdown(
+            progression_next_rank_html(
+                strings["progression_next_rank_template"].format(
+                    rank=f'<strong>{strings["titles"][next_tier_name]}</strong>',
+                    level_label=f'{strings["level_prefix"]} {next_level_required}',
+                )
+            ),
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(progression_next_rank_html(strings["progression_max_rank_message"]), unsafe_allow_html=True)
+
+    # Rank ladder: every tier, lowest first, marked completed / current /
+    # future purely by comparing tier names against the player's current
+    # tier -- reuses learner.RANK_LADDER (a display-only reordering of the
+    # real LEVEL_TIERS thresholds) rather than any new progression logic.
+    ladder_rows = []
+    found_current = False
+    for threshold, tier_name in learner.RANK_LADDER:
+        if tier_name == level_info["tier"]:
+            state = "current"
+            found_current = True
+        elif found_current:
+            state = "future"
+        else:
+            state = "completed"
+        level_display = 1 if threshold == 0 else threshold
+        ladder_rows.append({
+            "name": strings["titles"][tier_name],
+            "level_label": f'{strings["level_prefix"]} {level_display}',
+            "state": state,
+        })
+    st.markdown(
+        f'<div class="word-card" style="text-align:left;">{rank_ladder_html(ladder_rows)}</div>',
+        unsafe_allow_html=True,
+    )
+
+    if st.button(strings["back_button"], use_container_width=True):
+        st.session_state.show_progression = False
+        st.rerun()
+    st.stop()
 
 if st.session_state.show_leaderboard:
     st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["leaderboard_title"]}</div>', unsafe_allow_html=True)

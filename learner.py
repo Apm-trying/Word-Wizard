@@ -45,6 +45,24 @@ LEVEL_TIERS = [
     (0, "beginner"),
 ]
 
+# Same tiers, lowest rank first -- built from LEVEL_TIERS so it can never
+# drift out of sync with the real thresholds. Used only for display (e.g.
+# the progression screen's rank ladder), never for level/XP calculation.
+RANK_LADDER = list(reversed(LEVEL_TIERS))
+
+
+def get_next_tier(current_tier):
+    """
+    Returns (level_required, tier_name) for the rank immediately after
+    current_tier, or None if current_tier is already the highest rank
+    (Archmage). A pure lookup over RANK_LADDER -- doesn't change or
+    duplicate the level/tier math itself, just answers "what's next".
+    """
+    for i, (_, tier) in enumerate(RANK_LADDER):
+        if tier == current_tier:
+            return RANK_LADDER[i + 1] if i + 1 < len(RANK_LADDER) else None
+    return None
+
 
 def sanitize_nickname(raw_nickname):
     """

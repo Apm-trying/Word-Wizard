@@ -744,6 +744,88 @@ div[data-testid="stButton"] button[kind="primary"] {
     color: #C9A8DE;
     margin-bottom: 1rem;
 }
+
+/* --- Progression screen. The hero (avatar/rank name/level) reuses the
+   .rankup-portrait/.rankup-name/.rankup-level classes above as-is, so the
+   focal treatment matches the rank-up celebration exactly. Only the XP
+   progress bar, next-rank line, and rank ladder below are new. --- */
+.progression-xp-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 0.4rem;
+}
+.progression-xp-track {
+    width: 220px;
+    height: 10px;
+    background: rgba(237,230,214,0.15);
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0.4rem auto 0.3rem;
+}
+.progression-xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #8C288C, #F0C674);
+    border-radius: 999px;
+}
+.progression-xp-remaining {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: #D6B8E8;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.progression-next-rank {
+    text-align: center;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #C9A8DE;
+    margin-bottom: 1.4rem;
+}
+.progression-next-rank strong {
+    color: #F0C674;
+    font-style: normal;
+}
+
+.rank-ladder-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.2rem;
+    border-bottom: 1px solid rgba(42,21,16,0.12);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+}
+.rank-ladder-row:last-child { border-bottom: none; }
+.rank-ladder-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+}
+.rank-ladder-row.completed { opacity: 0.7; }
+.rank-ladder-row.completed .rank-ladder-name { color: #8C6A2E; }
+
+.rank-ladder-row.current {
+    background: rgba(199,154,60,0.14);
+    border-radius: 10px;
+    padding: 0.7rem 0.7rem;
+    border-bottom: none;
+    box-shadow: 0 0 0 1.5px rgba(199,154,60,0.55) inset;
+}
+.rank-ladder-row.current .rank-ladder-name { color: #A6631E; }
+.rank-ladder-row.current .rank-ladder-level { color: #A6631E; }
+
+.rank-ladder-row.future { opacity: 0.45; }
+.rank-ladder-row.future .rank-ladder-name { color: #4A453B; }
+
+.rank-ladder-level {
+    color: #6B665A;
+    font-size: 0.72rem;
+}
 </style>
 """
 
@@ -1013,6 +1095,48 @@ def rank_up_html(rank_up_title, rank_name, level_label, flavor, wizard_tier_html
         f'<div class="rankup-level">{level_label}</div>'
         f'<div class="rankup-flavor">{flavor}</div>'
         '</div>'
+    )
+
+
+def progression_hero_html(wizard_tier_html, rank_name, level_label):
+    """Current-rank focal point for the progression screen -- reuses the
+    exact same .rankup-portrait/.rankup-name/.rankup-level treatment as
+    the rank-up celebration, so it reads as the same visual language."""
+    return (
+        '<div class="rankup-screen">'
+        f'<div class="rankup-portrait">{wizard_tier_html}</div>'
+        f'<div class="rankup-name">{rank_name}</div>'
+        f'<div class="rankup-level">{level_label}</div>'
+        '</div>'
+    )
+
+
+def xp_progress_bar_html(percent, xp_label, remaining_label):
+    """Gold/purple XP-to-next-level progress bar, distinct from the
+    red/gold monster HP bar and the pip-based boss HP bar."""
+    return (
+        f'<div class="progression-xp-label">{xp_label}</div>'
+        f'<div class="progression-xp-track"><div class="progression-xp-fill" style="width:{percent}%;"></div></div>'
+        f'<div class="progression-xp-remaining">{remaining_label}</div>'
+    )
+
+
+def progression_next_rank_html(text):
+    return f'<div class="progression-next-rank">{text}</div>'
+
+
+def rank_ladder_html(rows):
+    """rows: list of {"name", "level_label", "state"} dicts, state one of
+    'completed' / 'current' / 'future'. Rendered inside the same cream
+    .word-card container the leaderboard and My Words screens use, so it
+    matches their existing list pattern rather than inventing a new one."""
+    icons = {"completed": "✓", "current": "★", "future": "🔒"}
+    return "".join(
+        f'<div class="rank-ladder-row {row["state"]}">'
+        f'<span class="rank-ladder-name">{icons[row["state"]]} {row["name"]}</span>'
+        f'<span class="rank-ladder-level">{row["level_label"]}</span>'
+        f'</div>'
+        for row in rows
     )
 
 
