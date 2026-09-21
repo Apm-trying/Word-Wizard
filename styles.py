@@ -92,7 +92,33 @@ html, body, [class*="css"] {
     border: 1px solid rgba(237, 230, 214, 0.2);
     border-radius: 999px;
     padding: 0.25rem 0.7rem;
+}
+
+/* Wraps the main status pill (streak/level/rank/XP) and the smaller daily-
+   goal pill so they can sit side by side on desktop but stack as two short,
+   separate lines on mobile instead of both being crammed into one bubble
+   (see the mobile media query below). */
+.status-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
     margin-bottom: 0.8rem;
+}
+
+/* Deliberately smaller/quieter than .xp-badge -- it's a secondary indicator,
+   not part of the main progression status. */
+.daily-goal-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    opacity: 0.75;
+    border: 1px solid rgba(237, 230, 214, 0.12);
+    border-radius: 999px;
+    padding: 0.2rem 0.55rem;
+    white-space: nowrap;
 }
 
 /* App-wide title on the language/topic setup screens */
@@ -914,6 +940,19 @@ div[data-testid="stButton"] button[kind="primary"] {
         font-size: 0.62rem;
         padding: 0.22rem 0.5rem;
         text-align: center;
+    }
+    /* Two separate, short pills stacked one per line -- instead of one
+       bordered bubble trying to fit streak+level+rank+XP+daily-goal all at
+       once, which is what was wrapping awkwardly before this change. */
+    .status-pills {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        margin-bottom: 0.5rem;
+    }
+    .daily-goal-badge {
+        font-size: 0.58rem;
+        padding: 0.16rem 0.5rem;
     }
 
     /* 2) Reserve less dead space above the first element, and tighten

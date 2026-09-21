@@ -409,6 +409,12 @@ topics = st.session_state.topics
 level_info = learner.get_level_info(nickname)
 level_title = strings["titles"][level_info["tier"]]
 streak = learner.get_streak(nickname)
+daily_goal_count, daily_goal_target = learner.get_daily_goal_progress(nickname)
+daily_goal_text = (
+    strings["daily_goal_complete"].format(target=daily_goal_target)
+    if daily_goal_count >= daily_goal_target
+    else strings["daily_goal_progress"].format(count=daily_goal_count, target=daily_goal_target)
+)
 
 # Maps the 6 rank tiers down to 3 visual bands for the wizard avatar —
 # your character's robe/hat/staff gets more elaborate as you rank up.
@@ -454,7 +460,10 @@ with st.container(key="top-nav"):
     top_col1, top_col2, top_col3, top_col4, top_col5 = st.columns([2.0, 1, 1, 1, 1])
     with top_col1:
         st.markdown(
-            f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>',
+            '<div class="status-pills">'
+            f'<span class="xp-badge">🔥 {streak} · {strings["level_prefix"]} {level_info["level"]} · {level_title} · {level_info["xp"]} XP</span>'
+            f'<span class="daily-goal-badge">{daily_goal_text}</span>'
+            '</div>',
             unsafe_allow_html=True,
         )
     with top_col2:
@@ -640,6 +649,11 @@ elif st.session_state.boss_outcome is not None:
             level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
             unsafe_allow_html=True,
         )
+    if st.session_state.pop("daily_goal_just_completed", False):
+        st.markdown(
+            level_up_badge_html(strings["daily_goal_complete_badge"]),
+            unsafe_allow_html=True,
+        )
 
     if outcome == "perfect":
         st.markdown(chime_audio_html(), unsafe_allow_html=True)
@@ -702,6 +716,11 @@ elif st.session_state.just_correct:
     if level_up:
         st.markdown(
             level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
+            unsafe_allow_html=True,
+        )
+    if st.session_state.pop("daily_goal_just_completed", False):
+        st.markdown(
+            level_up_badge_html(strings["daily_goal_complete_badge"]),
             unsafe_allow_html=True,
         )
     st.markdown(chime_audio_html(), unsafe_allow_html=True)
@@ -833,6 +852,9 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
                 else:
                     st.session_state.revealed = True
                     st.session_state.quiz_was_wrong = True
+            new_daily_goal_count, _ = learner.get_daily_goal_progress(nickname)
+            if daily_goal_count < daily_goal_target <= new_daily_goal_count:
+                st.session_state.daily_goal_just_completed = True
             new_level_info = learner.get_level_info(nickname)
             if new_level_info["tier"] != old_tier:
                 st.session_state.rank_up_info = {
