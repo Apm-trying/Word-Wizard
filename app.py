@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html, progression_hero_html, xp_progress_bar_html, progression_next_rank_html, rank_ladder_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, daily_goal_chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html, progression_hero_html, xp_progress_bar_html, progression_next_rank_html, rank_ladder_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -649,20 +649,26 @@ elif st.session_state.boss_outcome is not None:
             level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
             unsafe_allow_html=True,
         )
-    if st.session_state.pop("daily_goal_just_completed", False):
+    daily_goal_complete = st.session_state.pop("daily_goal_just_completed", False)
+    if daily_goal_complete:
         st.markdown(
             level_up_badge_html(strings["daily_goal_complete_badge"]),
             unsafe_allow_html=True,
         )
+    # The daily-goal chime takes over from the plain correct-answer chime
+    # (not both) whenever this same answer is the one that hit the goal --
+    # so reaching 5/5 sounds like its own moment, not just another correct
+    # answer.
+    positive_chime_html = daily_goal_chime_audio_html() if daily_goal_complete else chime_audio_html()
 
     if outcome == "perfect":
-        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        st.markdown(positive_chime_html, unsafe_allow_html=True)
         st.markdown(boss_outcome_heading_html(strings["boss_name"], strings["boss_subtitle"]), unsafe_allow_html=True)
         render_encounter(BOSS_MONSTER_SVG, "monster-defeated boss-portrait", casting=True)
         st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
         st.success(strings["boss_perfect_message"].format(xp=bonus_xp))
     elif outcome == "defeated":
-        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        st.markdown(positive_chime_html, unsafe_allow_html=True)
         st.markdown(boss_outcome_heading_html(strings["boss_name"], strings["boss_subtitle"]), unsafe_allow_html=True)
         render_encounter(BOSS_MONSTER_SVG, "monster-defeated boss-portrait", casting=True)
         st.markdown(boss_hp_html(0, learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
@@ -673,7 +679,7 @@ elif st.session_state.boss_outcome is not None:
         st.markdown(boss_hp_html(learner.get_boss_hp(nickname, language), learner.BOSS_MAX_HP, label=strings["boss_hp_label"]), unsafe_allow_html=True)
         st.warning(strings["boss_escaped_message"].format(correct=correct_so_far))
     elif outcome == "hit":
-        st.markdown(chime_audio_html(), unsafe_allow_html=True)
+        st.markdown(positive_chime_html, unsafe_allow_html=True)
         render_encounter(BOSS_MONSTER_SVG, "boss-encounter", casting=True)
         current_hp = learner.get_boss_hp(nickname, language)
         st.markdown(
@@ -718,12 +724,19 @@ elif st.session_state.just_correct:
             level_up_badge_html(strings["level_up_badge"].format(level=level_up["new_level"])),
             unsafe_allow_html=True,
         )
-    if st.session_state.pop("daily_goal_just_completed", False):
+    daily_goal_complete = st.session_state.pop("daily_goal_just_completed", False)
+    if daily_goal_complete:
         st.markdown(
             level_up_badge_html(strings["daily_goal_complete_badge"]),
             unsafe_allow_html=True,
         )
-    st.markdown(chime_audio_html(), unsafe_allow_html=True)
+    # See the boss-outcome branch above: the daily-goal chime replaces the
+    # plain correct-answer chime (not both) when this answer is the one
+    # that hit the goal.
+    st.markdown(
+        daily_goal_chime_audio_html() if daily_goal_complete else chime_audio_html(),
+        unsafe_allow_html=True,
+    )
     render_encounter(MONSTER_SVG, "monster-defeated", casting=True)
     st.markdown(hp_bar_html(0, draining=True, label=strings["monster_hp_label"]), unsafe_allow_html=True)
     st.markdown(
