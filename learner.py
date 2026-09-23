@@ -10,6 +10,12 @@ LOCK_HOURS = 2
 XP_PER_CORRECT = 10
 XP_REVIEW_BONUS = 3  # smaller reward for correctly reviewing an already-known word
 
+# Daily goal: how many NEW words (never-known-before, answered correctly)
+# count as "learned" per calendar day. Reviews don't count -- see
+# score_correct_answer, where this hooks in via the was_already_known flag
+# that already exists there for XP purposes.
+DAILY_GOAL_TARGET = 5
+
 # Random boss encounters — a rare, higher-stakes detour from the normal loop
 BOSS_TRIGGER_CHANCE = 0.12  # ~12% chance on each new word, when no boss is already active
 BOSS_MAX_HP = 5
@@ -121,6 +127,8 @@ def _load_user_progress(nickname):
         "xp": 0,
         "streak": 0,
         "last_active_date": None,  # ISO date string, e.g. "2026-08-30"
+        "daily_words_learned": 0,  # resets to 0 whenever the date below isn't today
+        "daily_words_learned_date": None,  # ISO date string this count applies to
     }
     client = _get_client()
     result = client.table("progress").select("data").eq("nickname", nickname).execute()
@@ -274,6 +282,40 @@ def _update_streak(nickname):
 
 def get_streak(nickname):
     return _load_user_progress(nickname).get("streak", 0)
+
+
+def _roll_daily_goal(user_progress):
+    """
+    Returns today's daily-words-learned count, resetting it to 0 in memory
+    first if the stored date isn't today (including a never-set date on an
+    older record). Does NOT save -- callers that only want to read today's
+    count (get_daily_goal_progress) don't need to write anything just to
+    display 0; only _increment_daily_goal below persists a change.
+    """
+    today = datetime.now().date().isoformat()
+    if user_progress.get("daily_words_learned_date") != today:
+        user_progress["daily_words_learned_date"] = today
+        user_progress["daily_words_learned"] = 0
+    return user_progress.get("daily_words_learned", 0)
+
+
+def get_daily_goal_progress(nickname):
+    """Returns (count, target) for today's 'Learn N new words' goal."""
+    user_progress = _load_user_progress(nickname)
+    count = _roll_daily_goal(user_progress)
+    return count, DAILY_GOAL_TARGET
+
+
+def _increment_daily_goal(nickname):
+    """
+    Bumps today's words-learned count by one and saves it. Called only from
+    score_correct_answer, only when the word was NOT already known -- i.e.
+    this is the first time it's been answered correctly, not a review.
+    """
+    user_progress = _load_user_progress(nickname)
+    _roll_daily_goal(user_progress)
+    user_progress["daily_words_learned"] = user_progress.get("daily_words_learned", 0) + 1
+    _save_user_progress(nickname, user_progress)
 
 
 def mark_status(nickname, word_id, status):
@@ -473,6 +515,8 @@ def score_correct_answer(nickname, word_id):
     mark_status(nickname, word_id, "known")
     amount = XP_REVIEW_BONUS if was_already_known else XP_PER_CORRECT
     award_xp(nickname, amount)
+    if not was_already_known:
+        _increment_daily_goal(nickname)
     return amount
 
 
