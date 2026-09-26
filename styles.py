@@ -242,6 +242,16 @@ span[data-tag] button svg {
 div[data-testid="stMultiSelect"] div[data-rac][role="group"] {
     background-color: #1C2029 !important;
     border: 1px solid rgba(237,230,214,0.25) !important;
+    /* Cap the chip box at ~2 rows and scroll internally past that,
+       instead of letting it grow unbounded. With all 7 topics
+       selected it used to expand to 3 rows and push "Cast your
+       spell" ~130px further down the page with no visual cue --
+       a beta tester repeatedly tapped where the button used to be
+       after hitting "Select all" and it looked completely dead.
+       Capping the height keeps the button's position fixed no
+       matter how many topics are chosen. */
+    max-height: 118px !important;
+    overflow-y: auto !important;
 }
 
 div[data-testid="stSelectbox"] > div > div {

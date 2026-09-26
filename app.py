@@ -468,15 +468,31 @@ with st.container(key="top-nav"):
         )
     with top_col2:
         if st.button(strings["progression_button"], use_container_width=True, help=strings["progression_tooltip"]):
-            st.session_state.show_progression = True
+            # Tapping the icon for the screen you're already on toggles back
+            # to the fight; tapping a different icon jumps straight to it.
+            # Previously this only ever set its own flag to True and never
+            # cleared the others, so whichever sub-screen flag was already
+            # True kept winning (each sub-screen block below runs st.stop()
+            # before the next one is even checked) -- the nav icons looked
+            # dead and "← Back" was the only way out.
+            going_to = not st.session_state.show_progression
+            st.session_state.show_progression = going_to
+            st.session_state.show_leaderboard = False
+            st.session_state.show_my_words = False
             st.rerun()
     with top_col3:
         if st.button(strings["leaderboard_button"], use_container_width=True, help="Leaderboard"):
-            st.session_state.show_leaderboard = True
+            going_to = not st.session_state.show_leaderboard
+            st.session_state.show_leaderboard = going_to
+            st.session_state.show_progression = False
+            st.session_state.show_my_words = False
             st.rerun()
     with top_col4:
         if st.button(strings["my_words_button"], use_container_width=True, help=strings["my_words_tooltip"]):
-            st.session_state.show_my_words = True
+            going_to = not st.session_state.show_my_words
+            st.session_state.show_my_words = going_to
+            st.session_state.show_progression = False
+            st.session_state.show_leaderboard = False
             st.rerun()
     with top_col5:
         if st.button(strings["settings_button"], use_container_width=True, help=strings["settings_tooltip"]):
