@@ -1,3 +1,4 @@
+import copy
 import json
 import re
 import random
@@ -120,7 +121,44 @@ def _get_client():
     return create_client(url, key)
 
 
+# Per-rerun cache for progress dicts, so a single click (which today chains
+# through several helpers -- mark_status, award_xp, _update_streak,
+# _increment_daily_goal, each of which used to load progress fresh and often
+# save it right back) doesn't turn into a waterfall of blocking Supabase
+# round trips within that one script execution. Keyed by nickname and
+# stashed in st.session_state, which is per-browser-session -- never shared
+# across different people's sessions on the same server process, so there's
+# no cross-user staleness risk. A write always updates the cache in the
+# same call, so nothing later in *this* rerun ever reads data older than
+# its own last save.
+#
+# Deliberately reset at the start of every rerun (see reset_progress_cache,
+# called once near the top of app.py) rather than left to persist across
+# clicks for the whole session. A same-nickname session played from two
+# devices at once is an edge case this app doesn't otherwise guard against,
+# but a cache that lived for the whole session would make it worse: this
+# device could keep reusing its own stale copy indefinitely and silently
+# clobber the other device's progress on its next save. Clearing per rerun
+# keeps the exact freshness guarantee the app already had (every rerun sees
+# the latest saved state) while still collapsing the many redundant loads
+# *within* one rerun down to one real fetch per nickname.
+_PROGRESS_CACHE_KEY = "_progress_cache"
+
+
+def reset_progress_cache():
+    """Call once near the top of each script run, before any progress
+    reads/writes happen. See the module-level comment above _PROGRESS_CACHE_KEY."""
+    st.session_state[_PROGRESS_CACHE_KEY] = {}
+
+
 def _load_user_progress(nickname):
+    cache = st.session_state.setdefault(_PROGRESS_CACHE_KEY, {})
+    if nickname in cache:
+        # A fresh copy every time -- callers mutate the dict they get back
+        # before saving it, and must never be able to corrupt the cached
+        # copy (or another caller's in-flight copy) by reference.
+        return copy.deepcopy(cache[nickname])
+
     defaults = {
         "languages": {},  # lang code -> {"current_word_id":, "assigned_at":, "topics":}
         "word_status": {},  # word_id (as string) -> "known" | "unknown" — shared across languages
@@ -136,6 +174,8 @@ def _load_user_progress(nickname):
         defaults.update(result.data[0]["data"])
     if "languages" not in defaults or not isinstance(defaults["languages"], dict):
         defaults["languages"] = {}
+
+    cache[nickname] = copy.deepcopy(defaults)
     return defaults
 
 
@@ -161,6 +201,12 @@ def _get_lang_state(user_progress, language):
 def _save_user_progress(nickname, user_progress):
     client = _get_client()
     client.table("progress").upsert({"nickname": nickname, "data": user_progress}).execute()
+    # Keep the cache in lockstep with what was just persisted, so the very
+    # next _load_user_progress call in this session (often milliseconds
+    # later, in the same click's helper chain) sees this write without
+    # needing another round trip.
+    cache = st.session_state.setdefault(_PROGRESS_CACHE_KEY, {})
+    cache[nickname] = copy.deepcopy(user_progress)
 
 
 def _get_all_progress():

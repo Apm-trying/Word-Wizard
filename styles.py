@@ -3,6 +3,8 @@
 # The word itself is the hero, set in a characterful serif; everything
 # else (labels, topics, buttons) stays quiet and out of its way.
 
+import urllib.parse
+
 CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
@@ -63,6 +65,45 @@ html, body, [class*="css"] {
     font-size: 2.6rem;
     line-height: 1.15;
     margin: 0.2rem 0 0.4rem 0;
+    /* Safety net regardless of size step below -- a single long word with
+       no natural break point (unlike a multi-word phrase, which already
+       wraps fine at spaces) would otherwise overflow the card's fixed
+       width instead of wrapping, which on a narrow phone runs the text
+       off the visible screen rather than just looking cramped. */
+    overflow-wrap: break-word;
+}
+/* Two extra size steps, applied via word_display_html() (styles.py) based
+   on the word's character count -- see that function for the thresholds.
+   Normal-length words are untouched (plain .word-display, unchanged
+   2.6rem); only words too long to comfortably fit step down, and only as
+   far as they need to. */
+.word-display-md {
+    font-size: 1.9rem;
+}
+.word-display-sm {
+    font-size: 1.5rem;
+}
+
+/* Optional pronunciation button, rendered next to word_display_html() via
+   speaker_button_html() -- plain button styled to sit quietly beside the
+   word rather than compete with it. */
+.speaker-button {
+    background: none;
+    border: 1px solid var(--accent, #C79A3C);
+    color: var(--accent, #C79A3C);
+    border-radius: 999px;
+    width: 2.1rem;
+    height: 2.1rem;
+    line-height: 1;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0;
+}
+.speaker-button:hover {
+    background: var(--accent, #C79A3C);
+    color: var(--paper, #EFE7D3);
 }
 
 .section-label {
@@ -1201,6 +1242,69 @@ BOSS_MONSTER_SVG = """
 </svg>
 </div>
 """
+
+
+def word_display_html(word_text):
+    """
+    Renders the vocabulary word with responsive font sizing: normal-length
+    words keep the existing full 2.6rem size unchanged; longer words step
+    down to one of two smaller sizes (with overflow-wrap as a safety net
+    regardless -- see .word-display in the CSS above) so they wrap onto 2-3
+    lines within the card instead of overflowing it or running off-screen.
+
+    Thresholds picked against the real word list: the longest single
+    unbroken word today is ~18 chars ("interoperabilitet",
+    "multikulturalisme"), with headroom for future additions. Multi-word
+    phrases ("artificial intelligence") already wrap fine at their natural
+    spaces and rarely need to step down, but sizing purely by character
+    count handles both cases without needing to tell them apart.
+    """
+    length = len(word_text)
+    if length > 17:
+        css_class = "word-display word-display-sm"
+    elif length > 12:
+        css_class = "word-display word-display-md"
+    else:
+        css_class = "word-display"
+    return f'<div class="{css_class}">{word_text}</div>'
+
+
+# Word language -> BCP-47 speech-synthesis voice language. Falls back to
+# en-US for anything unrecognized rather than erroring, so a missing/odd
+# language code just gives a (probably wrong-accented) reading instead of
+# silently doing nothing.
+_SPEECH_LANG_MAP = {
+    "en": "en-US",
+    "no": "nb-NO",
+}
+
+
+def speaker_button_html(word_text, language):
+    """
+    Small optional speaker button using the browser's own built-in
+    text-to-speech (Web Speech API, window.speechSynthesis) -- no
+    external service, no API key, no new dependency. Never autoplays:
+    it only speaks when clicked.
+
+    The word text is percent-encoded into the onclick handler (rather than
+    interpolated raw) so quotes/apostrophes/HTML in the word can't break
+    the attribute or need separate HTML-escaping; the inline script
+    decodes it before speaking.
+    """
+    voice_lang = _SPEECH_LANG_MAP.get(language, "en-US")
+    encoded_word = urllib.parse.quote(word_text)
+    return (
+        f'<button type="button" class="speaker-button" '
+        f'aria-label="Hear pronunciation" '
+        f'onclick="(function(){{'
+        f'try{{'
+        f'var u=new SpeechSynthesisUtterance(decodeURIComponent(&quot;{encoded_word}&quot;));'
+        f"u.lang='{voice_lang}';"
+        f'window.speechSynthesis.cancel();'
+        f'window.speechSynthesis.speak(u);'
+        f'}}catch(e){{}}'
+        f'}})()">&#128266;</button>'
+    )
 
 
 def hp_bar_html(percent, draining=False, label=None):

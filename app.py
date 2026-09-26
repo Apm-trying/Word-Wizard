@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import time
 import learner
 from translations import t
-from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, daily_goal_chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html, progression_hero_html, xp_progress_bar_html, progression_next_rank_html, rank_ladder_html
+from styles import CSS, countdown_ring_html, TOWER_SVG, chime_audio_html, daily_goal_chime_audio_html, MONSTER_SVG, hp_bar_html, BOSS_MONSTER_SVG, boss_hp_html, wizard_avatar_html, spell_projectile_html, boss_entrance_html, boss_feedback_html, boss_outcome_heading_html, rank_up_html, level_up_badge_html, progression_hero_html, xp_progress_bar_html, progression_next_rank_html, rank_ladder_html, word_display_html, speaker_button_html
 
 st.set_page_config(page_title="Word Wizard", page_icon="🧙", layout="centered")
 components.html(
@@ -45,6 +45,17 @@ st.markdown(CSS, unsafe_allow_html=True)
 # Typing this as your "name" at the name-entry screen opens the hidden admin
 # panel instead of saving progress normally. Not shown anywhere in the UI.
 ADMIN_TRIGGER = "wizardmasterkey"
+
+# How long the boss entrance (banner + artwork + HP bar) stays on screen
+# before the player can act, so "BOSS APPROACHES" / the boss name actually
+# registers. Applied once per boss encounter -- see boss_entrance_shown.
+BOSS_ENTRANCE_HOLD_SECONDS = 1.3
+
+# Fresh per-rerun progress cache -- must run before any learner.* call
+# below touches Supabase. See the comment on learner._PROGRESS_CACHE_KEY:
+# this collapses the several redundant loads/saves a single click used to
+# trigger down to one real fetch per nickname per rerun.
+learner.reset_progress_cache()
 
 # --- Session state setup ---
 if "setup_stage" not in st.session_state:
@@ -251,7 +262,7 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
             f"""
             <div class="word-card">
                 <span class="topic-tag">{topic_label}</span>
-                <div class="word-display">{guest_word['word']}</div>
+                {word_display_html(guest_word['word'])}
             </div>
             """,
             unsafe_allow_html=True,
@@ -278,7 +289,7 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
             f"""
             <div class="word-card">
                 <span class="topic-tag">{topic_label}</span>
-                <div class="word-display">{guest_word['word']}</div>
+                {word_display_html(guest_word['word'])}
             </div>
             """,
             unsafe_allow_html=True,
@@ -297,7 +308,7 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
                 f"""
                 <div class="word-card">
                     <span class="topic-tag">{topic_label}</span>
-                    <div class="word-display">{guest_word['word']}</div>
+                    {word_display_html(guest_word['word'])}
                     <div class="section-label">{strings['correct_heading']}</div>
                     <div>{strings['xp_gained_template'].format(xp=learner.XP_PER_CORRECT)}</div>
                 </div>
@@ -311,7 +322,7 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
                 f"""
                 <div class="word-card">
                     <span class="topic-tag">{topic_label}</span>
-                    <div class="word-display">{guest_word['word']}</div>
+                    {word_display_html(guest_word['word'])}
                     <div class="section-label">{strings['definition_label']}</div>
                     <div>{guest_word['definition']}</div>
                     <div class="section-label">{strings['example_label']}</div>
@@ -759,7 +770,7 @@ elif st.session_state.just_correct:
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>
-            <div class="word-display">{word['word']}</div>
+            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
             <div class="section-label">{strings['correct_heading']}</div>
             <div>{strings['xp_gained_template'].format(xp=st.session_state.xp_awarded)}</div>
         </div>
@@ -774,12 +785,14 @@ elif st.session_state.just_correct:
 
 elif not st.session_state.revealed and not st.session_state.quiz_active:
     boss_active = learner.is_boss_active(nickname, language)
+    boss_entrance_just_shown = False
     if boss_active:
         if not st.session_state.boss_entrance_shown:
             # Plays once, the first time this specific boss encounter is
             # seen on the idle ask-screen; resets below once the encounter
             # ends, ready for the next boss to trigger its own entrance.
             st.session_state.boss_entrance_shown = True
+            boss_entrance_just_shown = True
             st.markdown(
                 boss_entrance_html(strings["boss_arrives_label"], strings["boss_name"], strings["boss_subtitle"]),
                 unsafe_allow_html=True,
@@ -798,11 +811,23 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>{review_tag_html}
-            <div class="word-display">{word['word']}</div>
+            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
         </div>
         """,
         unsafe_allow_html=True,
     )
+
+    if boss_entrance_just_shown:
+        # The entrance banner, boss artwork and HP bar above are already
+        # flushed to the browser at this point (Streamlit sends each
+        # st.markdown call's output as the script runs, not all at once at
+        # the end) -- this sleep holds the screen here, with nothing
+        # clickable yet, so the reveal is genuinely readable instead of a
+        # race against how fast the player's thumb already knows where the
+        # Yes/No buttons usually are. Fires exactly once per encounter,
+        # gated by the same boss_entrance_shown flag as the banner itself.
+        time.sleep(BOSS_ENTRANCE_HOLD_SECONDS)
+
     st.write(strings["know_prompt"])
 
     col1, col2 = st.columns(2)
@@ -843,7 +868,7 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>
-            <div class="word-display">{word['word']}</div>
+            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
         </div>
         """,
         unsafe_allow_html=True,
@@ -905,7 +930,7 @@ else:
         f"""
         <div class="word-card hurt">
             <span class="topic-tag">{topic_label}</span>
-            <div class="word-display">{word['word']}</div>
+            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
             <div class="section-label">{strings['definition_label']}</div>
             <div>{word['definition']}</div>
             <div class="section-label">{strings['example_label']}</div>
