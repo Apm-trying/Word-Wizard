@@ -3,6 +3,7 @@
 # The word itself is the hero, set in a characterful serif; everything
 # else (labels, topics, buttons) stays quiet and out of its way.
 
+import json
 import urllib.parse
 
 CSS = """
@@ -84,27 +85,11 @@ html, body, [class*="css"] {
     font-size: 1.5rem;
 }
 
-/* Optional pronunciation button, rendered next to word_display_html() via
-   speaker_button_html() -- plain button styled to sit quietly beside the
-   word rather than compete with it. */
-.speaker-button {
-    background: none;
-    border: 1px solid var(--accent, #C79A3C);
-    color: var(--accent, #C79A3C);
-    border-radius: 999px;
-    width: 2.1rem;
-    height: 2.1rem;
-    line-height: 1;
-    font-size: 1rem;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    cursor: pointer;
-    padding: 0;
-}
-.speaker-button:hover {
-    background: var(--accent, #C79A3C);
-    color: var(--paper, #EFE7D3);
-}
+/* Note: the optional pronunciation button (speaker_button_html() in this
+   file) is NOT styled here -- it renders inside its own
+   st.components.v1.html() iframe (see that function's docstring for why),
+   which carries its own inline <style>, so nothing in this page-level
+   stylesheet reaches it. */
 
 .section-label {
     font-family: 'IBM Plex Mono', monospace;
@@ -1286,25 +1271,61 @@ def speaker_button_html(word_text, language):
     external service, no API key, no new dependency. Never autoplays:
     it only speaks when clicked.
 
-    The word text is percent-encoded into the onclick handler (rather than
-    interpolated raw) so quotes/apostrophes/HTML in the word can't break
-    the attribute or need separate HTML-escaping; the inline script
-    decodes it before speaking.
+    IMPORTANT: this is meant to be rendered via
+    st.components.v1.html(speaker_button_html(...), height=44), NOT via
+    st.markdown(..., unsafe_allow_html=True). Streamlit's markdown
+    sanitizer strips inline onXxx event-handler attributes even with
+    unsafe_allow_html=True (confirmed by hand: the button rendered, but
+    its onclick attribute was silently gone from the DOM, so clicking it
+    did nothing) -- it allows plain attributes like <audio autoplay>,
+    just not JS event handlers. components.html renders its own real
+    <iframe srcdoc="..."> document, which isn't run through that
+    sanitizer, so the script here actually executes.
+
+    The word text is JSON-encoded (rather than interpolated raw) so
+    quotes/apostrophes/HTML in the word can't break out of the JS string.
+    Separately, a literal "</script" substring anywhere inside a <script>
+    block closes the tag at the HTML-parser level regardless of JS
+    quoting, so that sequence is escaped to "<\/script" (valid, identical
+    JS string content, just not spelled the same way) as a defense in
+    depth -- today's word list is developer-controlled, but this makes
+    the function safe for arbitrary input regardless.
     """
     voice_lang = _SPEECH_LANG_MAP.get(language, "en-US")
-    encoded_word = urllib.parse.quote(word_text)
-    return (
-        f'<button type="button" class="speaker-button" '
-        f'aria-label="Hear pronunciation" '
-        f'onclick="(function(){{'
-        f'try{{'
-        f'var u=new SpeechSynthesisUtterance(decodeURIComponent(&quot;{encoded_word}&quot;));'
-        f"u.lang='{voice_lang}';"
-        f'window.speechSynthesis.cancel();'
-        f'window.speechSynthesis.speak(u);'
-        f'}}catch(e){{}}'
-        f'}})()">&#128266;</button>'
-    )
+    word_js_literal = json.dumps(word_text).replace("</script", "<\\/script")
+    lang_js_literal = json.dumps(voice_lang)
+    return f"""
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  html, body {{ margin:0; padding:0; background:transparent; }}
+  .speaker-button {{
+      background: none;
+      border: 1px solid #C79A3C;
+      color: #C79A3C;
+      border-radius: 999px;
+      width: 2.1rem;
+      height: 2.1rem;
+      line-height: 1;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+  }}
+  .speaker-button:hover {{ background: #C79A3C; color: #EFE7D3; }}
+</style></head>
+<body>
+  <button type="button" class="speaker-button" aria-label="Hear pronunciation" id="speak-btn">&#128266;</button>
+  <script>
+    document.getElementById("speak-btn").addEventListener("click", function () {{
+      try {{
+        var u = new SpeechSynthesisUtterance({word_js_literal});
+        u.lang = {lang_js_literal};
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(u);
+      }} catch (e) {{ /* Web Speech API unavailable -- fail silently */ }}
+    }});
+  </script>
+</body></html>
+"""
 
 
 def hp_bar_html(percent, draining=False, label=None):

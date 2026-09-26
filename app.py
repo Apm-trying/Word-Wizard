@@ -770,13 +770,14 @@ elif st.session_state.just_correct:
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>
-            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
+            {word_display_html(word['word'])}
             <div class="section-label">{strings['correct_heading']}</div>
             <div>{strings['xp_gained_template'].format(xp=st.session_state.xp_awarded)}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    components.html(speaker_button_html(word['word'], language), height=44)
     if st.button(strings["continue_button"], use_container_width=True, type="primary"):
         learner.advance_word(nickname, language, topics)
         st.session_state.just_correct = False
@@ -811,11 +812,12 @@ elif not st.session_state.revealed and not st.session_state.quiz_active:
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>{review_tag_html}
-            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
+            {word_display_html(word['word'])}
         </div>
         """,
         unsafe_allow_html=True,
     )
+    components.html(speaker_button_html(word['word'], language), height=44)
 
     if boss_entrance_just_shown:
         # The entrance banner, boss artwork and HP bar above are already
@@ -868,11 +870,12 @@ elif st.session_state.quiz_active and st.session_state.quiz_word_id == word["id"
         f"""
         <div class="word-card">
             <span class="topic-tag">{topic_label}</span>
-            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
+            {word_display_html(word['word'])}
         </div>
         """,
         unsafe_allow_html=True,
     )
+    components.html(speaker_button_html(word['word'], language), height=44)
 
     for i, choice_text in enumerate(st.session_state.quiz_choices):
         if st.button(choice_text, use_container_width=True, key=f"quiz_choice_{i}"):
@@ -930,7 +933,7 @@ else:
         f"""
         <div class="word-card hurt">
             <span class="topic-tag">{topic_label}</span>
-            {word_display_html(word['word'])}{speaker_button_html(word['word'], language)}
+            {word_display_html(word['word'])}
             <div class="section-label">{strings['definition_label']}</div>
             <div>{word['definition']}</div>
             <div class="section-label">{strings['example_label']}</div>
@@ -939,6 +942,7 @@ else:
         """,
         unsafe_allow_html=True,
     )
+    components.html(speaker_button_html(word['word'], language), height=44)
 
     st.info(strings["locked_message"])
     remaining_seconds, percent_elapsed = learner.get_time_remaining(nickname, language)

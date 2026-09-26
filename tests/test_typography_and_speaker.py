@@ -1,9 +1,9 @@
 """Unit tests for styles.word_display_html and styles.speaker_button_html.
 Run directly: python3 tests/test_typography_and_speaker.py
 """
+import json
 import os
 import sys
-import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -72,10 +72,10 @@ def test_speaker_button_norwegian_language_mapping():
     assert "nb-NO" in html
 
 
-def test_speaker_button_no_autoplay_markers():
+def test_speaker_button_no_autoplay():
     html = styles.speaker_button_html("cat", "en")
-    # Must only be wired to onclick, never fire on render.
-    assert "onclick=" in html
+    # Must only speak from the click listener, never fire on render/load.
+    assert "addEventListener" in html and '"click"' in html
     assert "autoplay" not in html.lower()
     assert "onload=" not in html.lower()
 
@@ -83,18 +83,32 @@ def test_speaker_button_no_autoplay_markers():
 def test_speaker_button_escapes_quotes_and_html_safely():
     tricky = """cat" onmouseover="alert(1)"><script>alert(2)</script>"""
     html = styles.speaker_button_html(tricky, "en")
-    # The raw tricky text must never appear verbatim in the output --
-    # it must be percent-encoded, so it can't break out of the attribute
-    # or inject a script tag.
-    assert tricky not in html
-    assert "<script>" not in html
-    assert urllib.parse.quote(tricky) in html
+    # Quotes must be JS-escaped (json.dumps) so they can't break out of the
+    # string literal, AND a literal "</script" must never appear verbatim
+    # -- even inside a JS string, it closes the <script> tag at the
+    # HTML-parser level, so it must come out escaped as "<\/script".
+    assert "alert(2)</script>" not in html, "unescaped </script must not survive"
+    assert "alert(2)<\\/script>" in html, "must be present, just escaped"
+    assert json.dumps(tricky).replace("</script", "<\\/script") in html
 
 
-def test_speaker_button_is_a_plain_button_element():
+def test_speaker_button_is_a_full_html_document_for_components_html():
+    """speaker_button_html() is meant to be rendered via
+    st.components.v1.html(...), which needs a full HTML document (it's
+    rendered inside its own <iframe srcdoc>) -- NOT via
+    st.markdown(..., unsafe_allow_html=True), whose sanitizer was found
+    (by hand-testing in a real browser) to silently strip inline onXxx
+    event-handler attributes, which is why an earlier version of this
+    button rendered but did nothing when clicked."""
     html = styles.speaker_button_html("cat", "en")
-    assert html.strip().startswith("<button")
-    assert html.strip().endswith("</button>")
+    assert "<!doctype html>" in html.lower()
+    assert '<button type="button" class="speaker-button"' in html
+    assert "<script>" in html and "</script>" in html
+
+
+def test_speaker_button_uses_addeventlistener_not_inline_onclick():
+    html = styles.speaker_button_html("cat", "en")
+    assert "onclick=" not in html
 
 
 ALL_TESTS = [v for k, v in list(globals().items()) if k.startswith("test_")]
