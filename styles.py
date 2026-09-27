@@ -1004,14 +1004,29 @@ div[data-testid="stButton"] button[kind="primary"] {
     .leaderboard-name {
         max-width: 100%;
     }
-    /* 1) Keep the top-nav row horizontal instead of letting Streamlit
-       stack it into 4 separate full-width rows. */
+    /* 1) The status pill (streak/level/rank/XP) and the 4 icon buttons
+       used to be forced onto one strict no-wrap row. That worked as long
+       as the pill's text stayed short, but once the pill text itself was
+       also forced to stay on one line (see .xp-badge below), a long
+       pill on a real phone had nowhere to shrink to -- Streamlit's own
+       column widths don't shrink-to-fit, so the pill's text overflowed
+       its column and visually sat on top of the icon buttons next to it.
+       Fix: give the pill its own full-width line, and let the 4 icon
+       buttons wrap onto a second line below it -- so there's no shared
+       line for the two to collide on in the first place. */
     .st-key-top-nav div[data-testid="stHorizontalBlock"] {
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap !important;
         gap: 6px !important;
     }
     .st-key-top-nav div[data-testid="stColumn"] {
         min-width: 0 !important;
+    }
+    .st-key-top-nav div[data-testid="stColumn"]:first-child {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+    }
+    .st-key-top-nav div[data-testid="stColumn"]:not(:first-child) {
+        flex: 1 1 0% !important;
         width: auto !important;
     }
     .xp-badge {
