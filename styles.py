@@ -313,6 +313,7 @@ div[data-testid="stMarkdownContainer"] p {
     flex-direction: column;
     align-items: center;
     margin-top: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .countdown-ring {
@@ -334,6 +335,9 @@ div[data-testid="stMarkdownContainer"] p {
     letter-spacing: 0.05em;
     color: var(--muted);
     text-transform: uppercase;
+    text-align: center;
+    white-space: normal;
+    max-width: 220px;
 }
 
 /* Buttons: pill-shaped, quiet by default, gold when primary */
@@ -961,7 +965,45 @@ div[data-testid="stButton"] button[kind="primary"] {
    3) The encounter row and word-card had comfortable-but-not-essential
       padding/margins that a phone doesn't have room for. Desktop is
       untouched -- none of this applies above 480px. --- */
+
+/* Leaderboard rows: name and stats sit on one line when there's room, but
+   wrap as two whole lines (never a mid-word split) when there isn't --
+   flex-wrap on the row plus no-wrap on each span means a too-long stats
+   string drops to its own full-width line instead of visually fragmenting,
+   which is what was reading as a rendering bug on narrow phones before. */
+.leaderboard-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    column-gap: 0.6rem;
+    row-gap: 0.1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(237,230,214,0.12);
+}
+.leaderboard-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.leaderboard-stats {
+    color: var(--muted);
+    white-space: nowrap;
+}
+.leaderboard-tie {
+    color: #C79A3C;
+    font-size: 0.85em;
+}
+
 @media (max-width: 480px) {
+    .leaderboard-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .leaderboard-name {
+        max-width: 100%;
+    }
     /* 1) Keep the top-nav row horizontal instead of letting Streamlit
        stack it into 4 separate full-width rows. */
     .st-key-top-nav div[data-testid="stHorizontalBlock"] {
@@ -976,6 +1018,7 @@ div[data-testid="stButton"] button[kind="primary"] {
         font-size: 0.62rem;
         padding: 0.22rem 0.5rem;
         text-align: center;
+        white-space: nowrap;
     }
     /* Two separate, short pills stacked one per line -- instead of one
        bordered bubble trying to fit streak+level+rank+XP+daily-goal all at
@@ -1017,6 +1060,20 @@ div[data-testid="stButton"] button[kind="primary"] {
     .word-card {
         padding: 1.5rem 1.5rem;
         margin-bottom: 0.8rem;
+    }
+
+    /* 4) The locked-word countdown ring + label were getting cramped
+       against the bottom of the viewport on short phones -- trim the
+       ring itself and its top margin so the label reliably clears the
+       fold instead of relying on that space being there. */
+    .countdown-wrap {
+        margin-top: 0.6rem;
+        margin-bottom: 0.8rem;
+    }
+    .countdown-ring {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 0.4rem;
     }
 }
 </style>
@@ -1464,11 +1521,13 @@ WIZARD_AVATAR_TIER_2 = """
 <div style="display:flex; justify-content:center;">
 <svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
 <polygon points="35,92 65,92 60,50 40,50" fill="#4A3D6B" stroke="#2E2447" stroke-width="2"/>
+<polygon points="50,70 45,80 50,77.5 55,80" fill="#C79A3C"/>
 <line x1="40" y1="70" x2="60" y2="70" stroke="#C79A3C" stroke-width="1.5"/>
 <circle cx="50" cy="42" r="10" fill="#EFD9B8"/>
 <polygon points="50,15 63,40 37,40" fill="#4A3D6B" stroke="#2E2447" stroke-width="2"/>
-<ellipse cx="50" cy="40" rx="17" ry="4" fill="#3A2F54" stroke="#2E2447" stroke-width="1.5"/>
+<ellipse cx="50" cy="41" rx="22" ry="4.5" fill="#3A2F54" stroke="#2E2447" stroke-width="1.5"/>
 <line x1="50" y1="20" x2="50" y2="38" stroke="#C79A3C" stroke-width="1"/>
+<circle cx="50" cy="18" r="2.4" fill="#8CB8E8" stroke="#3A6EA5" stroke-width="1"/>
 <line x1="74" y1="30" x2="74" y2="95" stroke="#5A4A38" stroke-width="3" stroke-linecap="round"/>
 <circle cx="74" cy="27" r="4" fill="#6B9BD1" stroke="#3A6EA5" stroke-width="1"/>
 </svg>
@@ -1479,14 +1538,16 @@ WIZARD_AVATAR_TIER_3 = """
 <div style="display:flex; justify-content:center;">
 <svg viewBox="0 0 100 100" width="52" xmlns="http://www.w3.org/2000/svg">
 <circle class="wizard-aura" cx="74" cy="24" r="12" fill="#F0C674" opacity="0.25"/>
-<polygon points="35,92 65,92 58,50 42,50" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
+<polygon points="30,92 70,92 58,50 42,50" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
+<polygon points="30,92 20,83 35,86" fill="#2E2144" stroke="#C79A3C" stroke-width="1.5"/>
+<polygon points="70,92 80,83 65,86" fill="#2E2144" stroke="#C79A3C" stroke-width="1.5"/>
 <line x1="38" y1="68" x2="62" y2="68" stroke="#C79A3C" stroke-width="1.5"/>
 <circle cx="44" cy="80" r="1.5" fill="#C79A3C"/>
 <circle cx="56" cy="84" r="1.5" fill="#C79A3C"/>
 <circle cx="50" cy="42" r="10" fill="#EFD9B8"/>
-<polygon points="50,13 64,40 36,40" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
-<ellipse cx="50" cy="40" rx="18" ry="4" fill="#2E2144" stroke="#C79A3C" stroke-width="1.5"/>
-<circle cx="50" cy="22" r="3" fill="#F0C674"/>
+<polygon points="50,11 66,40 34,40" fill="#3D2E5C" stroke="#C79A3C" stroke-width="2"/>
+<ellipse cx="50" cy="40" rx="20" ry="4.5" fill="#2E2144" stroke="#C79A3C" stroke-width="1.5"/>
+<path d="M 47.5 17 A 5.5 5.5 0 1 0 47.5 27 A 4.3 4.3 0 1 1 47.5 17 Z" fill="#F0C674"/>
 <line x1="74" y1="26" x2="74" y2="95" stroke="#5A4A38" stroke-width="3" stroke-linecap="round"/>
 <circle cx="74" cy="24" r="5" fill="#F0C674" stroke="#C79A3C" stroke-width="1"/>
 </svg>

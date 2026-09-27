@@ -259,6 +259,10 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
 
     if st.session_state.setup_stage == "guest_word":
         st.markdown(
+            f'<div class="monster-idle" style="margin-bottom:0.4rem;">{MONSTER_SVG}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
             f"""
             <div class="word-card">
                 <span class="topic-tag">{topic_label}</span>
@@ -286,6 +290,10 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
 
     if st.session_state.setup_stage == "guest_quiz":
         st.markdown(
+            f'<div class="monster-idle" style="margin-bottom:0.4rem;">{MONSTER_SVG}</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
             f"""
             <div class="word-card">
                 <span class="topic-tag">{topic_label}</span>
@@ -294,6 +302,7 @@ if st.session_state.setup_stage in ("guest_word", "guest_quiz", "name_entry"):
             """,
             unsafe_allow_html=True,
         )
+        st.write(strings["quiz_prompt"])
         for i, choice_text in enumerate(st.session_state.guest_quiz_choices):
             if st.button(choice_text, use_container_width=True, key=f"guest_quiz_choice_{i}"):
                 st.session_state.guest_correct = (i == st.session_state.guest_quiz_correct_index)
@@ -583,15 +592,26 @@ if st.session_state.show_progression:
 if st.session_state.show_leaderboard:
     st.markdown(f'<div class="app-title" style="font-size:1.6rem;">{strings["leaderboard_title"]}</div>', unsafe_allow_html=True)
 
+    leaderboard_entries = learner.get_leaderboard()
+    # Ties are only marked visually here (a small "(tied)" note) -- rank
+    # numbering and ordering are untouched, this doesn't change any scoring
+    # or progression logic, just how equal scores are labeled.
+    xp_counts = {}
+    for entry in leaderboard_entries:
+        xp_counts[entry["xp"]] = xp_counts.get(entry["xp"], 0) + 1
+
     rows_html = ""
-    for i, entry in enumerate(learner.get_leaderboard(), start=1):
+    for i, entry in enumerate(leaderboard_entries, start=1):
         title = strings["titles"][entry["tier"]]
         name_display = entry["nickname"] + (strings["you_suffix"] if entry["nickname"] == nickname else "")
+        tie_marker = (
+            f' <span class="leaderboard-tie">{strings["tied_suffix"]}</span>'
+            if xp_counts[entry["xp"]] > 1 else ""
+        )
         rows_html += (
-            f'<div style="display:flex; justify-content:space-between; padding:0.5rem 0; '
-            f'border-bottom:1px solid rgba(237,230,214,0.12);">'
-            f'<span>#{i} {name_display}</span>'
-            f'<span style="color:var(--muted);">{strings["level_prefix"]} {entry["level"]} · {title} · {entry["xp"]} XP</span>'
+            f'<div class="leaderboard-row">'
+            f'<span class="leaderboard-name">#{i} {name_display}</span>'
+            f'<span class="leaderboard-stats">{strings["level_prefix"]} {entry["level"]} · {title} · {entry["xp"]} XP{tie_marker}</span>'
             f'</div>'
         )
     st.markdown(f'<div class="word-card" style="text-align:left;">{rows_html}</div>', unsafe_allow_html=True)
